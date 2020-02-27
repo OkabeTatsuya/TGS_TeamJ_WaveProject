@@ -1,0 +1,15 @@
+*.user
+*.aps
+*.lib
+*.dll
+*.pdb
+*.suo
+/Libs/lib/
+/**/Temp/
+/**/Debug/
+/**/Release/
+/**/media/Shaders/
+/**/.vs/
+.vs/
+/**/GameSources/GameSources.vcxitems.filters
+/**/GameSources/GameSources.vcxitems
