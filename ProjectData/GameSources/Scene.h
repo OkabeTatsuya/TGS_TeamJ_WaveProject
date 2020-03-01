@@ -39,6 +39,12 @@ namespace basecross{
 		*/
 		//--------------------------------------------------------------------------------------
 		virtual void OnEvent(const shared_ptr<Event>& event) override;
+
+		void CreateResourses();
+
+		void FindFile(wstring dir);
+
+
 	};
 
 }
