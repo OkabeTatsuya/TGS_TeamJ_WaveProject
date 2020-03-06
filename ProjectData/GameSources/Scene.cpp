@@ -21,8 +21,8 @@ namespace basecross{
 		App::GetApp()->GetDataDirectory(mediaDir);
 
 		FindFile(dataDir);
-		FindFile(mediaDir + L"Sound/SE/");
-		FindFile(mediaDir + L"Sound/BGM/");
+		//FindFile(mediaDir + L"Sound/SE/");
+		//FindFile(mediaDir + L"Sound/BGM/");
 		FindFile(mediaDir + L"Image/");
 	}
 
@@ -97,6 +97,11 @@ namespace basecross{
 		if (event->m_MsgStr == L"ToGameStage") {
 			//最初のアクティブステージの設定
 			ResetActiveStage<GameStage>();
+		}
+
+		else if (event->m_MsgStr == L"ToTitleStage")
+		{
+			ResetActiveStage<TitleStage>();
 		}
 	}
 
