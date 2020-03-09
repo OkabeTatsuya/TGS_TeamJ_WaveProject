@@ -52,6 +52,7 @@ namespace basecross {
 
 	void ObjectBase::OnCreate() {
 		DrawingImage();
+        GetComponent<Transform>()->SetPosition(m_position);
 	}
 
 }
