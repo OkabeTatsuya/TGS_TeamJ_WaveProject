@@ -11,6 +11,7 @@
 #include "Scene.h"
 #include "GameStage.h"
 #include "ObjectBase.h"
+#include "UIBase.h"
 #include "Character.h"
 #include "Player.h"
 #include "SpawnerBase.h"
