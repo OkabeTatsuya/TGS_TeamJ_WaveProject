@@ -14,18 +14,14 @@ namespace basecross{
 	//--------------------------------------------------------------------------------------
 
 	void Scene::CreateResourses() {
-		wstring dataDir;
-		App::GetApp()->GetAssetsDirectory(dataDir);
 
 		wstring mediaDir;
 		App::GetApp()->GetDataDirectory(mediaDir);
 
-		FindFile(dataDir);
-		//FindFile(mediaDir + L"Sound/SE/");
-		//FindFile(mediaDir + L"Sound/BGM/");
-		FindFile(mediaDir + L"Image/");
+		FindFile(mediaDir);
 	}
-
+	
+	//メディアディレクトリにある素材を取ってくる
 	void Scene::FindFile(wstring dir) {
 		HANDLE hFind;
 		WIN32_FIND_DATA win32fd;
@@ -104,6 +100,11 @@ namespace basecross{
 			ResetActiveStage<TitleStage>();
 		}
 	}
+
+	void Scene::LoadStage(wstring stageName) {
+		PostEvent(0.0f, GetThis<ObjectInterface>(), GetThis<Scene>(), stageName);
+	}
+
 
 }
 //end basecross

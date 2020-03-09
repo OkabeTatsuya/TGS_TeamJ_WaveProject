@@ -44,6 +44,7 @@ namespace basecross{
 
 		void FindFile(wstring dir);
 
+		void LoadStage(wstring stageName);
 
 	};
 
