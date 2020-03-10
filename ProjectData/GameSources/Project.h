@@ -15,6 +15,7 @@
 #include "Character.h"
 #include "Player.h"
 #include "SpawnerBase.h"
+#include "GroundWave.h"
 
 #include"TitleStage.h"
 
