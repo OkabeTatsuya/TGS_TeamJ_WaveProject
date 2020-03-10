@@ -18,3 +18,4 @@
 
 #include"TitleStage.h"
 
+#include"ResulfStage.h"

@@ -79,7 +79,7 @@ namespace basecross{
 			SetClearColor(Col);
 			//自分自身にイベントを送る
 			//これにより各ステージやオブジェクトがCreate時にシーンにアクセスできる
-			PostEvent(0.0f, GetThis<ObjectInterface>(), GetThis<Scene>(), L"ToGameStage");
+			PostEvent(0.0f, GetThis<ObjectInterface>(), GetThis<Scene>(), L"ResulfStage");
 		}
 		catch (...) {
 			throw;
@@ -99,6 +99,12 @@ namespace basecross{
 		{
 			ResetActiveStage<TitleStage>();
 		}
+
+		else if (event->m_MsgStr == L"ResulfStage")
+		{
+			ResetActiveStage<ResulfStage>();
+		}
+
 	}
 
 	void Scene::LoadStage(wstring stageName) {
