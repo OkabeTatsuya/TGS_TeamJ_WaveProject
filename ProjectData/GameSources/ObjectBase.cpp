@@ -20,7 +20,7 @@ namespace basecross {
 		m_textureName = L"trace.png";
 	}
 
-	void ObjectBase::DrawingImage() {
+	void ObjectBase::DrawingImage(wstring texStr) {
 		Col4 color(1, 1, 1, 1);
 		Vec2 tipSize = Vec2(1.0f, 1.0f);
 
@@ -43,15 +43,9 @@ namespace basecross {
 		drawComp->SetOriginalMeshUse(true);
 
 		///テクスチャの取得、貼り付け
-		auto &app = App::GetApp();
-		auto texDir = app->GetDataDirWString();
-
+		m_textureName = texStr;
 		drawComp->SetTextureResource(m_textureName);
 		this->SetAlphaActive(true);
-	}
-
-	void ObjectBase::OnCreate() {
-		DrawingImage();
 	}
 
 }

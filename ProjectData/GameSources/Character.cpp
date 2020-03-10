@@ -19,7 +19,7 @@ namespace basecross{
 
 	void Enemy::OnCreate() {
 
-		DrawingImage();
+		DrawingImage(L"trace.png");
 		auto transPtr = AddComponent<Transform>();
 		transPtr->SetPosition(m_position);
 		transPtr->SetScale(m_scale);
