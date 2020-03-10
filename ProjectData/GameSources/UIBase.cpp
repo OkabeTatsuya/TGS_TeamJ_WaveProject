@@ -11,15 +11,17 @@ namespace basecross {
 		Vec3& rotation,
 		Vec3& scale,
 		Vec2& position,
-		float& layer) :
+		float& layer,
+		wstring& tex) :
 		GameObject(stage),
 		m_rotation(rotation),
 		m_scale(scale),
 		m_position(Vec2(position.x, position.y)),
-		m_layer(layer)
+		m_layer(layer),
+		m_textureName(tex)
 	{
 		//エラーが起きないよう初期化
-		m_textureName = L"trace.png";
+		//m_textureName = L"trace.png";
 	}
 
 	void UIBase::DrawingImage() {
@@ -47,7 +49,6 @@ namespace basecross {
 		drawComp->SetSamplerState(SamplerState::LinearWrap);
 
 		///テクスチャの取得、貼り付け
-		m_textureName = L"trace.png";
 		drawComp->SetTextureResource(m_textureName);
 		this->SetAlphaActive(true);
 
