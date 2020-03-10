@@ -26,12 +26,13 @@ namespace basecross {
 		//はりつけるテクスチャを指定
 		void SetTexture(wstring texStr) {
 			m_textureName = texStr;
+			auto drawComp = AddComponent<PCTStaticDraw>();
+			drawComp->SetTextureResource(m_textureName);
+
 		};
 
 		//テクスチャを張り付ける
-		void DrawingImage();
-
-		virtual void OnCreate() override;
+		void DrawingImage(wstring texStr);
 
 	};
 }
