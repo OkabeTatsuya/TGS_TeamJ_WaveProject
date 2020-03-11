@@ -35,8 +35,8 @@ namespace basecross {
 			//					 ローテーション,スケール,ポジション
 			//AddGameObject<Enemy>(Vec3(0.0f), Vec3(10.0f), Vec3(0.0f));
 
-			AddGameObject<UIBase>(Vec3(0.0f,0.0f,0.0f), Vec3(100.0f,100.0f,100.0f), Vec2(0.0f,0.0f),0.0f);
-		
+			AddGameObject<UIBase>(Vec3(0.0f), Vec3(40.0f, 40.0f, 1.0f), Vec2(-600.0f, 350.0f), float(2.0f), L"trace.png");
+
 
 			//シーン移動
 			//App::GetApp()->GetScene<Scene>()->LoadStage(L"ToTitleStage");
