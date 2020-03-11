@@ -98,6 +98,19 @@ namespace basecross{
 			//最初のアクティブステージの設定
 			ResetActiveStage<GameStage>();
 		}
+		else if (event->m_MsgStr == L"ToTitleStage") {
+			//最初のアクティブステージの設定
+			ResetActiveStage<GameStage>();
+		}
+		else if (event->m_MsgStr == L"ToResulfStage") {
+			//最初のアクティブステージの設定
+			ResetActiveStage<GameStage>();
+		}
+	}
+
+	//ステージ移動処理
+	void Scene::LoadStage(wstring stageName) {
+		PostEvent(0.0f, GetThis<ObjectInterface>(), GetThis<Scene>(), stageName);
 	}
 
 }
