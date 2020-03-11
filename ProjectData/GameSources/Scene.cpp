@@ -14,14 +14,18 @@ namespace basecross{
 	//--------------------------------------------------------------------------------------
 
 	void Scene::CreateResourses() {
+		wstring dataDir;
+		App::GetApp()->GetAssetsDirectory(dataDir);
 
 		wstring mediaDir;
 		App::GetApp()->GetDataDirectory(mediaDir);
 
-		FindFile(mediaDir);
+		FindFile(dataDir);
+		//FindFile(mediaDir + L"Sound/SE/");
+		//FindFile(mediaDir + L"Sound/BGM/");
+		FindFile(mediaDir + L"Image/");
 	}
-	
-	//メディアディレクトリにある素材を取ってくる
+
 	void Scene::FindFile(wstring dir) {
 		HANDLE hFind;
 		WIN32_FIND_DATA win32fd;
@@ -79,7 +83,7 @@ namespace basecross{
 			SetClearColor(Col);
 			//自分自身にイベントを送る
 			//これにより各ステージやオブジェクトがCreate時にシーンにアクセスできる
-			PostEvent(0.0f, GetThis<ObjectInterface>(), GetThis<Scene>(), L"ResulfStage");
+			PostEvent(0.0f, GetThis<ObjectInterface>(), GetThis<Scene>(), L"ToGameStage");
 		}
 		catch (...) {
 			throw;
@@ -94,23 +98,7 @@ namespace basecross{
 			//最初のアクティブステージの設定
 			ResetActiveStage<GameStage>();
 		}
-
-		else if (event->m_MsgStr == L"ToTitleStage")
-		{
-			ResetActiveStage<TitleStage>();
-		}
-
-		else if (event->m_MsgStr == L"ResulfStage")
-		{
-			ResetActiveStage<ResulfStage>();
-		}
-
 	}
-
-	void Scene::LoadStage(wstring stageName) {
-		PostEvent(0.0f, GetThis<ObjectInterface>(), GetThis<Scene>(), stageName);
-	}
-
 
 }
 //end basecross

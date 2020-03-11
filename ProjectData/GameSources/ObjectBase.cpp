@@ -43,7 +43,9 @@ namespace basecross {
 		drawComp->SetOriginalMeshUse(true);
 
 		///テクスチャの取得、貼り付け
-		m_textureName = texStr;
+		auto &app = App::GetApp();
+		auto texDir = app->GetDataDirWString();
+
 		drawComp->SetTextureResource(m_textureName);
 		this->SetAlphaActive(true);
 	}
