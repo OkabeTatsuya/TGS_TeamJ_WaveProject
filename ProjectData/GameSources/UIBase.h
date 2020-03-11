@@ -23,7 +23,7 @@ namespace basecross {
 			Vec3& scale,
 			Vec2& position,
 			float& layer,
-			wstring& tex);
+			wstring tex);
 
 		//セッター
 		//はりつけるテクスチャを指定

@@ -12,11 +12,11 @@ namespace basecross {
 		Vec3& scale,
 		Vec2& position,
 		float& layer,
-		wstring& tex) :
+		wstring tex) :
 		GameObject(stage),
 		m_rotation(rotation),
 		m_scale(scale),
-		m_position(Vec2(position.x, position.y)),
+		m_position(position),
 		m_layer(layer),
 		m_textureName(tex)
 	{
