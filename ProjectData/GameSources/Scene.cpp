@@ -83,12 +83,15 @@ namespace basecross{
 			SetClearColor(Col);
 			//自分自身にイベントを送る
 			//これにより各ステージやオブジェクトがCreate時にシーンにアクセスできる
-			PostEvent(0.0f, GetThis<ObjectInterface>(), GetThis<Scene>(), L"ToGameStage");
+			PostEvent(0.0f, GetThis<ObjectInterface>(), GetThis<Scene>(), L"ToResulfStage");
+
 		}
 		catch (...) {
 			throw;
 		}
 	}
+
+
 
 	Scene::~Scene() {
 	}
@@ -100,11 +103,11 @@ namespace basecross{
 		}
 		else if (event->m_MsgStr == L"ToTitleStage") {
 			//最初のアクティブステージの設定
-			ResetActiveStage<GameStage>();
+			ResetActiveStage<TitleStage>();
 		}
 		else if (event->m_MsgStr == L"ToResulfStage") {
 			//最初のアクティブステージの設定
-			ResetActiveStage<GameStage>();
+			ResetActiveStage<ResulfStage>();
 		}
 	}
 

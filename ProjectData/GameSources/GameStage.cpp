@@ -40,11 +40,23 @@ namespace basecross {
             AddGameObject<GroundWave>(Vec3(0, 0, 0), Vec3(10, 0.5, 3), Vec3(0, -2, 0));
 
             AddGameObject<Player>(Vec3(0, 0, 0), Vec3(1, 1, 1),Vec3(-4.0, 0, 0));
+
+			auto BGM = App::GetApp()->GetXAudio2Manager();
+			m_BGM = BGM->Start(L"SampleBGM.wav", XAUDIO2_LOOP_INFINITE, 0.1f);
+
+
 		}
 		catch (...) {
 			throw;
 		}
 	}
+
+	void GameStage::OnDestroy() {
+		//BGMのストップ
+		auto BGM = App::GetApp()->GetXAudio2Manager();
+		BGM->Stop(m_BGM);
+	}
+
 
 }
 //end basecross
