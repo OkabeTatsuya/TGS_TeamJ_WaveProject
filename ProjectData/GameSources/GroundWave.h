@@ -1,7 +1,7 @@
 
 /*!
 @file Character.h
-@brief キャラクターなど
+@brief 地面となる波
 */
 
 #pragma once
@@ -9,6 +9,11 @@
 
 namespace basecross {
     class GroundWave : public ObjectBase {
+    protected:
+        //移動速度
+        float m_moveSpeed;
+        //Y座標の固定
+        float m_initYPos;
     public:
         GroundWave(const shared_ptr<Stage>& stage,
             Vec3& rotation,
@@ -16,6 +21,7 @@ namespace basecross {
             Vec3& position);
 
         virtual void OnCreate() override;
+        virtual void OnUpdate() override;
     };
 }
 //end basecross

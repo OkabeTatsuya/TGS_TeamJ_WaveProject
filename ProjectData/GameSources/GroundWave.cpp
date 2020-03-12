@@ -19,19 +19,33 @@ namespace basecross {
         transPtr->SetPosition(m_position);
         transPtr->SetScale(m_scale);
         transPtr->SetRotation(m_rotation);
+        m_initYPos = m_position.y;
 
-
-        PsBoxParam param(transPtr->GetWorldMatrix(), 1.0f, false, PsMotionType::MotionTypeFixed);
-
-        auto psPtr = AddComponent<RigidbodyBox>(param);
-        psPtr->SetDrawActive(true);
-
-        AddComponent<CollisionObb>()->SetDrawActive(true);
+        auto collision = AddComponent<CollisionObb>();
+        collision->SetDrawActive(true);
+        collision->SetFixed(true);
 
         AddTag(L"GroundWave");
 
+        auto gameobjects = GetStage()->GetGameObjectVec();
+        for (auto obj : gameobjects) {
+            auto player = dynamic_pointer_cast<Player>(obj);
+            if (player) {
+                m_moveSpeed = player->GetCurrentSpeed();
+            }
+        }
+
+
         //SetTexture(L"");
     }
+
+    void GroundWave::OnUpdate() {
+        auto pos = GetComponent<Transform>()->GetPosition();
+        pos.x -= m_moveSpeed * App::GetApp()->GetElapsedTime();
+        pos.y = m_initYPos;
+        GetComponent<Transform>()->SetPosition(pos);
+    }
+   
 
 }
 //end basecross
