@@ -16,18 +16,20 @@ namespace basecross{
         ObjectBase(stage,
             rotation, scale, position
         )
-    {}
-
-    //メンバ変数の初期化
-    void Player::Initialize()
     {
         m_initRotation = m_rotation;
         m_initPosition = m_position;
+        m_isTopJumpAction = false;
+        m_isBottomJumpAction = false;
+        m_isLeftJumpAction = false;
+        m_isRightJumpAction = false;
+        m_isJump = false;
+        m_isJumpAction = false;
+        m_rot = m_rotation;
     }
 
     void Player::OnCreate() {
 
-        Initialize();
         DrawingImage(L"trace.png");
         auto transPtr = AddComponent<Transform>();
         transPtr->SetPosition(m_position);
@@ -47,26 +49,52 @@ namespace basecross{
     }
 
     void Player::OnUpdate() {
+        if (m_isJump && !m_isJumpAction) {
+            auto controller = App::GetApp()->GetInputDevice().GetControlerVec()[0];
+            if (controller.fThumbLY >= 1.0f) {
+                m_isTopJumpAction = true;
+            }
+            if (controller.fThumbLY <= -1.0f) {
+                m_isBottomJumpAction = true;
+            }
+            if (controller.fThumbLX <= -1.0f) {
+                m_isLeftJumpAction = true;
+            }
+            if (controller.fThumbLX >= 1.0f) {
+                m_isRightJumpAction = true;
+            }
+        }
 
+        if (m_isTopJumpAction && m_isBottomJumpAction && m_isLeftJumpAction && m_isRightJumpAction && !m_isJumpAction) {
+            m_isTopJumpAction = false;
+            m_isBottomJumpAction = false;
+            m_isLeftJumpAction = false;
+            m_isRightJumpAction = false;
+            m_isJumpAction = true;
+        }
     }
 
     void Player::OnUpdate2() {
-        auto transPtr=GetComponent<Transform>();
-        //回転の固定
-        transPtr->SetRotation(m_initRotation);
-        //落下しないようにする
-        if (!m_isJump)
-            GetComponent<RigidbodyBox>()->SetLinearVelocity(Vec3(0, 0, 0));
+
+        if (m_isJumpAction) {
+
+            m_rot.z += XM_2PI * App::GetApp()->GetElapsedTime();
+            GetComponent<Transform>()->SetRotation(m_rot);
+            if (m_rot.z >= XM_2PI) {
+                m_isJumpAction = false;
+                m_rot.z = 0;
+            }
+        }
     }
 
     //ジャンプの処理
     void Player::Jump() {
-        auto controller = App::GetApp()->GetInputDevice().GetControlerVec();
+        auto controller = App::GetApp()->GetInputDevice().GetControlerVec()[0];
         //ボタンの判定
-        if (controller[0].wPressedButtons & XINPUT_GAMEPAD_A && !m_isJump) {
+        if (controller.wPressedButtons & XINPUT_GAMEPAD_A && !m_isJump) {
             HighJump();
         }
-        if (controller[0].wPressedButtons & XINPUT_GAMEPAD_B && !m_isJump) {
+        if (controller.wPressedButtons & XINPUT_GAMEPAD_B && !m_isJump) {
             LowJump();
         }
 
@@ -100,6 +128,9 @@ namespace basecross{
     void Player::OnCollisionExcute(shared_ptr<GameObject>& other) {
         if (other->FindTag(L"Wave")) {
             Jump();
+        }
+        if (other->FindTag(L"GroundWave")&&!m_isJump) {
+            GetComponent<RigidbodyBox>()->SetLinearVelocity(Vec3(0, 0, 0));
         }
 
     }
