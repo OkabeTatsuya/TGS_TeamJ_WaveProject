@@ -15,7 +15,10 @@ namespace basecross {
         ObjectBase(stage,
             rotation, scale, position
         )
-    {}
+    {
+        m_isMove = true;
+        m_offScreenX = -6;
+    }
 
     void Wave::OnCreate() {
 
@@ -43,9 +46,37 @@ namespace basecross {
     }
 
     void Wave::OnUpdate() {
-        auto pos = GetComponent<Transform>()->GetPosition();
-        pos.x -= m_moveSpeed * App::GetApp()->GetElapsedTime();
-         GetComponent<Transform>()->SetPosition(pos);
+        Move();
+        OffScreen();
+    }
+
+    void Wave::OffScreen() {
+        if (GetComponent<Transform>()->GetPosition().x <= m_offScreenX) {
+            SetIsMove(false);
+        }
+    }
+
+    void Wave::Move() {
+        if (m_isMove) {
+            auto gameobjects = GetStage()->GetGameObjectVec();
+            for (auto obj : gameobjects) {
+                auto player = dynamic_pointer_cast<Player>(obj);
+                if (player) {
+                    m_moveSpeed = player->GetCurrentSpeed();
+                }
+            }
+            auto pos = GetComponent<Transform>()->GetPosition();
+            pos.x -= m_moveSpeed * App::GetApp()->GetElapsedTime();
+            GetComponent<Transform>()->SetPosition(pos);
+        }
+    }
+
+    bool Wave::GetIsMove() {
+        return m_isMove;
+    }
+
+    void Wave::SetIsMove(bool move) {
+        m_isMove = move;
     }
 }
 //end basecross

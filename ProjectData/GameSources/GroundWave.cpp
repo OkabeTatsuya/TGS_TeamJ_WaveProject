@@ -39,6 +39,13 @@ namespace basecross {
     }
 
     void GroundWave::OnUpdate() {
+        auto gameobjects = GetStage()->GetGameObjectVec();
+        for (auto obj : gameobjects) {
+            auto player = dynamic_pointer_cast<Player>(obj);
+            if (player) {
+                m_moveSpeed = player->GetCurrentSpeed();
+            }
+        }
         auto pos = GetComponent<Transform>()->GetPosition();
         pos.x -= m_moveSpeed * App::GetApp()->GetElapsedTime();
         GetComponent<Transform>()->SetPosition(pos);
