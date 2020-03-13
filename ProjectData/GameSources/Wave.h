@@ -11,7 +11,7 @@ namespace basecross {
     protected:
         //移動速度
         float m_moveSpeed;
-        //動いているかどうか
+        //移動判定
         bool m_isMove;
         //画面外判定のｘ座標
         float m_offScreenX;
@@ -24,10 +24,13 @@ namespace basecross {
         virtual void OnCreate() override;
         virtual void OnUpdate() override;
 
+        //移動処理
         void Move();
+        //移動判定のゲッター
         bool GetIsMove();
+        //移動判定のセッター
         void SetIsMove(bool move);
-        //画面外に出たかどうかの判定
+        //画面外判定
         void OffScreen();
     };
 }

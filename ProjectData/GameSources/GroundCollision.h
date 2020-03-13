@@ -8,18 +8,14 @@
 #include "stdafx.h"
 
 namespace basecross {
-    class GroundWave : public ObjectBase {
-    protected:
-        //ˆÚ“®‘¬“x
-        float m_moveSpeed;
+    class GroundCollision : public ObjectBase {
     public:
-        GroundWave(const shared_ptr<Stage>& stage,
+        GroundCollision(const shared_ptr<Stage>& stage,
             Vec3& rotation,
             Vec3& scale,
             Vec3& position);
 
         virtual void OnCreate() override;
-        virtual void OnUpdate() override;
     };
 }
 //end basecross

@@ -22,6 +22,8 @@ namespace basecross{
 
 		virtual void OnCreate() override;
         virtual void OnUpdate();
+        //ˆÚ“®ˆ—
+        void Move();
 	};
 }
 //end basecross

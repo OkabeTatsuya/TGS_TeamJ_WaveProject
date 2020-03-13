@@ -50,12 +50,14 @@ namespace basecross {
         OffScreen();
     }
 
+    //画面外判定
     void Wave::OffScreen() {
         if (GetComponent<Transform>()->GetPosition().x <= m_offScreenX) {
             SetIsMove(false);
         }
     }
 
+    //移動処理
     void Wave::Move() {
         if (m_isMove) {
             auto gameobjects = GetStage()->GetGameObjectVec();
@@ -71,10 +73,12 @@ namespace basecross {
         }
     }
 
+    //移動判定のゲッター
     bool Wave::GetIsMove() {
         return m_isMove;
     }
 
+    //移動判定のセッター
     void Wave::SetIsMove(bool move) {
         m_isMove = move;
     }

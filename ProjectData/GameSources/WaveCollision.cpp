@@ -36,10 +36,13 @@ namespace basecross{
 	}
 
     void WaveCollision::OnUpdate() {
+        Move();
+    }
+
+    void WaveCollision::Move() {
         auto pos = GetComponent<Transform>()->GetPosition();
         pos.x -= m_moveSpeed * App::GetApp()->GetElapsedTime();
         GetComponent<Transform>()->SetPosition(pos);
-
     }
 
 }

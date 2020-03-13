@@ -11,22 +11,22 @@ namespace basecross{
     protected:
         //ジャンプのフラグ
         bool m_isJump = true;
-        //高いジャンプの上昇量
+        //ハイジャンプの上昇量
         float m_highJumpMoveY;
-        //低いジャンプの上昇量
+        //ロージャンプの上昇量
         float m_lowJumpMoveY;
         //移動速度上限
         float m_maxSpeed;
-        //移動速度加減
+        //移動速度下限
         float m_minSpeed;
         //現在の移動速度
         float m_currentSpeed;
-        //地面となる波に当たっているときのスピードの減少量
+        //継続スピードダウンの減少量
         float m_groundWaveDownSpeedValue;
 
-        //空中アクションのフラグ
+        //空中アクション成否
         bool m_isJumpAction;
-        //空中アクションの上下左右認識フラグ
+        //空中アクション中のスティック上下左右認識フラグ
         bool m_isTopJumpAction;
         bool m_isBottomJumpAction;
         bool m_isLeftJumpAction;
@@ -58,21 +58,21 @@ namespace basecross{
         virtual void OnCollisionExit(shared_ptr<GameObject>& other)override;
         //ジャンプ
         void Jump();
-        //高いジャンプ
+        //ハイジャンプ
         void HighJump();
-        //低いジャンプ
+        //ロージャンプ
         void LowJump();
         //ジャンプアクション
         void JumpAction();
-        //ジャンプアクションの成否判定
+        //ジャンプアクションの入力判定
         void JudgeJumpAction();
-        //スピードの上限下限の限界設定
+        //スピードの上限下限処理
         void AdjustSpeed();
-        //スピードアップ
+        //スピードアップ処理
         void SpeedUp();
-        //ジャンプミスの時のスピードダウン
+        //ジャンプミスのスピードダウン処理
         void JumpMissSpeedDown();
-        //地面の波に当たっているときの継続的なスピードダウン
+        //継続スピードダウン処理
         void GroundWaveSpeedDown();
         //現在の移動速度のゲッター
         float GetCurrentSpeed() {
