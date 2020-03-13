@@ -18,6 +18,7 @@
 #include "GroundWave.h"
 #include "Wave.h"
 #include "WaveCollision.h"
+#include "GameManager.h"
 
 #include"TitleStage.h"
 
