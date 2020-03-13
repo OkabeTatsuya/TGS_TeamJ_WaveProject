@@ -11,6 +11,8 @@ namespace basecross{
     protected:
         //ジャンプのフラグ
         bool m_isJump = true;
+        //空中アクションのフラグ
+        bool m_isJumpAction = false;
         //回転固定用のVec3
         Vec3 m_initRotation;
         //Y座標以外の固定用Vec３

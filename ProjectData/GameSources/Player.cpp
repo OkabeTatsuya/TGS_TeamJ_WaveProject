@@ -48,7 +48,6 @@ namespace basecross{
 
     void Player::OnUpdate() {
 
-        Jump();
     }
 
     void Player::OnUpdate2() {
@@ -77,7 +76,7 @@ namespace basecross{
     void Player::HighJump() {
         m_isJump = true;
         GetComponent<RigidbodyBox>()->SetAutoGravity(true);
-        GetComponent<RigidbodyBox>()->SetLinearVelocity(Vec3(0, 8, 0));
+        GetComponent<RigidbodyBox>()->SetLinearVelocity(Vec3(0, m_highJumpMoveY, 0));
 
     }
 
@@ -85,7 +84,7 @@ namespace basecross{
     void Player::LowJump() {
         m_isJump = true;
         GetComponent<RigidbodyBox>()->SetAutoGravity(true);
-        GetComponent<RigidbodyBox>()->SetLinearVelocity(Vec3(0, 5, 0));
+        GetComponent<RigidbodyBox>()->SetLinearVelocity(Vec3(0, m_lowJumpMoveY, 0));
 
     }
 
@@ -99,6 +98,9 @@ namespace basecross{
     }
     //コリジョンに当たり続けているときの処理
     void Player::OnCollisionExcute(shared_ptr<GameObject>& other) {
+        if (other->FindTag(L"Wave")) {
+            Jump();
+        }
 
     }
     //コリジョンから抜けた瞬間１回のみの処理

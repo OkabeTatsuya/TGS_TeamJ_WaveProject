@@ -1,19 +1,17 @@
-
 /*!
 @file Character.h
-@brief ’n–Ê‚Æ‚È‚é”g
+@brief “®‚¢‚Ä‚­‚é”g
 */
 
 #pragma once
 #include "stdafx.h"
 
 namespace basecross {
-    class GroundWave : public ObjectBase {
+    class Wave : public ObjectBase {
     protected:
-        //ˆÚ“®‘¬“x
         float m_moveSpeed;
     public:
-        GroundWave(const shared_ptr<Stage>& stage,
+        Wave(const shared_ptr<Stage>& stage,
             Vec3& rotation,
             Vec3& scale,
             Vec3& position);
