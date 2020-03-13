@@ -21,7 +21,7 @@ namespace basecross {
 
 	void GameManager::OnCreate() {
 		GetStage()->SetSharedGameObject(L"GameManager", GetThis<GameManager>());
-		ReadGameData();
+		//ReadGameData();
 
 		//デバッグ用のスプライトをつける
 		auto ptrString = AddComponent<StringSprite>();
