@@ -16,6 +16,8 @@
 #include "Player.h"
 #include "SpawnerBase.h"
 #include "GroundWave.h"
+#include "Wave.h"
+#include "WaveCollision.h"
 
 #include"TitleStage.h"
 
