@@ -11,8 +11,6 @@ namespace basecross{
     protected:
         //ジャンプのフラグ
         bool m_isJump = true;
-        //空中アクションのフラグ
-        bool m_isJumpAction = false;
         //回転固定用のVec3
         Vec3 m_initRotation;
         //Y座標以外の固定用Vec３
@@ -27,6 +25,20 @@ namespace basecross{
         float m_minSpeed = 2;
         //現在の移動速度
         float m_currentSpeed = (m_maxSpeed-m_minSpeed)/3+m_minSpeed;
+
+        //空中アクションのフラグ
+        bool m_isJumpAction;
+        //空中アクションの上下左右認識フラグ
+        bool m_isTopJumpAction;
+        bool m_isBottomJumpAction;
+        bool m_isLeftJumpAction;
+        bool m_isRightJumpAction;
+        //空中アクションの入力時間
+        float m_jumpActionLimitTime;
+        //現在の空中アクションの入力にかかっている時間
+        float m_currentJumpActionTime;
+    private:
+        Vec3 m_rot;
     public:
         Player(const shared_ptr<Stage>& stage,
             Vec3& rotation,
@@ -48,8 +60,6 @@ namespace basecross{
         void HighJump();
         //低いジャンプ
         void LowJump();
-        //初期化
-        void Initialize();
         //現在の移動速度のゲッター
         float GetCurrentSpeed() {
             return m_currentSpeed;
