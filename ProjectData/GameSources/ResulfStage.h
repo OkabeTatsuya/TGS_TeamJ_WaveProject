@@ -6,6 +6,26 @@
 #pragma once
 #include "stdafx.h"
 
+//コントローラー
+template<typename T>
+struct bInputHandler
+{
+	void Pushandle(const shared_ptr<T>& Obj)
+	{
+	//コントローラーの取得
+	auto cntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
+		if (cntVec[0].bConnected) {
+			//Aボタン
+			if (cntVec[0].wPressedButtons & XINPUT_GAMEPAD_A)
+			{
+				obj->OnPushA();
+
+			}
+		}
+	}	
+};
+
+
 namespace basecross {
 
 	//--------------------------------------------------------------------------------------
@@ -22,27 +42,6 @@ namespace basecross {
 		virtual void OnCreate()override;
 	};
 
-	//コントローラー
-	template<typename T>
-	struct bInputHandler 
-	{
-		voidPushHandler
-		{
-			void Pushandle(const shared_ptr<T>& Obj)
-			{
-			//コントローラーの取得
-			auto cntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
-			  if (cntVec[0].bConnected) {
-				  //Aボタン
-				  if (cntVec[0].wPressedButtons & XINPUT_GAMEPAD_A)
-				  {
-					  obj->OnPushA();
-
-				  }
-			  }
-		}
-
-	};
 
 
 
