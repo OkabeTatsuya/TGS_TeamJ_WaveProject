@@ -44,6 +44,8 @@ namespace basecross {
 
             AddGameObject<Wave>(Vec3(0, 0, 0), Vec3(1, 1, 1), Vec3(8, -1.5, 0));
             AddGameObject<Wave>(Vec3(0, 0, 0), Vec3(1, 1, 1), Vec3(16, -1.5, 0));
+			AddGameObject<GameManager>();
+			AddGameObject<WaveSpawner>();
 
 
 			auto BGM = App::GetApp()->GetXAudio2Manager();
