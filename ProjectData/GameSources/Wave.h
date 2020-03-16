@@ -1,5 +1,5 @@
 /*!
-@file Character.h
+@file Wave.h
 @brief “®‚¢‚Ä‚­‚é”g
 */
 
@@ -7,10 +7,8 @@
 #include "stdafx.h"
 
 namespace basecross {
-    class Wave : public ObjectBase {
+    class Wave : public MoveSpriteBase {
     protected:
-        //ˆÚ“®‘¬“x
-        float m_moveSpeed;
         //ˆÚ“®”»’è
         bool m_isMove;
         //‰æ–ÊŠO”»’è‚Ì‚˜À•W
@@ -21,8 +19,8 @@ namespace basecross {
             Vec3& scale,
             Vec3& position);
 
-        virtual void OnCreate() override;
         virtual void OnUpdate() override;
+        virtual void OnCreate() override;
 
         //ˆÚ“®ˆ—
         void Move();

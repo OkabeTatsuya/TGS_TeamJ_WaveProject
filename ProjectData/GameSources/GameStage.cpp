@@ -41,7 +41,6 @@ namespace basecross {
             AddGameObject<GroundCollision>(Vec3(0, 0, 0), Vec3(1, 0.5, 3), Vec3(-4, -2, 0));
             AddGameObject<Wave>(Vec3(0, 0, 0), Vec3(1, 1, 1), Vec3(0, -1.5, 0));
 
-
             AddGameObject<Wave>(Vec3(0, 0, 0), Vec3(1, 1, 1), Vec3(8, -1.5, 0));
             AddGameObject<Wave>(Vec3(0, 0, 0), Vec3(1, 1, 1), Vec3(16, -1.5, 0));
 
