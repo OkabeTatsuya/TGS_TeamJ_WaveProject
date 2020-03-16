@@ -13,9 +13,9 @@ namespace basecross {
 
 
 	public:
-		const Vec3& m_rotation;
-		const Vec3& m_scale;
-		const Vec3& m_position;
+		Vec3 m_rotation;
+		Vec3 m_scale;
+		Vec3 m_position;
 
 		ObjectBase(const shared_ptr<Stage>& stage,
 			Vec3& rotation,
@@ -28,7 +28,6 @@ namespace basecross {
 			m_textureName = texStr;
 			auto drawComp = AddComponent<PCTStaticDraw>();
 			drawComp->SetTextureResource(m_textureName);
-
 		};
 
 		//テクスチャを張り付ける
