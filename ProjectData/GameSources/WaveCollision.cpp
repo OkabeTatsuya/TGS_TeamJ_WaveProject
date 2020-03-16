@@ -1,5 +1,5 @@
 /*!
-@file Character.cpp
+@file WaveCollision.cpp
 @brief “®‚­”g‚Ì“–‚½‚è”»’è‚ÌŽÀ‘Ì
 */
 
@@ -13,10 +13,9 @@ namespace basecross{
         Vec3& position
         ):
 
-        GameObject(stage),
-        m_rotation(rotation),
-        m_scale(scale),
-        m_position(position)		
+        ObjectBase(stage,
+            rotation, scale, position
+        )
 	{}
 
 	void WaveCollision::OnCreate() {
@@ -30,19 +29,22 @@ namespace basecross{
         collision->SetDrawActive(true);
         collision->SetAfterCollision(AfterCollision::None);
 
+
+
         AddTag(L"Wave");
 
 		//SetTexture(L"");
 	}
 
     void WaveCollision::OnUpdate() {
-        Move();
+        Stop();
     }
 
-    void WaveCollision::Move() {
-        auto pos = GetComponent<Transform>()->GetPosition();
-        pos.x -= m_moveSpeed * App::GetApp()->GetElapsedTime();
-        GetComponent<Transform>()->SetPosition(pos);
+    void WaveCollision::Stop() {
+        auto wave = dynamic_pointer_cast<Wave>(GetComponent<Transform>()->GetParent());
+        if (wave->GetIsMove()) {
+            GetComponent<CollisionObb>()->SetUpdateActive(false);
+        }
     }
 
 }

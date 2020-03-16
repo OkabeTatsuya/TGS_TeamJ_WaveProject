@@ -16,6 +16,7 @@
 #include "Player.h"
 #include "SpawnerBase.h"
 #include "GroundCollision.h"
+#include "MoveSpriteBase.h"
 #include "Wave.h"
 #include "WaveCollision.h"
 #include "GameManager.h"

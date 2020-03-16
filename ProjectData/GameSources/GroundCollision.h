@@ -1,6 +1,6 @@
 
 /*!
-@file Character.h
+@file GroundCollision.h
 @brief ’n–Ê‚Æ‚È‚é”g
 */
 

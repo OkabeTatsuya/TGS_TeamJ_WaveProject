@@ -1,5 +1,5 @@
 /*!
-@file Character.cpp
+@file Wave.cpp
 @brief “®‚­”g‚ÌŽÀ‘Ì
 */
 
@@ -12,7 +12,7 @@ namespace basecross {
         Vec3& scale,
         Vec3& position) :
 
-        ObjectBase(stage,
+        MoveSpriteBase(stage,
             rotation, scale, position
         )
     {
@@ -21,27 +21,14 @@ namespace basecross {
     }
 
     void Wave::OnCreate() {
-
-
         DrawingImage(L"trace.png");
         auto transPtr = AddComponent<Transform>();
         transPtr->SetPosition(m_position);
         transPtr->SetScale(m_scale);
         transPtr->SetRotation(m_rotation);
 
-        auto gameobjects = GetStage()->GetGameObjectVec();
-        for (auto obj : gameobjects) {
-            auto player = dynamic_pointer_cast<Player>(obj);
-            if (player) {
-                m_moveSpeed = player->GetCurrentSpeed();
-            }
-        }
-
         auto waveCol = GetStage()->AddGameObject<WaveCollision>(Vec3(0, 0, 0), Vec3(1, 1, 1), Vec3(m_position.x - 1, m_position.y, m_position.z));
-        waveCol->GetComponent<Transform>()->SetParent(GetThis<Wave>());
-        waveCol->GetComponent<Transform>()->SetPosition(Vec3(-1, 0, 0));
-        auto parent = waveCol->GetComponent<Transform>()->GetParent();
-
+        waveCol->GetComponent<Transform>()->SetParent(GetThis<GameObject>());
         //SetTexture(L"");
     }
 
@@ -60,16 +47,7 @@ namespace basecross {
     //ˆÚ“®ˆ—
     void Wave::Move() {
         if (m_isMove) {
-            auto gameobjects = GetStage()->GetGameObjectVec();
-            for (auto obj : gameobjects) {
-                auto player = dynamic_pointer_cast<Player>(obj);
-                if (player) {
-                    m_moveSpeed = player->GetCurrentSpeed();
-                }
-            }
-            auto pos = GetComponent<Transform>()->GetPosition();
-            pos.x -= m_moveSpeed * App::GetApp()->GetElapsedTime();
-            GetComponent<Transform>()->SetPosition(pos);
+            Movement(GetComponent<Transform>());
         }
     }
 
