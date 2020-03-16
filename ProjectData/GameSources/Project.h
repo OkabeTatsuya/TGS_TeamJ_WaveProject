@@ -14,11 +14,12 @@
 #include "UIBase.h"
 #include "Character.h"
 #include "Player.h"
-#include "SpawnerBase.h"
 #include "GroundCollision.h"
 #include "Wave.h"
 #include "WaveCollision.h"
 #include "GameManager.h"
+#include "SpawnerBase.h"
+#include "WaveSpawner.h"
 
 #include"TitleStage.h"
 
