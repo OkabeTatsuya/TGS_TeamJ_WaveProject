@@ -17,8 +17,8 @@ namespace basecross {
 	class GameManager final {
 	private:
 		GameManager() {
-			//m_isFrastStop = true;
-			//m_isStopSpawner = true;
+			m_isFrastStop = true;
+			m_isStopSpawner = true;
 		}
 		GameManager(const GameManager&);
 		GameManager& operator = (const GameManager&);
@@ -50,6 +50,7 @@ namespace basecross {
 
 		//セッター
 		void SetIsGameEnd(bool set) { m_isGameEnd = set; }
+		void SetGameSpeed(float set ) { m_gameSpeed = set; }
 
 	};
 
