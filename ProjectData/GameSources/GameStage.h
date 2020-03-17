@@ -17,6 +17,7 @@ namespace basecross {
 
 		//BGM‚ÌÄ¶
 		shared_ptr<SoundItem> m_BGM;
+		shared_ptr<SoundItem> m_SE;
 
 	public:
 		//\’z‚Æ”jŠü

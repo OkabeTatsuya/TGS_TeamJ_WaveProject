@@ -107,7 +107,7 @@ namespace basecross{
 		}
 		else if (event->m_MsgStr == L"ToResulfStage") {
 			//最初のアクティブステージの設定
-			ResetActiveStage<ResulfStage>();
+			ResetActiveStage<ResultStage>();
 		}
 	}
 
