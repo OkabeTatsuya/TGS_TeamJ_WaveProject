@@ -46,7 +46,7 @@ namespace basecross {
 			AddGameObject<Wave>(Vec3(0, 0, 0), Vec3(1, 1, 1), Vec3(16, -1.5, 0));
 			
 			auto BGM = App::GetApp()->GetXAudio2Manager();
-			m_BGM = BGM->Start(L"SampleBGM.wav", XAUDIO2_LOOP_INFINITE, 0.4f);
+			m_BGM = BGM->Start(L"SampleBGM.wav", XAUDIO2_LOOP_INFINITE, 0.5f);
 		}
 		catch (...) {
 			throw;

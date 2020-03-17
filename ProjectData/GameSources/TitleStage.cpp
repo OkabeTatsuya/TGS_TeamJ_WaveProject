@@ -33,7 +33,7 @@ namespace basecross {
 
 			//BGMÄ¶
 			auto XAPtr = App::GetApp()->GetXAudio2Manager();
-			m_BGM = XAPtr->Start(L"SampleBGM.wav", XAUDIO2_LOOP_INFINITE, 0.4f);
+			m_BGM = XAPtr->Start(L"SampleBGM.wav", XAUDIO2_LOOP_INFINITE, 0.5f);
 			
 			//App::GetApp()->GetScene<Scene>()->LoadStage(L"ToGameStage");
 		}
@@ -55,7 +55,7 @@ namespace basecross {
 				if (!m_isPushA) {
 					//SEÄ¶
 					auto XAPtr = App::GetApp()->GetXAudio2Manager();
-					m_SE = XAPtr->Start(L"se_maoudamashii_system37.wav", 0, 0.1f);
+					m_SE = XAPtr->Start(L"se_maoudamashii_system37.wav", 0, 0.5f);
 					//Aƒ{ƒ^ƒ“‚ğ‰Ÿ‚µ‚½‚Æ‚«‚Ìˆ—
 					m_isPushA = true;
 				}
