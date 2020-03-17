@@ -15,16 +15,44 @@ namespace basecross {
 		const Vec3 eye(0.0f, 0.0f, -5.0f);
 		const Vec3 at(0.0f);
 		auto PtrView = CreateView<SingleView>();
+
 		//ビューのカメラの設定
 		auto PtrCamera = ObjectFactory::Create<Camera>();
 		PtrView->SetCamera(PtrCamera);
 		PtrCamera->SetEye(eye);
 		PtrCamera->SetAt(at);
+
 		//マルチライトの作成
 		auto PtrMultiLight = CreateLight<MultiLight>();
+
 		//デフォルトのライティングを指定
 		PtrMultiLight->SetDefaultLighting();
+		{
+			m_Time = false;
+		}
+	}
 
+	//ボタンを押す
+	void ResultStage::Press() {
+		auto cntVec = App::GetApp()->GetInputDevice().GetControlerVec();
+		cntVec[0].wPressedButtons & XINPUT_GAMEPAD_A;
+	}
+
+	//ボタンを押すとシーン遷移する
+	void ResultStage::Sceneloader() {
+		App::GetApp()->GetScene<Scene>()->LoadStage(m_ResultUi[m_ResultUiCount]);
+	}
+
+	//BGMを流す処理
+	void ResultStage::GetBGM() {
+		auto BGM = App::GetApp()->GetXAudio2Manager();
+		m_BGM = BGM->Start(L"SampleBGM.wav", XAUDIO2_LOOP_INFINITE, 0.5f);
+	}
+
+	//SEを流す処理
+	void ResultStage::GetSE() {
+		auto SE = App::GetApp()->GetXAudio2Manager();
+		m_SE = SE->Start(L"se_maoudamashii_system37.wav", 0, 0.5f);
 	}
 
 	void ResultStage::m_ControllerA()		//コントローラーA
@@ -67,6 +95,11 @@ namespace basecross {
 
 			//auto SE = App::GetApp()->GetXAudio2Manager();
 			//m_SE = SE->Start(L"se_maoudamashii_system37.wav", 0, 0.5f);
+			m_ResultUi[0] = L"ToTitleStage"; //リザルト画面のボタン配置
+			m_ResultUi[1] = L"ToGameStage";
+			m_ResultUi[2] = L"ToResultStage";
+			m_ResultUi[3] = L"ToGameStage";
+
 
 		}
 		catch (...) {
@@ -102,7 +135,7 @@ namespace basecross {
 
 			if (m_Time >= 3)
 			{
-				App::GetApp()->GetScene<Scene>()->LoadStage(L"ToGameStage");
+				App::GetApp()->GetScene<Scene>()->LoadStage(m_ResultUi[m_ResultUiCount]);
 			}
 			GetMoveVector();
 		}
@@ -137,19 +170,32 @@ namespace basecross {
 			wButtons = cntlVec[0].wButtons;
 		}
 
+
+
 		if (m_Push) {
 			m_Timer += App::GetApp()->GetElapsedTime();
+			
+		}
+
+		if (m_ResultUiCount >= 4)//リザルトボタンで四つ以上移動しないように
+		{
+			m_ResultUiCount = 3;
+		}
+		if (m_ResultUiCount < 0)
+		{
+			m_ResultUiCount = 0;
 		}
 
 		if (m_Timer>=3)
 		{
-
 			if (fThumbLX >= 1.0f)//スティックが右に倒れた時
 			{
 				auto SE = App::GetApp()->GetXAudio2Manager();
 				SE->Start(L"se_maoudamashii_system37.wav", 0, 0.5f);
 				m_Timer = 0;
 				m_Push = true;
+
+				m_ResultUiCount += 1;//右に1つ移動
 			}
 			if (fThumbLX <= -1.0f)//スティックが左に倒れた時
 			{
@@ -157,6 +203,8 @@ namespace basecross {
 				SE->Start(L"se_maoudamashii_system37.wav", 0, 0.5f);
 				m_Timer = 0;
 				m_Push = true;
+
+				m_ResultUiCount = -1;//左に1つ移動
 			}
 		}
 		//if (fThumbLY > 0.0f)//スティックが上に倒れた時
@@ -169,8 +217,6 @@ namespace basecross {
 		//	auto SE = App::GetApp()->GetXAudio2Manager();
 		//	SE->Start(L"se_maoudamashii_system37.wav", 0, 0.5f);
 		//}
-
-
 
 		return angle;
 	}

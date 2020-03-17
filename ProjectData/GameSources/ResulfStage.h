@@ -24,7 +24,12 @@ namespace basecross {
 		float m_Timer = 3;//コントローラー左スティック処理
 		bool m_Push;//コントローラー左スティック処理
 
+		wstring m_ResultUi[4];
+
+		int m_ResultUiCount = 0;
+
 		void m_ControllerA();
+
 
 		Vec2 GetMoveVector();
 
@@ -38,6 +43,15 @@ namespace basecross {
 		virtual void OnUpdate()override;
 
 		virtual void OnDestroy()override;
+
+		//時間を決めて、シーンを遷移する
+		void Sceneloader();
+		//コントローラーを押す
+		void Press();
+		//BGMを流す
+		void GetBGM();
+		//SEを流す
+		void GetSE();
 	};
 
 	//コントローラー
