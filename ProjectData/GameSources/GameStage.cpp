@@ -30,8 +30,6 @@ namespace basecross {
 		PtrMultiLight->SetDefaultLighting();
 	}
 
-
-
 	void GameStage::OnCreate() {
 		try {
 			//ビューとライトの作成
@@ -41,7 +39,6 @@ namespace basecross {
             AddGameObject<GroundCollision>(Vec3(0, 0, 0), Vec3(1, 0.5, 3), Vec3(-4, -2, 0));
             AddGameObject<Wave>(Vec3(0, 0, 0), Vec3(1, 1, 1), Vec3(0, -1.5, 0));
 
-
             AddGameObject<Wave>(Vec3(0, 0, 0), Vec3(1, 1, 1), Vec3(8, -1.5, 0));
             AddGameObject<Wave>(Vec3(0, 0, 0), Vec3(1, 1, 1), Vec3(16, -1.5, 0));
 			AddGameObject<GameManager>();
@@ -49,9 +46,7 @@ namespace basecross {
 
 
 			auto BGM = App::GetApp()->GetXAudio2Manager();
-			m_BGM = BGM->Start(L"SampleBGM.wav", XAUDIO2_LOOP_INFINITE, 0.1f);
-
-
+			m_BGM = BGM->Start(L"SampleBGM.wav", XAUDIO2_LOOP_INFINITE, 0.4f);
 		}
 		catch (...) {
 			throw;

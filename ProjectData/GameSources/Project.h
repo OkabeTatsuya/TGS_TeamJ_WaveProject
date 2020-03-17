@@ -15,6 +15,7 @@
 #include "Character.h"
 #include "Player.h"
 #include "GroundCollision.h"
+#include "MoveSpriteBase.h"
 #include "Wave.h"
 #include "WaveCollision.h"
 #include "GameManager.h"

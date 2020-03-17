@@ -21,6 +21,11 @@ namespace basecross {
 		shared_ptr<SoundItem>m_BGM;
 		//SE
 		shared_ptr<SoundItem>m_SE;
+		//時間
+		float m_time;
+		//Aボタン
+		bool m_isPushA;
+
 
 		//ビューの作成
 		void CreateViewLight();
