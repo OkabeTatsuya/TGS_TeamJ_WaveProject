@@ -17,11 +17,13 @@ namespace basecross{
             rotation, scale, position
         )
     {
-        m_highJumpMoveY = 8;
-        m_lowJumpMoveY = 5;
-        m_maxSpeed = 4;
-        m_minSpeed = 2;
+        m_highJumpMoveY = 8.0f;
+        m_lowJumpMoveY = 5.0f;
+        m_maxSpeed = 4.0f;
+        m_minSpeed = 2.0f;
         m_currentSpeed = (m_maxSpeed - m_minSpeed) / 3 + m_minSpeed;
+        m_jumpGradeMagnification = 1.5;
+        m_jumpGradeTime = 0.9f;
         m_isTopJumpAction = false;
         m_isBottomJumpAction = false;
         m_isLeftJumpAction = false;
@@ -47,7 +49,7 @@ namespace basecross{
         PsBoxParam param(transPtr->GetWorldMatrix(), 1.0f, false, PsMotionType::MotionTypeActive);
         AddComponent<RigidbodyBox>(param)->SetDrawActive(true);
 
-        AddComponent<CollisionObb>()->SetDrawActive(true);
+        AddComponent<CollisionObb>()->SetMakedSize(1);
 
         //SetTexture(L"");
     }
@@ -71,8 +73,8 @@ namespace basecross{
     }
 
     //スピードアップ処理
-    void Player::SpeedUp() {
-        m_currentSpeed += m_upSpeedValue;
+    void Player::SpeedUp(float upSpeedValue) {
+        m_currentSpeed += upSpeedValue;
         AdjustSpeed();
     }
 
@@ -139,14 +141,39 @@ namespace basecross{
 
     //ジャンプ処理
     void Player::Jump() {
+        bool isGreatJump = false;
         auto controller = App::GetApp()->GetInputDevice().GetControlerVec()[0];
-        if (controller.wPressedButtons & XINPUT_GAMEPAD_A && !m_isJump) {
-            SpeedUp();
-            HighJump();
+        m_currentJumpGradeTime += App::GetApp()->GetElapsedTime();
+        if (2.0f/ m_currentSpeed * m_jumpGradeTime<= m_currentJumpGradeTime) {
+            isGreatJump = true;
         }
-        if (controller.wPressedButtons & XINPUT_GAMEPAD_B && !m_isJump) {
-            SpeedUp();
-            LowJump();
+        if (isGreatJump) {
+            if (controller.wPressedButtons & XINPUT_GAMEPAD_A && !m_isJump) {
+                SpeedUp(m_upSpeedValue * m_jumpGradeMagnification);
+                HighJump();
+                m_currentJumpGradeTime = 0;
+
+            }
+            if (controller.wPressedButtons & XINPUT_GAMEPAD_B && !m_isJump) {
+                SpeedUp(m_upSpeedValue * m_jumpGradeMagnification);
+                LowJump();
+                m_currentJumpGradeTime = 0;
+
+            }
+        }
+        else{
+            if (controller.wPressedButtons & XINPUT_GAMEPAD_A && !m_isJump) {
+                SpeedUp(m_upSpeedValue);
+                HighJump();
+                m_currentJumpGradeTime = 0;
+
+            }
+            if (controller.wPressedButtons & XINPUT_GAMEPAD_B && !m_isJump) {
+                SpeedUp(m_upSpeedValue);
+                LowJump();
+                m_currentJumpGradeTime = 0;
+
+            }
         }
     }
 
@@ -188,6 +215,7 @@ namespace basecross{
     void Player::OnCollisionExit(shared_ptr<GameObject>&other) {
         if (other->FindTag(L"Wave") && !m_isJump) {
             JumpMissSpeedDown();
+            m_currentJumpGradeTime = 0;
         }
     }
 }
