@@ -34,8 +34,6 @@ namespace basecross {
 			//BGM再生
 			auto XAPtr = App::GetApp()->GetXAudio2Manager();
 			m_BGM = XAPtr->Start(L"SampleBGM.wav", XAUDIO2_LOOP_INFINITE, 0.4f);
-			//SE再生
-			m_SE = XAPtr->Start(L"se_maoudamashii_system37.wav", 0.1f);
 
 			//App::GetApp()->GetScene<Scene>()->LoadStage(L"ToGameStage");
 		}
@@ -51,6 +49,28 @@ namespace basecross {
 			if (CutlVec[0].wPressedButtons & XINPUT_GAMEPAD_B) {
 				PostEvent(0.0f, GetThis <ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
 			}
+
+			//Aボタン
+			if (CutlVec[0].wPressedButtons & XINPUT_GAMEPAD_A) {
+				if (!m_isPushA) {
+					//SE再生
+					auto XAPtr = App::GetApp()->GetXAudio2Manager();
+					m_SE = XAPtr->Start(L"se_maoudamashii_system37.wav", 0, 0.1f);
+					//Aボタンを押したときの処理
+					m_isPushA = true;
+				}
+			}
+		}
+
+		//時間を保存する
+		if (m_isPushA) {
+			m_time += App::GetApp()->GetElapsedTime();
+		}
+
+		//シーン移動
+		if (m_time >= 3) {
+			PostEvent(0.0f, GetThis <ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
+			
 		}
 	}
 
@@ -58,6 +78,7 @@ namespace basecross {
 	void TitleStage::OnDestroy() {
 		auto XAPtr = App::GetApp()->GetXAudio2Manager();
 		XAPtr->Stop(m_BGM);
+		XAPtr->Stop(m_SE);
 	}
 }
 //end basecross
