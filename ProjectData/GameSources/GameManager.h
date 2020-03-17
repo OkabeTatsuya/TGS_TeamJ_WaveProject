@@ -5,6 +5,7 @@
 
 #pragma once
 #include "stdafx.h"
+#include "Project.h"
 
 namespace basecross {
 	enum FlagName {
@@ -13,11 +14,16 @@ namespace basecross {
 		en_GamePuse = 0X0002
 	};
 
-	class GameManager : public GameObject {
+	class GameManager final {
+	private:
+		GameManager() {
+			//m_isFrastStop = true;
+			//m_isStopSpawner = true;
+		}
+		GameManager(const GameManager&);
+		GameManager& operator = (const GameManager&);
+		~GameManager() {};
 
-		UINT Game = 0;
-
-	public:
 		float m_gameSpeed;
 		float m_startTimeCount;
 		float m_maxStartTime;
@@ -29,33 +35,22 @@ namespace basecross {
 		bool m_isStopSpawner;
 		bool m_isGameEnd;
 
-		GameManager(const shared_ptr<Stage>& StagePtr);
 
-		~GameManager() {};
-
-		virtual void OnCreate() override;
-		virtual void OnUpdate() override;
-
-		//デバッグ用の文字列表示を表示するために必要
-		virtual void OnUpdate2() override;
+	public :
+		static GameManager& GetInstance() {
+			static GameManager inst;
+			return inst;
+		}
 
 		//ゲッター
-		bool GetGameEnd() { return m_isGameEnd; }
+		float GetGameSpeed() { return m_gameSpeed; }
+		bool GetIsStopSpawner() { return m_isFrastStop; }
+		bool GetIsGameEnd() { return m_isGameEnd; }
+
 
 		//セッター
-		void SetGameEnd(bool set) { m_isGameEnd = set; }
+		void SetIsGameEnd(bool set) { m_isGameEnd = set; }
 
-		void LoadResultStage();
-
-		void SaveGameData();
-
-		void ReadGameData();
-
-		void FrastTimeCount();
-
-		void DebugHander();
-
-		//デバッグ用の文字列表示処理
-		void DebugString();
 	};
+
 }
