@@ -33,27 +33,43 @@ namespace basecross {
 		}
 	}
 
-	void SpawnerBase::CreateObject() {
+	void SpawnerBase::LoadCreatePostion() {
+		for (int i = 0; i < 10; i++) {
+			float SetPos = 5 * i;
+			m_createPos.push_back(SetPos);
+		}
+	}
 
-		while (m_spawnCount <= m_defaultObjectNum) {
+	void SpawnerBase::CreateObject() {
+		for (int i = 0; i < m_defaultObjectNum; i++) {
 			m_waveObject.push_back(GetStage()->AddGameObject<Wave>(Vec3(0.0f), Vec3(1.0f), Vec3(-6.0f, -1.5, 0)));
-			m_spawnCount++;
 		}
 	}
 
 	void SpawnerBase::SpawnObject() {
-		m_spawnTimer += App::GetApp()->GetElapsedTime();
+		float gameSpeed = GameManager::GetInstance().GetGameSpeed();
 
-		if (m_curentTime <= m_spawnTimer) {		
+		m_spawnTimer += App::GetApp()->GetElapsedTime() * gameSpeed;
+
+		float move = m_createPos[m_spawnCount] / gameSpeed;
+
+		if (move <= m_spawnTimer) {
 			for (int i = 0; i < m_waveObject.size(); i++) {
 				if (!m_waveObject[i]->GetIsMove()) {
 					m_waveObject[i]->GetComponent<Transform>()->SetPosition(Vec3(6.0f, -1.5, 0));
 					m_waveObject[i]->SetIsMove(true);
+					m_spawnCount++;
 					break;
 				}
 			}
 			m_spawnTimer = 0;
 
+		}
+	}
+
+	void SpawnerBase::EndCreateObject() {
+		if (m_createPos.size() < m_spawnCount) {
+			GameManager::GetInstance().GetIsStopSpawner();
 		}
 	}
 }

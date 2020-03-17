@@ -29,6 +29,7 @@ namespace basecross {
 		FileNameCSV m_strFileNameCSV;
 		vector<CsvFile> m_gameStageCsv;
 		vector<shared_ptr<Wave>> m_waveObject;
+		vector<float> m_createPos;
 
 		int m_defaultObjectNum;
 		int m_spawnCount;
@@ -43,8 +44,14 @@ namespace basecross {
 
 		void LoadCSV();
 
+		//CSVからポジションデータを取ってくる
+		void LoadCreatePostion();
+
 		void CreateObject();
 
 		void SpawnObject();
+
+		void EndCreateObject();
+
 	};
 }
