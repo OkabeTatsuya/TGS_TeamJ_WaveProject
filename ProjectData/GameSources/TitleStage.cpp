@@ -28,10 +28,57 @@ namespace basecross {
 		try {
 			//ビューとライトの作成
 			CreateViewLight();
+
+			AddGameObject<UIBase>(Vec3(0.0f), Vec3(40.0f, 40.0f, 1.0f), Vec2(-600.0f, 350.0f), float(2.0f), L"trace.png");
+
+			//BGM再生
+			auto XAPtr = App::GetApp()->GetXAudio2Manager();
+			m_BGM = XAPtr->Start(L"SampleBGM.wav", XAUDIO2_LOOP_INFINITE, 0.4f);
+
+			//App::GetApp()->GetScene<Scene>()->LoadStage(L"ToGameStage");
 		}
 		catch (...) {
 			throw;
 		}
+	}
+
+	void TitleStage::OnUpdate(){
+		//Bボタンでシーン移動
+		auto CutlVec = App::GetApp()->GetInputDevice().GetControlerVec();
+		if (CutlVec[0].bConnected) {
+			if (CutlVec[0].wPressedButtons & XINPUT_GAMEPAD_B) {
+				PostEvent(0.0f, GetThis <ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
+			}
+
+			//Aボタン
+			if (CutlVec[0].wPressedButtons & XINPUT_GAMEPAD_A) {
+				if (!m_isPushA) {
+					//SE再生
+					auto XAPtr = App::GetApp()->GetXAudio2Manager();
+					m_SE = XAPtr->Start(L"se_maoudamashii_system37.wav", 0, 0.1f);
+					//Aボタンを押したときの処理
+					m_isPushA = true;
+				}
+			}
+		}
+
+		//時間を保存する
+		if (m_isPushA) {
+			m_time += App::GetApp()->GetElapsedTime();
+		}
+
+		//シーン移動
+		if (m_time >= 3) {
+			PostEvent(0.0f, GetThis <ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
+			
+		}
+	}
+
+	//BGMを止める
+	void TitleStage::OnDestroy() {
+		auto XAPtr = App::GetApp()->GetXAudio2Manager();
+		XAPtr->Stop(m_BGM);
+		XAPtr->Stop(m_SE);
 	}
 }
 //end basecross

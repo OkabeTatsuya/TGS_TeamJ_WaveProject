@@ -16,77 +16,152 @@ namespace basecross{
         ObjectBase(stage,
             rotation, scale, position
         )
-    {}
-
-    //メンバ変数の初期化
-    void Player::Initialize()
     {
-        m_initRotation = m_rotation;
-        m_initPosition = m_position;
+        m_highJumpMoveY = 8;
+        m_lowJumpMoveY = 5;
+        m_maxSpeed = 4;
+        m_minSpeed = 2;
+        m_currentSpeed = (m_maxSpeed - m_minSpeed) / 3 + m_minSpeed;
+        m_isTopJumpAction = false;
+        m_isBottomJumpAction = false;
+        m_isLeftJumpAction = false;
+        m_isRightJumpAction = false;
+        m_isJump = false;
+        m_isJumpAction = false;
+        m_rot = m_rotation;
+        m_currentJumpActionTime = 0;
+        m_jumpActionLimitTime = 0.3;
+        m_upSpeedValue = 0.5f;
+        m_jumpMissDownSpeedValue = 1.0f;
+        m_groundWaveDownSpeedValue = 0.1f;
     }
 
     void Player::OnCreate() {
 
-        Initialize();
         DrawingImage(L"trace.png");
         auto transPtr = AddComponent<Transform>();
         transPtr->SetPosition(m_position);
         transPtr->SetScale(m_scale);
         transPtr->SetRotation(m_rotation);
 
-
         PsBoxParam param(transPtr->GetWorldMatrix(), 1.0f, false, PsMotionType::MotionTypeActive);
-
         AddComponent<RigidbodyBox>(param)->SetDrawActive(true);
-        
 
         AddComponent<CollisionObb>()->SetDrawActive(true);
-
 
         //SetTexture(L"");
     }
 
     void Player::OnUpdate() {
-
-        Jump();
+        JudgeJumpAction();
     }
 
     void Player::OnUpdate2() {
-        auto transPtr=GetComponent<Transform>();
-        //回転の固定
-        transPtr->SetRotation(m_initRotation);
-        //落下しないようにする
-        if (!m_isJump)
-            GetComponent<RigidbodyBox>()->SetLinearVelocity(Vec3(0, 0, 0));
+        JumpAction();
     }
 
-    //ジャンプの処理
+    //スピードの上限下限処理
+    void Player::AdjustSpeed() {
+        if (m_currentSpeed > m_maxSpeed) {
+            m_currentSpeed = m_maxSpeed;
+        }
+        if (m_currentSpeed < m_minSpeed) {
+            m_currentSpeed = m_minSpeed;
+        }
+    }
+
+    //スピードアップ処理
+    void Player::SpeedUp() {
+        m_currentSpeed += m_upSpeedValue;
+        AdjustSpeed();
+    }
+
+    //ジャンプミスのスピードダウン処理
+    void Player::JumpMissSpeedDown() {
+        m_currentSpeed -= m_jumpMissDownSpeedValue;
+        AdjustSpeed();
+    }
+
+    //継続スピードダウン処理
+    void Player::GroundWaveSpeedDown() {
+        m_currentSpeed -= m_groundWaveDownSpeedValue * App::GetApp()->GetElapsedTime();
+        AdjustSpeed();
+    }
+
+    //ジャンプアクションの入力判定
+    void Player::JudgeJumpAction() {
+        auto controller = App::GetApp()->GetInputDevice().GetControlerVec()[0];
+        if (m_isJump && Vec2(controller.fThumbLX,controller.fThumbLY).length() >= 1.0f) {
+            m_currentJumpActionTime += App::GetApp()->GetElapsedTime();
+        }
+        if (m_isJump && !m_isJumpAction && m_currentJumpActionTime <= m_jumpActionLimitTime) {
+            if (controller.fThumbLY >= 1.0f) {
+                m_isTopJumpAction = true;
+            }
+            if (controller.fThumbLY <= -1.0f) {
+                m_isBottomJumpAction = true;
+            }
+            if (controller.fThumbLX <= -1.0f) {
+                m_isLeftJumpAction = true;
+            }
+            if (controller.fThumbLX >= 1.0f) {
+                m_isRightJumpAction = true;
+            }
+        }
+        else {
+            m_isTopJumpAction = false;
+            m_isBottomJumpAction = false;
+            m_isLeftJumpAction = false;
+            m_isRightJumpAction = false;
+            m_currentJumpActionTime = 0;
+        }
+
+        if (m_isTopJumpAction && m_isBottomJumpAction && m_isLeftJumpAction && m_isRightJumpAction && !m_isJumpAction) {
+            m_isTopJumpAction = false;
+            m_isBottomJumpAction = false;
+            m_isLeftJumpAction = false;
+            m_isRightJumpAction = false;
+            m_isJumpAction = true;
+        }
+    }
+
+    //ジャンプアクション処理
+    void Player::JumpAction() {
+        if (m_isJumpAction) {
+            m_rot.z += XM_2PI * App::GetApp()->GetElapsedTime();
+            GetComponent<Transform>()->SetRotation(m_rot);
+            if (m_rot.z >= XM_2PI) {
+                m_rot.z = 0;
+                m_isJumpAction = false;
+            }
+        }
+    }
+
+    //ジャンプ処理
     void Player::Jump() {
-        auto controller = App::GetApp()->GetInputDevice().GetControlerVec();
-        //ボタンの判定
-        if (controller[0].wPressedButtons & XINPUT_GAMEPAD_A && !m_isJump) {
+        auto controller = App::GetApp()->GetInputDevice().GetControlerVec()[0];
+        if (controller.wPressedButtons & XINPUT_GAMEPAD_A && !m_isJump) {
+            SpeedUp();
             HighJump();
         }
-        if (controller[0].wPressedButtons & XINPUT_GAMEPAD_B && !m_isJump) {
+        if (controller.wPressedButtons & XINPUT_GAMEPAD_B && !m_isJump) {
+            SpeedUp();
             LowJump();
         }
-
     }
 
-    //高いジャンプ
+    //ハイジャンプ
     void Player::HighJump() {
         m_isJump = true;
         GetComponent<RigidbodyBox>()->SetAutoGravity(true);
-        GetComponent<RigidbodyBox>()->SetLinearVelocity(Vec3(0, 8, 0));
-
+        GetComponent<RigidbodyBox>()->SetLinearVelocity(Vec3(0, m_highJumpMoveY, 0));
     }
 
-    //低いジャンプ
+    //ロージャンプ
     void Player::LowJump() {
         m_isJump = true;
         GetComponent<RigidbodyBox>()->SetAutoGravity(true);
-        GetComponent<RigidbodyBox>()->SetLinearVelocity(Vec3(0, 5, 0));
-
+        GetComponent<RigidbodyBox>()->SetLinearVelocity(Vec3(0, m_lowJumpMoveY, 0));
     }
 
     //コリジョンの最初に当たった瞬間１回のみの処理
@@ -94,16 +169,26 @@ namespace basecross{
         if (other->FindTag(L"GroundWave")) {
             m_isJump=false;
             GetComponent<RigidbodyBox>()->SetAutoGravity(false);
-            m_initPosition.y = GetComponent<Transform>()->GetPosition().y;
         }
     }
+
     //コリジョンに当たり続けているときの処理
     void Player::OnCollisionExcute(shared_ptr<GameObject>& other) {
-
+        if (other->FindTag(L"Wave")) {
+            Jump();
+        }
+        //落下防止処理
+        if (other->FindTag(L"GroundWave")&&!m_isJump) {
+            GetComponent<RigidbodyBox>()->SetLinearVelocity(Vec3(0, 0, 0));
+            GroundWaveSpeedDown();
+        }
     }
+
     //コリジョンから抜けた瞬間１回のみの処理
     void Player::OnCollisionExit(shared_ptr<GameObject>&other) {
-
+        if (other->FindTag(L"Wave") && !m_isJump) {
+            JumpMissSpeedDown();
+        }
     }
 }
 //end basecross
