@@ -23,6 +23,12 @@ namespace basecross{
         float m_currentSpeed;
         //継続スピードダウンの減少量
         float m_groundWaveDownSpeedValue;
+        //現在のジャンプのグレード判定秒数
+        float m_currentJumpGradeTime;
+        //ギリギリでジャンプした時のスピードの上昇量倍率
+        float m_jumpGradeMagnification;
+        //ジャンプグレード判定の難易度
+        float m_jumpGradeTime;
 
         //空中アクション成否
         bool m_isJumpAction;
@@ -69,7 +75,7 @@ namespace basecross{
         //スピードの上限下限処理
         void AdjustSpeed();
         //スピードアップ処理
-        void SpeedUp();
+        void SpeedUp(float upSpeedValue);
         //ジャンプミスのスピードダウン処理
         void JumpMissSpeedDown();
         //継続スピードダウン処理

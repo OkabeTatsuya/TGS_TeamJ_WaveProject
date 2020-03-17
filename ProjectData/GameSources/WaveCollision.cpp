@@ -27,8 +27,8 @@ namespace basecross{
         
         auto collision = AddComponent<CollisionObb>();
         collision->SetDrawActive(true);
+        collision->SetMakedSize(1);
         collision->SetAfterCollision(AfterCollision::None);
-
 
 
         AddTag(L"Wave");
@@ -42,7 +42,7 @@ namespace basecross{
 
     void WaveCollision::Stop() {
         auto wave = dynamic_pointer_cast<Wave>(GetComponent<Transform>()->GetParent());
-        if (wave->GetIsMove()) {
+        if (!wave->GetIsMove()) {
             GetComponent<CollisionObb>()->SetUpdateActive(false);
         }
     }
