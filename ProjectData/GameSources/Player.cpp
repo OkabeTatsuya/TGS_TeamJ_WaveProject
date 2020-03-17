@@ -21,7 +21,7 @@ namespace basecross{
         m_lowJumpMoveY = 5.0f;
         m_maxSpeed = 4.0f;
         m_minSpeed = 2.0f;
-        m_currentSpeed = (m_maxSpeed - m_minSpeed) / 3 + m_minSpeed;
+        GameManager::GetInstance().SetGameSpeed((m_maxSpeed - m_minSpeed) / 3 + m_minSpeed);
         m_jumpGradeMagnification = 1.5;
         m_jumpGradeTime = 0.9f;
         m_isTopJumpAction = false;
@@ -34,7 +34,7 @@ namespace basecross{
         m_currentJumpActionTime = 0;
         m_jumpActionLimitTime = 0.3;
         m_upSpeedValue = 0.5f;
-        m_jumpMissDownSpeedValue = 1.0f;
+        m_jumpMissDownSpeedValue = 0.5f;
         m_groundWaveDownSpeedValue = 0.1f;
     }
 
@@ -64,29 +64,39 @@ namespace basecross{
 
     //スピードの上限下限処理
     void Player::AdjustSpeed() {
-        if (m_currentSpeed > m_maxSpeed) {
-            m_currentSpeed = m_maxSpeed;
+        auto &gm = GameManager::GetInstance();
+        if (gm.GetGameSpeed() > m_maxSpeed) {
+            gm.SetGameSpeed(m_maxSpeed);
         }
-        if (m_currentSpeed < m_minSpeed) {
-            m_currentSpeed = m_minSpeed;
+        if (gm.GetGameSpeed() < m_minSpeed) {
+            gm.SetGameSpeed(m_minSpeed);
         }
     }
 
     //スピードアップ処理
     void Player::SpeedUp(float upSpeedValue) {
-        m_currentSpeed += upSpeedValue;
+        auto &gm = GameManager::GetInstance();
+        auto currentSpeed = gm.GetGameSpeed();
+        currentSpeed += upSpeedValue;
+        gm.SetGameSpeed(currentSpeed);
         AdjustSpeed();
     }
 
     //ジャンプミスのスピードダウン処理
     void Player::JumpMissSpeedDown() {
-        m_currentSpeed -= m_jumpMissDownSpeedValue;
+        auto &gm = GameManager::GetInstance();
+        auto currentSpeed = gm.GetGameSpeed();
+        currentSpeed -= m_jumpMissDownSpeedValue;
+        gm.SetGameSpeed(currentSpeed);
         AdjustSpeed();
     }
 
     //継続スピードダウン処理
     void Player::GroundWaveSpeedDown() {
-        m_currentSpeed -= m_groundWaveDownSpeedValue * App::GetApp()->GetElapsedTime();
+        auto &gm = GameManager::GetInstance();
+        auto currentSpeed = gm.GetGameSpeed();
+        currentSpeed -= m_groundWaveDownSpeedValue * App::GetApp()->GetElapsedTime();
+        gm.SetGameSpeed(currentSpeed);
         AdjustSpeed();
     }
 
@@ -142,9 +152,10 @@ namespace basecross{
     //ジャンプ処理
     void Player::Jump() {
         bool isGreatJump = false;
+        float collisionSize = 2.0f;
         auto controller = App::GetApp()->GetInputDevice().GetControlerVec()[0];
         m_currentJumpGradeTime += App::GetApp()->GetElapsedTime();
-        if (2.0f/ m_currentSpeed * m_jumpGradeTime<= m_currentJumpGradeTime) {
+        if (collisionSize/ GameManager::GetInstance().GetGameSpeed() * m_jumpGradeTime<= m_currentJumpGradeTime) {
             isGreatJump = true;
         }
         if (isGreatJump) {

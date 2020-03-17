@@ -19,8 +19,6 @@ namespace basecross{
         float m_maxSpeed;
         //移動速度下限
         float m_minSpeed;
-        //現在の移動速度
-        float m_currentSpeed;
         //継続スピードダウンの減少量
         float m_groundWaveDownSpeedValue;
         //現在のジャンプのグレード判定秒数
@@ -80,10 +78,6 @@ namespace basecross{
         void JumpMissSpeedDown();
         //継続スピードダウン処理
         void GroundWaveSpeedDown();
-        //現在の移動速度のゲッター
-        float GetCurrentSpeed() {
-            return m_currentSpeed;
-        }
     };
 
 }
