@@ -30,8 +30,6 @@ namespace basecross {
 		PtrMultiLight->SetDefaultLighting();
 	}
 
-
-
 	void GameStage::OnCreate() {
 		try {
 			//ビューとライトの作成
@@ -46,9 +44,7 @@ namespace basecross {
 
 
 			auto BGM = App::GetApp()->GetXAudio2Manager();
-			m_BGM = BGM->Start(L"SampleBGM.wav", XAUDIO2_LOOP_INFINITE, 0.1f);
-
-
+			m_BGM = BGM->Start(L"SampleBGM.wav", XAUDIO2_LOOP_INFINITE, 0.4f);
 		}
 		catch (...) {
 			throw;

@@ -37,7 +37,7 @@ namespace basecross {
 			//AddGameObject<Enemy>(Vec3(0.0f), Vec3(10.0f), Vec3(0.0f));
 
 			AddGameObject<UIBase>(Vec3(0.0f), Vec3(40.0f, 40.0f, 1.0f), Vec2(-600.0f, 350.0f), float(2.0f), L"trace.png");
-			App::GetApp()->GetScene<Scene>()->LoadStage(L"ToGameStage");
+			//App::GetApp()->GetScene<Scene>()->LoadStage(L"ToGameStage");
 
 
 			//ƒV[ƒ“ˆÚ“®

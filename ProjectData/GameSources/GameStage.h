@@ -17,7 +17,6 @@ namespace basecross {
 
 		//BGM‚ÌÄ¶
 		shared_ptr<SoundItem> m_BGM;
-
 	public:
 		//\’z‚Æ”jŠü
 		GameStage() :Stage() {}
