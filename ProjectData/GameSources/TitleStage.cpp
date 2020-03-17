@@ -29,12 +29,12 @@ namespace basecross {
 			//ビューとライトの作成
 			CreateViewLight();
 
-			AddGameObject<UIBase>(Vec3(0.0f), Vec3(40.0f, 40.0f, 1.0f), Vec2(-600.0f, 350.0f), float(2.0f), L"trace.png");
+			AddGameObject<UIBase>(Vec3(0.0f), Vec3(500.0f,500.0f, 1.0f), Vec2(0.0f, 0.0f), float(2.0f), L"FadeBG.png");
 
 			//BGM再生
 			auto XAPtr = App::GetApp()->GetXAudio2Manager();
 			m_BGM = XAPtr->Start(L"SampleBGM.wav", XAUDIO2_LOOP_INFINITE, 0.4f);
-
+			
 			//App::GetApp()->GetScene<Scene>()->LoadStage(L"ToGameStage");
 		}
 		catch (...) {
@@ -50,7 +50,7 @@ namespace basecross {
 				PostEvent(0.0f, GetThis <ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
 			}
 
-			//Aボタン
+			//Aボタンを押して、3秒経ったらシーン移動
 			if (CutlVec[0].wPressedButtons & XINPUT_GAMEPAD_A) {
 				if (!m_isPushA) {
 					//SE再生
