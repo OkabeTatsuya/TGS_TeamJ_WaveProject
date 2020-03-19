@@ -17,21 +17,36 @@ namespace basecross {
 	class GameManager final {
 	private:
 		GameManager() {
-			m_isFrastStop = true;
-			m_isStopSpawner = true;
+			m_gameScore = 0;
+			m_baseJumpScore = 100;
+			m_baseActionScore = 200;
+
+			m_isFirstStop = true;
+			m_isStopSpawner = false;
+
 		}
 		GameManager(const GameManager&);
 		GameManager& operator = (const GameManager&);
 		~GameManager() {};
 
+		//スコア
+		int m_gameScore;
+
+		//スコア加算の基準になる
+		int m_baseJumpScore;
+		int m_baseActionScore;
+
+
 		float m_gameSpeed;
+
+		//ゲームがスタートした時の硬直時間
 		float m_startTimeCount;
 		float m_maxStartTime;
 
 		float m_saveNum;
 		float m_stageNum;
 
-		bool m_isFrastStop;
+		bool m_isFirstStop;
 		bool m_isStopSpawner;
 		bool m_isGameEnd;
 
@@ -43,15 +58,24 @@ namespace basecross {
 		}
 
 		//ゲッター
+		int GetGameScore() { return m_gameScore; }
 		float GetGameSpeed() { return m_gameSpeed; }
-		bool GetIsStopSpawner() { return m_isFrastStop; }
+		bool GetIsStopSpawner() { return m_isStopSpawner; }
 		bool GetIsGameEnd() { return m_isGameEnd; }
 
 
 		//セッター
 		void SetIsGameEnd(bool set) { m_isGameEnd = set; }
 		void SetGameSpeed(float set ) { m_gameSpeed = set; }
+		void SetIsStopSpawner(bool set) { m_isStopSpawner = set; }
 
+		//ジャンプのスコア加算処理
+		///magnification 倍率、　combo 続けてジャンプした回数
+		void AddJumpScore(float magnification, int combo);
+
+		//ジャンプアクションのスコア加算処理
+		///magnification 倍率、　combo 続けてアクションした回数
+		void AddActionScore(float magnification, int combo);
 	};
 
 }
