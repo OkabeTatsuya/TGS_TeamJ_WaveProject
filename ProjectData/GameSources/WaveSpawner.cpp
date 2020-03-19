@@ -13,8 +13,9 @@ namespace basecross {
 	}
 
 	void WaveSpawner::OnCreate() {
-		//LoadCSV();
+		LoadCSV();
 		CreateObject();
+		//LoadCreatePostion();
 	}
 
 	void WaveSpawner::OnUpdate() {
