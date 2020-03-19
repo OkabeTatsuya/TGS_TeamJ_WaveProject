@@ -39,9 +39,11 @@ namespace basecross {
 			//AddGameObject<WaveSpawner>();
 
             AddGameObject<Player>(Vec3(0, 0, 0), Vec3(1, 1, 1),Vec3(-4.0, 2, 0));
-            AddGameObject<GroundCollision>(Vec3(0, 0, 0), Vec3(1, 0.5, 3), Vec3(-4, -2, 0));
+            AddGameObject<GroundCollision>(Vec3(0, 0, 0), Vec3(1, 0.5, 1), Vec3(-4, -2, 0));
 
-			AddGameObject<Wave>(Vec3(0, 0, 0), Vec3(1, 1, 1), Vec3(0, -1.5, 0));
+            AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(50.0f, 50.0f, 1.0f), Vec2(600.0f, 350.f), float(2.0f),L"",7);
+
+			AddGameObject<Wave>(Vec3(0, 0, 0), Vec3(1, 1, 1), Vec3(-1.5, -1.5, 0));
 			AddGameObject<Wave>(Vec3(0, 0, 0), Vec3(1, 1, 1), Vec3(8, -1.5, 0));
 			AddGameObject<Wave>(Vec3(0, 0, 0), Vec3(1, 1, 1), Vec3(16, -1.5, 0));
 			
