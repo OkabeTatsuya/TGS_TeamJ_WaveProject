@@ -31,7 +31,7 @@ namespace basecross {
 
 			AddGameObject<UIBase>(Vec3(0.0f), Vec3(500.0f,500.0f, 1.0f), Vec2(0.0f, 0.0f), float(2.0f), L"FadeBG.png");
 
-			//BGM再生
+			//BGM再生と音量調整
 			auto XAPtr = App::GetApp()->GetXAudio2Manager();
 			m_BGM = XAPtr->Start(L"SampleBGM.wav", XAUDIO2_LOOP_INFINITE, 0.5f);
 			
@@ -43,22 +43,22 @@ namespace basecross {
 	}
 
 	void TitleStage::OnUpdate(){
-		//Bボタンでシーン移動
 		auto CutlVec = App::GetApp()->GetInputDevice().GetControlerVec();
 		if (CutlVec[0].bConnected) {
-			if (CutlVec[0].wPressedButtons & XINPUT_GAMEPAD_B) {
-				PostEvent(0.0f, GetThis <ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
-			}
-
 			//Aボタンを押して、3秒経ったらシーン移動
 			if (CutlVec[0].wPressedButtons & XINPUT_GAMEPAD_A) {
 				if (!m_isPushA) {
-					//SE再生
+					//SE再生と音量調整
 					auto XAPtr = App::GetApp()->GetXAudio2Manager();
 					m_SE = XAPtr->Start(L"se_maoudamashii_system37.wav", 0, 0.5f);
 					//Aボタンを押したときの処理
 					m_isPushA = true;
 				}
+			}
+
+		//Bボタンでシーン移動
+			if (CutlVec[0].wPressedButtons & XINPUT_GAMEPAD_B) {
+				PostEvent(0.0f, GetThis <ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
 			}
 		}
 
@@ -70,7 +70,6 @@ namespace basecross {
 		//シーン移動
 		if (m_time >= 3) {
 			PostEvent(0.0f, GetThis <ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
-			
 		}
 	}
 
