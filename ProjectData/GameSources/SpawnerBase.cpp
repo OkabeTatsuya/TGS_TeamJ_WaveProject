@@ -10,7 +10,7 @@ namespace basecross {
 	SpawnerBase::SpawnerBase(const shared_ptr<Stage>& StagePtr) :
 	GameObject(StagePtr)
 	{
-		m_defaultObjectNum = 3;
+		m_defaultObjectNum = 5;
 		m_spawnCount = 0;
 	}
 
@@ -25,17 +25,27 @@ namespace basecross {
 		int itr = 0;
 		while (m_strFileNameCSV.stageStr.size() > itr) {
 			auto csvFilePths = mediaDir + L"CSV/" + m_strFileNameCSV.stageStr[itr] + L".csv";
+			//auto csvFilePths = mediaDir + L"CSV/" + L"Stage1.csv";
 			CsvFile LoadCsvFile;
-			LoadCsvFile.SetFileName(csvFilePths);
-			LoadCsvFile.GetCsvVec();
-			//m_gameStageCsv.push_back(LoadCsvFile);
+			m_gameStageCs.SetFileName(mediaDir + L"CSV/" + L"Stage1.csv");
+			m_gameStageCs.ReadCsv();
+
+			auto& lineVec = m_gameStageCs.GetCsvVec();
+			for (size_t i = 0; i < lineVec.size(); i++) {
+				vector<wstring> tokens;
+				Util::WStrToTokenVector(tokens, lineVec[i], L',');
+				for (size_t j = 0; j < tokens.size(); j++) {
+					m_createPos.push_back((float)j);
+				}
+			};
+			//m_gameStageCsv.push_back(m_gameStageCs);
 			itr++;
 		}
 	}
 
 	void SpawnerBase::LoadCreatePostion() {
 		for (int i = 0; i < 10; i++) {
-			float SetPos = 5 * i;
+			float SetPos = 15.0f * i;
 			m_createPos.push_back(SetPos);
 		}
 	}
@@ -47,29 +57,44 @@ namespace basecross {
 	}
 
 	void SpawnerBase::SpawnObject() {
-		float gameSpeed = GameManager::GetInstance().GetGameSpeed();
+		if (!GameManager::GetInstance().GetIsStopSpawner() && !m_isStopSpawn) {
+			float gameSpeed = GameManager::GetInstance().GetGameSpeed();
 
-		m_spawnTimer += App::GetApp()->GetElapsedTime() * gameSpeed;
+			m_spawnTimer += App::GetApp()->GetElapsedTime() * gameSpeed;
 
-		float move = m_createPos[m_spawnCount] / gameSpeed;
+			float move = m_createPos[m_spawnCount] / gameSpeed;
 
-		if (move <= m_spawnTimer) {
-			for (int i = 0; i < m_waveObject.size(); i++) {
-				if (!m_waveObject[i]->GetIsMove()) {
-					m_waveObject[i]->GetComponent<Transform>()->SetPosition(Vec3(6.0f, -1.5, 0));
-					m_waveObject[i]->SetIsMove(true);
-					m_spawnCount++;
-					break;
-				}
+			if (move <= m_spawnTimer) {
+				VisibleObject();
 			}
-			m_spawnTimer = 0;
+			EndCreateObject();
+		}
+	}
 
+	void SpawnerBase::VisibleObject() {
+		for (int i = 0; i < m_waveObject.size(); i++) {
+			//プーリングしたオブジェクトから動かせるものを探す
+			if (!m_waveObject[i]->GetIsMove()) {
+				m_waveObject[i]->GetComponent<Transform>()->SetPosition(Vec3(6.0f, -1.5, 0));
+				m_waveObject[i]->SetIsMove(true);
+				m_spawnCount++;
+				break;
+			}
+
+			//動かせるものがなかったら作成する
+			if(m_waveObject[m_waveObject.size() - 1]->GetIsMove()){
+				m_waveObject.push_back(GetStage()->AddGameObject<Wave>(Vec3(0.0f), Vec3(1.0f), Vec3(6.0f, -1.5, 0)));
+				m_waveObject[m_waveObject.size() - 1]->SetIsMove(true);
+				m_spawnCount++;
+				break;
+			}
 		}
 	}
 
 	void SpawnerBase::EndCreateObject() {
-		if (m_createPos.size() < m_spawnCount) {
-			GameManager::GetInstance().GetIsStopSpawner();
+		int spawnItr = m_createPos.size() - 1;
+		if (m_spawnCount > spawnItr) {
+			m_isStopSpawn = true;
 		}
 	}
 }

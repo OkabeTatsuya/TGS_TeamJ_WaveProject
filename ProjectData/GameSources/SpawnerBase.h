@@ -27,15 +27,18 @@ namespace basecross {
 	};
 	class SpawnerBase : public GameObject {
 		FileNameCSV m_strFileNameCSV;
+		CsvFile m_gameStageCs;
+
 		vector<CsvFile> m_gameStageCsv;
 		vector<shared_ptr<Wave>> m_waveObject;
 		vector<float> m_createPos;
 
+		Vec3 m_spawnPos;
+
 		int m_defaultObjectNum;
 		int m_spawnCount;
 		float m_spawnTimer = 0.0f;
-		float m_curentTime = 5.0f;
-		float m_playerSpeed = 3.0f;
+		bool m_isStopSpawn;
 
 	public:
 		SpawnerBase(const shared_ptr<Stage>& StagePtr);
@@ -47,10 +50,16 @@ namespace basecross {
 		//CSVからポジションデータを取ってくる
 		void LoadCreatePostion();
 
+		//プーリングするオブジェクトの作成
 		void CreateObject();
 
+		//オブジェクトを写す
+		void VisibleObject();
+
+		//オブジェクトを生成する
 		void SpawnObject();
 
+		//オブジェクト生成を止める
 		void EndCreateObject();
 
 	};
