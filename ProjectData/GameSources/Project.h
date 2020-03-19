@@ -21,6 +21,8 @@
 #include "GameManager.h"
 #include "SpawnerBase.h"
 #include "WaveSpawner.h"
+#include "ScoreUI.h"
+#include "ScoreUIPanel.h"
 
 #include"TitleStage.h"
 

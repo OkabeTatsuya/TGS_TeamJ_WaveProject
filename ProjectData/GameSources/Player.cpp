@@ -22,7 +22,8 @@ namespace basecross{
         m_maxSpeed = 4.0f;
         m_minSpeed = 2.0f;
         GameManager::GetInstance().SetGameSpeed((m_maxSpeed - m_minSpeed) / 3 + m_minSpeed);
-        m_jumpGradeMagnification = 1.5;
+        m_jumpGradeSpeedMagnification = 1.5;
+        m_jumpGradeScoreMagnification = 2.0f;
         m_jumpGradeTime = 0.9f;
         m_isTopJumpAction = false;
         m_isBottomJumpAction = false;
@@ -36,6 +37,12 @@ namespace basecross{
         m_upSpeedValue = 0.5f;
         m_jumpMissDownSpeedValue = 0.5f;
         m_groundWaveDownSpeedValue = 0.1f;
+        m_currentLandingTime = 0;
+        m_maxLandingTime = 0.2;
+        m_isLanding = false;
+        m_currentInvincibleTime = 0;
+        m_maxInvincibleTime = 1.0f;
+        m_isInvincible = false;
     }
 
     void Player::OnCreate() {
@@ -56,6 +63,7 @@ namespace basecross{
 
     void Player::OnUpdate() {
         JudgeJumpAction();
+        Invincible();
     }
 
     void Player::OnUpdate2() {
@@ -93,11 +101,21 @@ namespace basecross{
 
     //継続スピードダウン処理
     void Player::GroundWaveSpeedDown() {
-        auto &gm = GameManager::GetInstance();
-        auto currentSpeed = gm.GetGameSpeed();
-        currentSpeed -= m_groundWaveDownSpeedValue * App::GetApp()->GetElapsedTime();
-        gm.SetGameSpeed(currentSpeed);
-        AdjustSpeed();
+        if (m_isLanding) {
+            m_currentLandingTime += App::GetApp()->GetElapsedTime();
+            if (m_currentLandingTime >= m_maxLandingTime) {
+                m_currentLandingTime = 0;
+                m_isLanding = false;
+            }
+        }
+        else {
+            auto &gm = GameManager::GetInstance();
+            auto currentSpeed = gm.GetGameSpeed();
+            currentSpeed -= m_groundWaveDownSpeedValue * App::GetApp()->GetElapsedTime();
+            gm.SetGameSpeed(currentSpeed);
+            AdjustSpeed();
+        }
+
     }
 
     //ジャンプアクションの入力判定
@@ -145,6 +163,7 @@ namespace basecross{
             if (m_rot.z >= XM_2PI) {
                 m_rot.z = 0;
                 m_isJumpAction = false;
+                m_isInvincible = false;
             }
         }
     }
@@ -160,13 +179,13 @@ namespace basecross{
         }
         if (isGreatJump) {
             if (controller.wPressedButtons & XINPUT_GAMEPAD_A && !m_isJump) {
-                SpeedUp(m_upSpeedValue * m_jumpGradeMagnification);
+                SpeedUp(m_upSpeedValue * m_jumpGradeSpeedMagnification);
                 HighJump();
                 m_currentJumpGradeTime = 0;
 
             }
             if (controller.wPressedButtons & XINPUT_GAMEPAD_B && !m_isJump) {
-                SpeedUp(m_upSpeedValue * m_jumpGradeMagnification);
+                SpeedUp(m_upSpeedValue * m_jumpGradeSpeedMagnification);
                 LowJump();
                 m_currentJumpGradeTime = 0;
 
@@ -202,10 +221,28 @@ namespace basecross{
         GetComponent<RigidbodyBox>()->SetLinearVelocity(Vec3(0, m_lowJumpMoveY, 0));
     }
 
+    void Player::Invincible() {
+        if (m_isInvincible) {
+            m_currentInvincibleTime += App::GetApp()->GetElapsedTime();
+            if (m_currentInvincibleTime >= m_maxInvincibleTime) {
+                m_currentInvincibleTime = 0;
+                m_isInvincible = false;
+            }
+        }
+        else {
+            m_currentInvincibleTime = 0;
+        }
+    }
+
     //コリジョンの最初に当たった瞬間１回のみの処理
     void Player::OnCollisionEnter(shared_ptr<GameObject>& other) {
         if (other->FindTag(L"GroundWave")) {
             m_isJump=false;
+            m_isLanding = true;
+            if (m_rot.z!=0) {
+                JumpMissSpeedDown();
+                m_isInvincible = true;
+            }
             GetComponent<RigidbodyBox>()->SetAutoGravity(false);
         }
     }
@@ -218,14 +255,19 @@ namespace basecross{
         //落下防止処理
         if (other->FindTag(L"GroundWave")&&!m_isJump) {
             GetComponent<RigidbodyBox>()->SetLinearVelocity(Vec3(0, 0, 0));
-            GroundWaveSpeedDown();
+            if (!m_isInvincible) {
+                GroundWaveSpeedDown();
+            }
         }
     }
 
     //コリジョンから抜けた瞬間１回のみの処理
     void Player::OnCollisionExit(shared_ptr<GameObject>&other) {
         if (other->FindTag(L"Wave") && !m_isJump) {
-            JumpMissSpeedDown();
+            if (!m_isInvincible) {
+                JumpMissSpeedDown();
+                m_isInvincible = true;
+            }
             m_currentJumpGradeTime = 0;
         }
     }
