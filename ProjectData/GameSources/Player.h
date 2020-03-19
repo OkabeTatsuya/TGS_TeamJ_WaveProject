@@ -19,17 +19,18 @@ namespace basecross{
         float m_maxSpeed;
         //移動速度下限
         float m_minSpeed;
-        //現在の移動速度
-        float m_currentSpeed;
         //継続スピードダウンの減少量
         float m_groundWaveDownSpeedValue;
         //現在のジャンプのグレード判定秒数
         float m_currentJumpGradeTime;
-        //ギリギリでジャンプした時のスピードの上昇量倍率
-        float m_jumpGradeMagnification;
+        //良ジャンプした時のスピードの上昇量倍率
+        float m_jumpGradeSpeedMagnification;
+        //良ジャンプしたときのスコアの上昇量倍率
+        float m_jumpGradeScoreMagnification;
+        //スピードに依存したスコアの倍率上限
+        float m_maxSpeedScoreMagnification;
         //ジャンプグレード判定の難易度
         float m_jumpGradeTime;
-
         //空中アクション成否
         bool m_isJumpAction;
         //空中アクション中のスティック上下左右認識フラグ
@@ -45,7 +46,20 @@ namespace basecross{
         float m_upSpeedValue;
         //ジャンプミスしたときのスピードの減少量
         float m_jumpMissDownSpeedValue;
+        //ジャンプ後着地したときのスピード維持判定
+        bool m_isLanding;
+        //ジャンプ後着地したときのスピード維持判定上限時間
+        float m_maxLandingTime;
+        //現在のジャンプ後着地したときのスピード維持判定時間
+        float m_currentLandingTime;
+        //ジャンプミスまたは着地ミスしたときの無敵時間上限
+        float m_maxInvincibleTime;
+        //現在のジャンプミスまたは着地ミスしたときの無敵時間
+        float m_currentInvincibleTime;
+        //ジャンプミスまたは着地ミスしたときの無敵判定
+        bool m_isInvincible;
     private:
+        //プレイヤーの角度
         Vec3 m_rot;
     public:
         Player(const shared_ptr<Stage>& stage,
@@ -80,10 +94,8 @@ namespace basecross{
         void JumpMissSpeedDown();
         //継続スピードダウン処理
         void GroundWaveSpeedDown();
-        //現在の移動速度のゲッター
-        float GetCurrentSpeed() {
-            return m_currentSpeed;
-        }
+        //無敵時間処理
+        void Invincible();
     };
 
 }

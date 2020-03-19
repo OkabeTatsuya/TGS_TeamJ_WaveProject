@@ -19,16 +19,8 @@ namespace basecross {
 
     //スプライト自体の移動処理
     void MoveSpriteBase::Movement(shared_ptr<Transform> transPtr) {
-        float moveSpeed = 0;
-        auto gameobjects = GetStage()->GetGameObjectVec();
-        for (auto obj : gameobjects) {
-            auto player = dynamic_pointer_cast<Player>(obj);
-            if (player) {
-                moveSpeed = player->GetCurrentSpeed();
-            }
-        }
         auto pos = transPtr->GetPosition();
-        pos.x -= moveSpeed * App::GetApp()->GetElapsedTime();
+        pos.x -= GameManager::GetInstance().GetGameSpeed() * App::GetApp()->GetElapsedTime();
         GetComponent<Transform>()->SetPosition(pos);
     }
 }
