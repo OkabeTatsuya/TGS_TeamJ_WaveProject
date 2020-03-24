@@ -10,20 +10,16 @@
 using namespace std;
 
 namespace basecross {
-	void GameManager::AddJumpScore(float magnification, int combo) {
-		float com = (float)combo;
-		if (combo <= 0) {
-			com = 1;
-		}
-		m_gameScore += (int)(m_baseJumpScore * magnification * com);
+	void GameManager::AddJumpScore(float magnification, float comboMagnification) {
+        comboMagnification += 1;
+		m_gameScore += (int)(m_baseJumpScore * magnification * comboMagnification);
+        m_scoreUIPanel->ScoreDraw(m_gameScore);
 	}
 
-	void GameManager::AddActionScore(float magnification, int combo) {
-		float com = (float)combo;
-		if (combo <= 0) {
-			com = 1;
-		}
-		m_gameScore += (int)(m_baseActionScore * magnification * com);
+	void GameManager::AddActionScore(float magnification, float comboMagnification) {
+        comboMagnification += 1;
+		m_gameScore += (int)(m_baseActionScore * magnification * comboMagnification);
+        m_scoreUIPanel->ScoreDraw(m_gameScore);
 	}
 
 
