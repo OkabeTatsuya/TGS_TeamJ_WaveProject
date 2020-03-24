@@ -13,16 +13,17 @@
 #include "ObjectBase.h"
 #include "UIBase.h"
 #include "Character.h"
+#include "ScoreUI.h"
+#include "ScoreUIPanel.h"
+#include "GameManager.h"
 #include "Player.h"
 #include "GroundCollision.h"
 #include "MoveSpriteBase.h"
 #include "Wave.h"
 #include "WaveCollision.h"
-#include "GameManager.h"
 #include "SpawnerBase.h"
 #include "WaveSpawner.h"
-#include "ScoreUI.h"
-#include "ScoreUIPanel.h"
+
 
 #include"TitleStage.h"
 

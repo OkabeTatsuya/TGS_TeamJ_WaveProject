@@ -15,6 +15,8 @@ namespace basecross{
         float m_highJumpMoveY;
         //ロージャンプの上昇量
         float m_lowJumpMoveY;
+        //良ジャンプ時のジャンプの上昇量倍率
+        float m_greatJumpMagnification;
         //移動速度上限
         float m_maxSpeed;
         //移動速度下限
@@ -29,8 +31,12 @@ namespace basecross{
         float m_jumpGradeScoreMagnification;
         //スピードに依存したスコアの倍率上限
         float m_maxSpeedScoreMagnification;
-        //ジャンプグレード判定の難易度
+        //現在のスピードに依存したスコアの倍率
+        float m_currentSpeedScoreMagnification;
+        //ジャンプグレード判定時間
         float m_jumpGradeTime;
+        //ジャンプグレード判定の難易度
+        float m_jumpGradeTimeJudge;
         //空中アクション成否
         bool m_isJumpAction;
         //空中アクション中のスティック上下左右認識フラグ
@@ -58,6 +64,10 @@ namespace basecross{
         float m_currentInvincibleTime;
         //ジャンプミスまたは着地ミスしたときの無敵判定
         bool m_isInvincible;
+        //連続で波に乗っている回数
+        int m_combo;
+        //１コンボで増える倍率
+        float m_comboMagnification;
     private:
         //プレイヤーの角度
         Vec3 m_rot;
@@ -79,9 +89,9 @@ namespace basecross{
         //ジャンプ
         void Jump();
         //ハイジャンプ
-        void HighJump();
+        void HighJump(float jumpMag);
         //ロージャンプ
-        void LowJump();
+        void LowJump(float jumpMag);
         //ジャンプアクション
         void JumpAction();
         //ジャンプアクションの入力判定
@@ -96,6 +106,8 @@ namespace basecross{
         void GroundWaveSpeedDown();
         //無敵時間処理
         void Invincible();
+        //スピード依存のスコア倍率計算処理
+        void SpeedScoreMagnification();
     };
 
 }

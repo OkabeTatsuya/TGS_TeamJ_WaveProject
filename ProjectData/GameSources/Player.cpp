@@ -6,7 +6,7 @@
 #include "stdafx.h"
 #include "Project.h"
 
-namespace basecross{
+namespace basecross {
 
     Player::Player(const shared_ptr<Stage>& stage,
         Vec3& rotation,
@@ -24,7 +24,8 @@ namespace basecross{
         GameManager::GetInstance().SetGameSpeed((m_maxSpeed - m_minSpeed) / 3 + m_minSpeed);
         m_jumpGradeSpeedMagnification = 1.5;
         m_jumpGradeScoreMagnification = 2.0f;
-        m_jumpGradeTime = 0.9f;
+        m_jumpGradeTime = 0.0f;
+        m_jumpGradeTimeJudge = 0.95f;
         m_isTopJumpAction = false;
         m_isBottomJumpAction = false;
         m_isLeftJumpAction = false;
@@ -43,11 +44,16 @@ namespace basecross{
         m_currentInvincibleTime = 0;
         m_maxInvincibleTime = 1.0f;
         m_isInvincible = false;
+        m_maxSpeedScoreMagnification = 1.5f;
+        m_currentSpeedScoreMagnification = 0;
+        m_comboMagnification = 0.1f;
+        m_combo = 0;
+        m_greatJumpMagnification = 1.5;
     }
 
     void Player::OnCreate() {
 
-        DrawingImage(L"trace.png");
+        DrawingImage(L"player.png");
         auto transPtr = AddComponent<Transform>();
         transPtr->SetPosition(m_position);
         transPtr->SetScale(m_scale);
@@ -58,16 +64,24 @@ namespace basecross{
 
         AddComponent<CollisionObb>()->SetMakedSize(1);
 
-        //SetTexture(L"");
     }
 
     void Player::OnUpdate() {
         JudgeJumpAction();
         Invincible();
+        SpeedScoreMagnification();
     }
 
     void Player::OnUpdate2() {
         JumpAction();
+    }
+
+    //スピード依存のスコア倍率計算処理
+    void Player::SpeedScoreMagnification() {
+        auto a = m_maxSpeed - m_minSpeed;
+        auto b = GameManager::GetInstance().GetGameSpeed() - m_minSpeed;
+        auto c = b / a;
+        m_currentSpeedScoreMagnification = 1.0f + 0.5f*c;
     }
 
     //スピードの上限下限処理
@@ -121,7 +135,7 @@ namespace basecross{
     //ジャンプアクションの入力判定
     void Player::JudgeJumpAction() {
         auto controller = App::GetApp()->GetInputDevice().GetControlerVec()[0];
-        if (m_isJump && Vec2(controller.fThumbLX,controller.fThumbLY).length() >= 1.0f) {
+        if (m_isJump && Vec2(controller.fThumbLX, controller.fThumbLY).length() >= 1.0f) {
             m_currentJumpActionTime += App::GetApp()->GetElapsedTime();
         }
         if (m_isJump && !m_isJumpAction && m_currentJumpActionTime <= m_jumpActionLimitTime) {
@@ -171,54 +185,53 @@ namespace basecross{
     //ジャンプ処理
     void Player::Jump() {
         bool isGreatJump = false;
-        float collisionSize = 2.0f;
         auto controller = App::GetApp()->GetInputDevice().GetControlerVec()[0];
+        auto &gm = GameManager::GetInstance();
         m_currentJumpGradeTime += App::GetApp()->GetElapsedTime();
-        if (collisionSize/ GameManager::GetInstance().GetGameSpeed() * m_jumpGradeTime<= m_currentJumpGradeTime) {
+        if (m_jumpGradeTime * m_jumpGradeTimeJudge <= m_currentJumpGradeTime) {
             isGreatJump = true;
         }
-        if (isGreatJump) {
-            if (controller.wPressedButtons & XINPUT_GAMEPAD_A && !m_isJump) {
+        if (controller.wPressedButtons & XINPUT_GAMEPAD_A && !m_isJump) {
+            if (isGreatJump) {
                 SpeedUp(m_upSpeedValue * m_jumpGradeSpeedMagnification);
-                HighJump();
-                m_currentJumpGradeTime = 0;
-
+                HighJump(m_greatJumpMagnification);
             }
-            if (controller.wPressedButtons & XINPUT_GAMEPAD_B && !m_isJump) {
-                SpeedUp(m_upSpeedValue * m_jumpGradeSpeedMagnification);
-                LowJump();
-                m_currentJumpGradeTime = 0;
-
+            else {
+                SpeedUp(m_upSpeedValue);
+                HighJump(1.0f);
             }
+            m_currentJumpGradeTime = 0;
+            gm.AddJumpScore(m_currentSpeedScoreMagnification, m_combo*m_comboMagnification);
+            m_combo++;
         }
-        else{
-            if (controller.wPressedButtons & XINPUT_GAMEPAD_A && !m_isJump) {
-                SpeedUp(m_upSpeedValue);
-                HighJump();
-                m_currentJumpGradeTime = 0;
-
+        if (controller.wPressedButtons & XINPUT_GAMEPAD_B && !m_isJump) {
+            if (isGreatJump) {
+                SpeedUp(m_upSpeedValue * m_jumpGradeSpeedMagnification);
+                LowJump(m_greatJumpMagnification);
             }
-            if (controller.wPressedButtons & XINPUT_GAMEPAD_B && !m_isJump) {
+            else {
                 SpeedUp(m_upSpeedValue);
-                LowJump();
-                m_currentJumpGradeTime = 0;
-
+                LowJump(1.0f);
             }
+            m_currentJumpGradeTime = 0;
+            gm.AddJumpScore(m_currentSpeedScoreMagnification, m_combo * m_comboMagnification);
+            m_combo++;
         }
     }
+    
 
     //ハイジャンプ
-    void Player::HighJump() {
+    void Player::HighJump(float jumpMag) {
         m_isJump = true;
         GetComponent<RigidbodyBox>()->SetAutoGravity(true);
-        GetComponent<RigidbodyBox>()->SetLinearVelocity(Vec3(0, m_highJumpMoveY, 0));
+        GetComponent<RigidbodyBox>()->SetLinearVelocity(Vec3(0, m_highJumpMoveY * jumpMag, 0));
     }
 
     //ロージャンプ
-    void Player::LowJump() {
+    void Player::LowJump(float jumpMag) {
         m_isJump = true;
         GetComponent<RigidbodyBox>()->SetAutoGravity(true);
-        GetComponent<RigidbodyBox>()->SetLinearVelocity(Vec3(0, m_lowJumpMoveY, 0));
+        GetComponent<RigidbodyBox>()->SetLinearVelocity(Vec3(0, m_lowJumpMoveY * jumpMag, 0));
     }
 
     void Player::Invincible() {
@@ -245,6 +258,14 @@ namespace basecross{
             }
             GetComponent<RigidbodyBox>()->SetAutoGravity(false);
         }
+        if (other->FindTag(L"Wave")) {
+            float collisionSize = 2.0f;
+            auto currentSpeed = GameManager::GetInstance().GetGameSpeed();
+            auto a = collisionSize / currentSpeed * m_groundWaveDownSpeedValue;
+            auto c = currentSpeed - a;
+            auto d = (c + currentSpeed) / 2;
+            m_jumpGradeTime = collisionSize / d*m_jumpGradeTimeJudge;
+        }
     }
 
     //コリジョンに当たり続けているときの処理
@@ -269,6 +290,7 @@ namespace basecross{
                 m_isInvincible = true;
             }
             m_currentJumpGradeTime = 0;
+            m_combo = 0;
         }
     }
 }

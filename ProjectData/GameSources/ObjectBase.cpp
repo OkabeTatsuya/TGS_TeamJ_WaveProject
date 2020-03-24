@@ -21,15 +21,16 @@ namespace basecross {
 	}
 
 	void ObjectBase::DrawingImage(wstring texStr) {
+        m_textureName = texStr;
 		Col4 color(1, 1, 1, 1);
 		Vec2 tipSize = Vec2(1.0f, 1.0f);
 
 		m_vertices =
 		{
-			{Vec3(-0.1f,+0.1f,0.0f),color,Vec2(0		,0)},
-			{Vec3(+0.1f,+0.1f,0.0f),color,Vec2(tipSize.x,0)},
-			{Vec3(-0.1f,-0.1f,0.0f),color,Vec2(0		,tipSize.y)},
-			{Vec3(+0.1f,-0.1f,0.0f),color,Vec2(tipSize.x,tipSize.y)},
+			{Vec3(-0.5f,+0.5f,0.0f),color,Vec2(0		,0)},
+			{Vec3(+0.5f,+0.5f,0.0f),color,Vec2(tipSize.x,0)},
+			{Vec3(-0.5f,-0.5f,0.0f),color,Vec2(0		,tipSize.y)},
+			{Vec3(+0.5f,-0.5f,0.0f),color,Vec2(tipSize.x,tipSize.y)},
 		};
 
 		vector<uint16_t> indices =

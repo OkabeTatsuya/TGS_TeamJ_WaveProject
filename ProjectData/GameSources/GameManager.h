@@ -29,6 +29,9 @@ namespace basecross {
 		GameManager& operator = (const GameManager&);
 		~GameManager() {};
 
+        //スコアパネル
+        shared_ptr<ScoreUIPanel> m_scoreUIPanel;
+
 		//スコア
 		int m_gameScore;
 
@@ -68,14 +71,15 @@ namespace basecross {
 		void SetIsGameEnd(bool set) { m_isGameEnd = set; }
 		void SetGameSpeed(float set ) { m_gameSpeed = set; }
 		void SetIsStopSpawner(bool set) { m_isStopSpawner = set; }
+        void SetScoreUIPanel(shared_ptr<ScoreUIPanel> set) { m_scoreUIPanel = set; }
 
 		//ジャンプのスコア加算処理
 		///magnification 倍率、　combo 続けてジャンプした回数
-		void AddJumpScore(float magnification, int combo);
+		void AddJumpScore(float magnification, float comboMagnification);
 
 		//ジャンプアクションのスコア加算処理
 		///magnification 倍率、　combo 続けてアクションした回数
-		void AddActionScore(float magnification, int combo);
+		void AddActionScore(float magnification, float comboMagnification);
 	};
 
 }

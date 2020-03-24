@@ -24,6 +24,8 @@ namespace basecross {
 
 
         virtual void OnCreate() override;
+
+        void ScoreDraw(int score);
     };
 }
 //end basecross
