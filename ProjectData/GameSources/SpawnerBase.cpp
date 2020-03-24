@@ -35,7 +35,8 @@ namespace basecross {
 				vector<wstring> tokens;
 				Util::WStrToTokenVector(tokens, lineVec[i], L',');
 				for (size_t j = 0; j < tokens.size(); j++) {
-					m_createPos.push_back((float)j);
+					float num = stof(tokens[j]);
+					m_createPos.push_back(num);
 				}
 			};
 			//m_gameStageCsv.push_back(m_gameStageCs);
@@ -62,7 +63,7 @@ namespace basecross {
 
 			m_spawnTimer += App::GetApp()->GetElapsedTime() * gameSpeed;
 
-			float move = m_createPos[m_spawnCount] / gameSpeed;
+			float move = m_createPos[m_spawnCount] * App::GetApp()->GetElapsedTime() * gameSpeed * 10.0f;
 
 			if (move <= m_spawnTimer) {
 				VisibleObject();
@@ -82,19 +83,25 @@ namespace basecross {
 			}
 
 			//“®‚©‚¹‚é‚à‚Ì‚ª‚È‚©‚Á‚½‚çì¬‚·‚é
-			if(m_waveObject[m_waveObject.size() - 1]->GetIsMove()){
+			if (m_waveObject.size()-1 == i) {
 				m_waveObject.push_back(GetStage()->AddGameObject<Wave>(Vec3(0.0f), Vec3(1.0f), Vec3(6.0f, -1.5, 0)));
 				m_waveObject[m_waveObject.size() - 1]->SetIsMove(true);
 				m_spawnCount++;
 				break;
 			}
 		}
+
+
 	}
 
 	void SpawnerBase::EndCreateObject() {
-		int spawnItr = m_createPos.size() - 1;
+		int spawnItr = (int)m_createPos.size() - 1;
 		if (m_spawnCount > spawnItr) {
-			m_isStopSpawn = true;
+			//m_isStopSpawn = true;
+			m_spawnCount = 0;
+			m_spawnTimer = 0.0f;
 		}
 	}
+
+
 }
