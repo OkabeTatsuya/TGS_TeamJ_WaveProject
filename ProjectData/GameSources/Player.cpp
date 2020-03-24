@@ -249,7 +249,7 @@ namespace basecross {
 
     //ƒRƒŠƒWƒ‡ƒ“‚ÌÅ‰‚É“–‚½‚Á‚½uŠÔ‚P‰ñ‚Ì‚İ‚Ìˆ—
     void Player::OnCollisionEnter(shared_ptr<GameObject>& other) {
-        if (other->FindTag(L"GroundWave")) {
+        if (other->FindTag(L"Sea")) {
             m_isJump=false;
             m_isLanding = true;
             if (m_rot.z!=0) {
@@ -274,7 +274,7 @@ namespace basecross {
             Jump();
         }
         //—‰º–h~ˆ—
-        if (other->FindTag(L"GroundWave")&&!m_isJump) {
+        if (other->FindTag(L"Sea")&&!m_isJump) {
             GetComponent<RigidbodyBox>()->SetLinearVelocity(Vec3(0, 0, 0));
             if (!m_isInvincible) {
                 GroundWaveSpeedDown();
