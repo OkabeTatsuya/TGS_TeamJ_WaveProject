@@ -75,7 +75,7 @@ namespace basecross {
 
 		//ジャンプのスコア加算処理
 		///magnification 倍率、　combo 続けてジャンプした回数
-		void AddJumpScore(float magnification, float comboMagnification);
+        void AddJumpScore(float magnification, float comboMagnification, bool isGreat);
 
 		//ジャンプアクションのスコア加算処理
 		///magnification 倍率、　combo 続けてアクションした回数

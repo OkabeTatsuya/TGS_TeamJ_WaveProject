@@ -10,9 +10,14 @@
 using namespace std;
 
 namespace basecross {
-	void GameManager::AddJumpScore(float magnification, float comboMagnification) {
+	void GameManager::AddJumpScore(float magnification, float comboMagnification,bool isGreat) {
         comboMagnification += 1;
-		m_gameScore += (int)(m_baseJumpScore * magnification * comboMagnification);
+        if (isGreat) {
+            float greatJumpMagnification = 2.0f;
+            m_gameScore += (int)(m_baseJumpScore * magnification * comboMagnification * greatJumpMagnification);
+        }
+        else
+	        m_gameScore += (int)(m_baseJumpScore * magnification * comboMagnification);
         m_scoreUIPanel->ScoreDraw(m_gameScore);
 	}
 

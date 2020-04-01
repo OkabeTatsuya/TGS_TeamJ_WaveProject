@@ -17,6 +17,8 @@ namespace basecross {
             rotation, scale, position
         )
     {
+        m_isWaveTouch = false;
+        m_jumpActionTime = 0.5f;
         m_highJumpMoveY = 8.0f;
         m_lowJumpMoveY = 5.0f;
         m_maxSpeed = 4.0f;
@@ -25,7 +27,7 @@ namespace basecross {
         m_jumpGradeSpeedMagnification = 1.5;
         m_jumpGradeScoreMagnification = 2.0f;
         m_jumpGradeTime = 0.0f;
-        m_jumpGradeTimeJudge = 0.95f;
+        m_jumpGradeTimeJudge = 0.9f;
         m_isTopJumpAction = false;
         m_isBottomJumpAction = false;
         m_isLeftJumpAction = false;
@@ -78,10 +80,13 @@ namespace basecross {
 
     //スピード依存のスコア倍率計算処理
     void Player::SpeedScoreMagnification() {
-        auto a = m_maxSpeed - m_minSpeed;
-        auto b = GameManager::GetInstance().GetGameSpeed() - m_minSpeed;
-        auto c = b / a;
-        m_currentSpeedScoreMagnification = 1.0f + 0.5f*c;
+        auto diff = m_maxSpeed - m_minSpeed;
+        auto currentDiff = GameManager::GetInstance().GetGameSpeed() - m_minSpeed;
+        auto currentSpeedPersentage = currentDiff / diff;
+        if (diff != currentDiff)
+            m_currentSpeedScoreMagnification = 1.0f + 0.5f*currentSpeedPersentage;
+        else
+            m_currentSpeedScoreMagnification = 1.0f;
     }
 
     //スピードの上限下限処理
@@ -172,12 +177,13 @@ namespace basecross {
     //ジャンプアクション処理
     void Player::JumpAction() {
         if (m_isJumpAction) {
-            m_rot.z += XM_2PI * App::GetApp()->GetElapsedTime();
+            m_rot.z += XM_2PI * App::GetApp()->GetElapsedTime() / m_jumpActionTime;
             GetComponent<Transform>()->SetRotation(m_rot);
             if (m_rot.z >= XM_2PI) {
                 m_rot.z = 0;
                 m_isJumpAction = false;
                 m_isInvincible = false;
+                GameManager::GetInstance().AddActionScore(m_currentSpeedScoreMagnification, m_combo * m_comboMagnification);
             }
         }
     }
@@ -200,8 +206,8 @@ namespace basecross {
                 SpeedUp(m_upSpeedValue);
                 HighJump(1.0f);
             }
+            gm.AddJumpScore(m_currentSpeedScoreMagnification, m_combo*m_comboMagnification,false);
             m_currentJumpGradeTime = 0;
-            gm.AddJumpScore(m_currentSpeedScoreMagnification, m_combo*m_comboMagnification);
             m_combo++;
         }
         if (controller.wPressedButtons & XINPUT_GAMEPAD_B && !m_isJump) {
@@ -214,7 +220,7 @@ namespace basecross {
                 LowJump(1.0f);
             }
             m_currentJumpGradeTime = 0;
-            gm.AddJumpScore(m_currentSpeedScoreMagnification, m_combo * m_comboMagnification);
+            gm.AddJumpScore(m_currentSpeedScoreMagnification, m_combo * m_comboMagnification,isGreatJump);
             m_combo++;
         }
     }
@@ -271,12 +277,13 @@ namespace basecross {
     //コリジョンに当たり続けているときの処理
     void Player::OnCollisionExcute(shared_ptr<GameObject>& other) {
         if (other->FindTag(L"Wave")) {
+            m_isWaveTouch = true;
             Jump();
         }
         //落下防止処理
         if (other->FindTag(L"Sea")&&!m_isJump) {
             GetComponent<RigidbodyBox>()->SetLinearVelocity(Vec3(0, 0, 0));
-            if (!m_isInvincible) {
+            if (!m_isInvincible&&!m_isWaveTouch) {
                 GroundWaveSpeedDown();
             }
         }
@@ -291,6 +298,7 @@ namespace basecross {
             }
             m_currentJumpGradeTime = 0;
             m_combo = 0;
+            m_isWaveTouch = false;
         }
     }
 }
