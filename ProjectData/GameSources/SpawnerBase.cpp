@@ -67,9 +67,9 @@ namespace basecross {
 
 			m_spawnTimer += App::GetApp()->GetElapsedTime() * gameSpeed;
 
-			float move = m_createPos[m_spawnCount] * App::GetApp()->GetElapsedTime() * 10.0f;
+			float spawnTime = m_createPos[m_spawnCount] / gameSpeed;
 
-			if (move <= m_spawnTimer) {
+			if (spawnTime <= m_spawnTimer) {
 				VisibleObject();
 			}
 			EndCreateObject();
