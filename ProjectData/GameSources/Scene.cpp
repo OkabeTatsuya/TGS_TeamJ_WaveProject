@@ -26,6 +26,7 @@ namespace basecross{
 		FindFile(mediaDir + L"Image/");
 	}
 
+	//‰æ‘œ‚â‰¹ºƒf[ƒ^‚ğæ“¾
 	void Scene::FindFile(wstring dir) {
 		HANDLE hFind;
 		WIN32_FIND_DATA win32fd;
