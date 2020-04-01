@@ -21,10 +21,12 @@
 #include "MoveSpriteBase.h"
 #include "Wave.h"
 #include "WaveCollision.h"
+#include "MoveBG.h"
 #include "SpawnerBase.h"
 #include "WaveSpawner.h"
-
+#include "BGGenerator.h"
+#include "ImageUI.h"
+#include "FlashingUI.h"
 
 #include"TitleStage.h"
-
 #include"ResulfStage.h"
