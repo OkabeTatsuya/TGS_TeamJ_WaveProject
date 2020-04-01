@@ -12,6 +12,7 @@ namespace basecross {
 	{
 		m_defaultObjectNum = 5;
 		m_spawnCount = 0;
+		m_spawnPos = Vec3(6.0f, -1.5, -4.0f);
 	}
 
 	SpawnerBase::~SpawnerBase() {
@@ -55,7 +56,8 @@ namespace basecross {
 	void SpawnerBase::CreateObject() {
 		for (int i = 0; i < m_defaultObjectNum; i++) {
 			//m_moveObject.push_back(m_moveObjectTile[0]);
-			m_waveObject.push_back(GetStage()->AddGameObject<Wave>(Vec3(0.0f), Vec3(1.0f), Vec3(-6.0f, -1.5, -3.0f)));
+			Vec3 firstPos = Vec3(-6.0f, m_spawnPos.y, m_spawnPos.z);
+			m_waveObject.push_back(GetStage()->AddGameObject<Wave>(Vec3(0.0f), Vec3(1.0f), firstPos));
 		}
 	}
 
@@ -78,7 +80,7 @@ namespace basecross {
 		for (int i = 0; i < m_waveObject.size(); i++) {
 			//プーリングしたオブジェクトから動かせるものを探す
 			if (!m_waveObject[i]->GetIsMove()) {
-				m_waveObject[i]->GetComponent<Transform>()->SetPosition(Vec3(6.0f, -1.5, -3.0f));
+				m_waveObject[i]->GetComponent<Transform>()->SetPosition(m_spawnPos);
 				m_waveObject[i]->SetIsMove(true);
 				m_spawnCount++;
 				break;
@@ -86,7 +88,7 @@ namespace basecross {
 
 			//動かせるものがなかったら作成する
 			if (m_waveObject.size()-1 == i) {
-				m_waveObject.push_back(GetStage()->AddGameObject<Wave>(Vec3(0.0f), Vec3(1.0f), Vec3(6.0f, -1.5f, -3.0f)));
+				m_waveObject.push_back(GetStage()->AddGameObject<Wave>(Vec3(0.0f), Vec3(1.0f), m_spawnPos));
 				m_waveObject[m_waveObject.size() - 1]->SetIsMove(true);
 				m_spawnCount++;
 				break;
