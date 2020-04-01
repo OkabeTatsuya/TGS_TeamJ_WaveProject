@@ -27,7 +27,7 @@ namespace basecross {
 			auto csvFilePths = mediaDir + L"CSV/" + m_strFileNameCSV.stageStr[itr] + L".csv";
 			//auto csvFilePths = mediaDir + L"CSV/" + L"Stage1.csv";
 			CsvFile LoadCsvFile;
-			m_gameStageCs.SetFileName(mediaDir + L"CSV/" + L"Stage1.csv");
+			m_gameStageCs.SetFileName(mediaDir + L"CSV/" + m_strFileNameCSV.stageStr[itr] + L".csv");
 			m_gameStageCs.ReadCsv();
 
 			auto& lineVec = m_gameStageCs.GetCsvVec();
@@ -51,7 +51,7 @@ namespace basecross {
 		}
 	}
 
-	//ï¿½vï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½Ìì¬
+	//ƒv[ƒ‹‚·‚éƒIƒuƒWƒFƒNƒg‚Ìì¬
 	void SpawnerBase::CreateObject() {
 		for (int i = 0; i < m_defaultObjectNum; i++) {
 			//m_moveObject.push_back(m_moveObjectTile[0]);
@@ -65,7 +65,7 @@ namespace basecross {
 
 			m_spawnTimer += App::GetApp()->GetElapsedTime() * gameSpeed;
 
-			float move = m_createPos[m_spawnCount] * App::GetApp()->GetElapsedTime() * gameSpeed * 10.0f;
+			float move = m_createPos[m_spawnCount] * App::GetApp()->GetElapsedTime() * 10.0f;
 
 			if (move <= m_spawnTimer) {
 				VisibleObject();
