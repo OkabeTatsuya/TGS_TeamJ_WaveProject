@@ -9,6 +9,8 @@
 namespace basecross{
     class Player : public ObjectBase {
     protected:
+        //ジャンプアクションの１回転にかかる時間
+        float m_jumpActionTime;
         //ジャンプのフラグ
         bool m_isJump = true;
         //ハイジャンプの上昇量
@@ -23,6 +25,8 @@ namespace basecross{
         float m_minSpeed;
         //継続スピードダウンの減少量
         float m_groundWaveDownSpeedValue;
+        //波に当たっているときの判定
+        bool m_isWaveTouch;
         //現在のジャンプのグレード判定秒数
         float m_currentJumpGradeTime;
         //良ジャンプした時のスピードの上昇量倍率
