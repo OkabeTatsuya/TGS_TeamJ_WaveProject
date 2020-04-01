@@ -58,6 +58,19 @@ namespace basecross {
 		BGM->Stop(m_BGM);
 	}
 
+	//���߂̍d������
+	void GameStage::FrastTimeCount() {
+		if (m_startTimeCount < m_maxStartTime) {
+			auto delta = App::GetApp()->GetElapsedTime();
+			m_startTimeCount += delta;
+			return;
+		}
+		else {
+			m_isFrastStop = false;
+			GameManager::GetInstance().SetIsStopSpawner(false);
+		}
+	}
+
 
 }
 //end basecross

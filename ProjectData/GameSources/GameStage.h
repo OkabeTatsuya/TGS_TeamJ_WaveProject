@@ -19,6 +19,12 @@ namespace basecross {
 		shared_ptr<SoundItem> m_BGM;
 		shared_ptr<SoundItem> m_SE;
 
+		bool m_isPause;
+
+		float m_startTimeCount;
+		float m_maxStartTime;
+		bool m_isFrastStop;
+
 	public:
 		//\’z‚Æ”jŠü
 		GameStage() :Stage() {}
@@ -28,6 +34,8 @@ namespace basecross {
 
 		//Áœ
 		virtual void OnDestroy()override;
+
+		void FrastTimeCount();
 	};
 
 
