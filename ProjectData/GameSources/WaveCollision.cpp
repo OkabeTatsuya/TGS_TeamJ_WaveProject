@@ -38,6 +38,7 @@ namespace basecross{
 
     void WaveCollision::OnUpdate() {
         Stop();
+		AwakeCollision();
     }
 
     void WaveCollision::Stop() {
@@ -46,6 +47,13 @@ namespace basecross{
             GetComponent<CollisionObb>()->SetUpdateActive(false);
         }
     }
+
+	void WaveCollision::AwakeCollision() {
+		auto wave = dynamic_pointer_cast<Wave>(GetComponent<Transform>()->GetParent());
+		if (!GetComponent<CollisionObb>()->GetUpdateActive() && wave->GetIsMove()) {
+			GetComponent<CollisionObb>()->SetUpdateActive(true);
+		}
+	}
 
 }
 //end basecross
