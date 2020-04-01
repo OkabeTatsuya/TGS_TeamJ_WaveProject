@@ -27,7 +27,7 @@ namespace basecross {
 			auto csvFilePths = mediaDir + L"CSV/" + m_strFileNameCSV.stageStr[itr] + L".csv";
 			//auto csvFilePths = mediaDir + L"CSV/" + L"Stage1.csv";
 			CsvFile LoadCsvFile;
-			m_gameStageCs.SetFileName(mediaDir + L"CSV/" + L"Stage1.csv");
+			m_gameStageCs.SetFileName(mediaDir + L"CSV/" + m_strFileNameCSV.stageStr[itr] + L".csv");
 			m_gameStageCs.ReadCsv();
 
 			auto& lineVec = m_gameStageCs.GetCsvVec();
@@ -51,9 +51,11 @@ namespace basecross {
 		}
 	}
 
+	//プールするオブジェクトの作成
 	void SpawnerBase::CreateObject() {
 		for (int i = 0; i < m_defaultObjectNum; i++) {
-			m_waveObject.push_back(GetStage()->AddGameObject<Wave>(Vec3(0.0f), Vec3(1.0f), Vec3(-6.0f, -1.5, 0)));
+			//m_moveObject.push_back(m_moveObjectTile[0]);
+			m_waveObject.push_back(GetStage()->AddGameObject<Wave>(Vec3(0.0f), Vec3(1.0f), Vec3(-6.0f, -1.5, -3.0f)));
 		}
 	}
 
@@ -63,7 +65,7 @@ namespace basecross {
 
 			m_spawnTimer += App::GetApp()->GetElapsedTime() * gameSpeed;
 
-			float move = m_createPos[m_spawnCount] * App::GetApp()->GetElapsedTime() * gameSpeed * 10.0f;
+			float move = m_createPos[m_spawnCount] * App::GetApp()->GetElapsedTime() * 10.0f;
 
 			if (move <= m_spawnTimer) {
 				VisibleObject();
@@ -76,7 +78,7 @@ namespace basecross {
 		for (int i = 0; i < m_waveObject.size(); i++) {
 			//プーリングしたオブジェクトから動かせるものを探す
 			if (!m_waveObject[i]->GetIsMove()) {
-				m_waveObject[i]->GetComponent<Transform>()->SetPosition(Vec3(6.0f, -1.5, 0));
+				m_waveObject[i]->GetComponent<Transform>()->SetPosition(Vec3(6.0f, -1.5, -3.0f));
 				m_waveObject[i]->SetIsMove(true);
 				m_spawnCount++;
 				break;
@@ -84,14 +86,12 @@ namespace basecross {
 
 			//動かせるものがなかったら作成する
 			if (m_waveObject.size()-1 == i) {
-				m_waveObject.push_back(GetStage()->AddGameObject<Wave>(Vec3(0.0f), Vec3(1.0f), Vec3(6.0f, -1.5, 0)));
+				m_waveObject.push_back(GetStage()->AddGameObject<Wave>(Vec3(0.0f), Vec3(1.0f), Vec3(6.0f, -1.5f, -3.0f)));
 				m_waveObject[m_waveObject.size() - 1]->SetIsMove(true);
 				m_spawnCount++;
 				break;
 			}
 		}
-
-
 	}
 
 	void SpawnerBase::EndCreateObject() {

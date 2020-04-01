@@ -36,8 +36,9 @@ namespace basecross {
 			CreateViewLight();
             SetPhysicsActive(true);
 
-			//AddGameObject<WaveSpawner>();
+			AddGameObject<BGGenerator>();
 
+			AddGameObject<WaveSpawner>();
             AddGameObject<Player>(Vec3(0, 0, 0), Vec3(1, 1, 1),Vec3(-4.0, 0, 0));
             AddGameObject<SeaCollision>(Vec3(0, 0, 0), Vec3(1, 0.5, 1), Vec3(-4, -2, 0));
             AddGameObject<Sea>(Vec3(0, 0, 0), Vec3(11, 4, 1), Vec3(0, -3.7, 0));
@@ -60,6 +61,19 @@ namespace basecross {
 		//BGMのストップ
 		auto BGM = App::GetApp()->GetXAudio2Manager();
 		BGM->Stop(m_BGM);
+	}
+
+	//・ｽ・ｽ・ｽﾟの硬・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ
+	void GameStage::FrastTimeCount() {
+		if (m_startTimeCount < m_maxStartTime) {
+			auto delta = App::GetApp()->GetElapsedTime();
+			m_startTimeCount += delta;
+			return;
+		}
+		else {
+			m_isFrastStop = false;
+			GameManager::GetInstance().SetIsStopSpawner(false);
+		}
 	}
 
 
