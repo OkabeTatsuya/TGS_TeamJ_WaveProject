@@ -51,9 +51,11 @@ namespace basecross {
 		}
 	}
 
+	//ï¿½vï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½Ìì¬
 	void SpawnerBase::CreateObject() {
 		for (int i = 0; i < m_defaultObjectNum; i++) {
-			m_waveObject.push_back(GetStage()->AddGameObject<Wave>(Vec3(0.0f), Vec3(1.0f), Vec3(-6.0f, -1.5, 0)));
+			//m_moveObject.push_back(m_moveObjectTile[0]);
+			m_waveObject.push_back(GetStage()->AddGameObject<Wave>(Vec3(0.0f), Vec3(1.0f), Vec3(-6.0f, -1.5, -3.0f)));
 		}
 	}
 
@@ -76,7 +78,7 @@ namespace basecross {
 		for (int i = 0; i < m_waveObject.size(); i++) {
 			//ƒv[ƒŠƒ“ƒO‚µ‚½ƒIƒuƒWƒFƒNƒg‚©‚ç“®‚©‚¹‚é‚à‚Ì‚ğ’T‚·
 			if (!m_waveObject[i]->GetIsMove()) {
-				m_waveObject[i]->GetComponent<Transform>()->SetPosition(Vec3(6.0f, -1.5, 0));
+				m_waveObject[i]->GetComponent<Transform>()->SetPosition(Vec3(6.0f, -1.5, -3.0f));
 				m_waveObject[i]->SetIsMove(true);
 				m_spawnCount++;
 				break;
@@ -84,14 +86,12 @@ namespace basecross {
 
 			//“®‚©‚¹‚é‚à‚Ì‚ª‚È‚©‚Á‚½‚çì¬‚·‚é
 			if (m_waveObject.size()-1 == i) {
-				m_waveObject.push_back(GetStage()->AddGameObject<Wave>(Vec3(0.0f), Vec3(1.0f), Vec3(6.0f, -1.5, 0)));
+				m_waveObject.push_back(GetStage()->AddGameObject<Wave>(Vec3(0.0f), Vec3(1.0f), Vec3(6.0f, -1.5f, -3.0f)));
 				m_waveObject[m_waveObject.size() - 1]->SetIsMove(true);
 				m_spawnCount++;
 				break;
 			}
 		}
-
-
 	}
 
 	void SpawnerBase::EndCreateObject() {
