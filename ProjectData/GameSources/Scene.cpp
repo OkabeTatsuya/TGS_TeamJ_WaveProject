@@ -21,8 +21,6 @@ namespace basecross{
 		App::GetApp()->GetDataDirectory(mediaDir);
 
 		FindFile(dataDir);
-		//FindFile(mediaDir + L"Sound/SE/");
-		//FindFile(mediaDir + L"Sound/BGM/");
 		FindFile(mediaDir + L"Image/");
 	}
 
@@ -84,7 +82,6 @@ namespace basecross{
 			SetClearColor(Col);
 			//自分自身にイベントを送る
 			//これにより各ステージやオブジェクトがCreate時にシーンにアクセスできる
-
 			PostEvent(0.0f, GetThis<ObjectInterface>(), GetThis<Scene>(), L"ToGameStage");
 		}
 		catch (...) {
@@ -93,22 +90,33 @@ namespace basecross{
 	}
 
 
-
 	Scene::~Scene() {
 	}
 
 	void Scene::OnEvent(const shared_ptr<Event>& event) {
-		if (event->m_MsgStr == L"ToGameStage") {
+		if (event->m_MsgStr == L"ToCopywriterStage") {
 			//最初のアクティブステージの設定
-			ResetActiveStage<GameStage>();
+
 		}
 		else if (event->m_MsgStr == L"ToTitleStage") {
-			//最初のアクティブステージの設定
+			//タイトルステージの設定
 			ResetActiveStage<TitleStage>();
 		}
+		else if (event->m_MsgStr == L"ToSelectStage") {
+			//ステージ選択画面の設定
+
+		}
+		else if (event->m_MsgStr == L"ToGameStage") {
+			//ゲームステージの設定
+			ResetActiveStage<GameStage>();
+		}
 		else if (event->m_MsgStr == L"ToResulfStage") {
-			//最初のアクティブステージの設定
+			//リザルトステージの設定
 			ResetActiveStage<ResultStage>();
+		}
+		else if (event->m_MsgStr == L"ToSanpleStage") {
+			//サンプルステージの設定
+			ResetActiveStage<SanpleStage>();
 		}
 	}
 
