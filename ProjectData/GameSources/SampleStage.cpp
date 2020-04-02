@@ -67,10 +67,13 @@ namespace basecross {
 		//画像を表示するUI
 		//引数　Vec3(Rot),Vec3(Sca),Vec2(Pos.xy),float(Layer),wstring(ImageName)
 		AddGameObject<ImageUI>(Vec3(0.0f), Vec3(100.0f, 100.0f, 1.0f), Vec2(-150.0f, 0.0f), float(2.0f), L"FadeBG.png");
+		//AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1280.0f, 800.0f, 1.0f), Vec2(0.0f, 0.0f), float(3.0f), L"BGImage.png");
 
 		//画像を点滅させるUI
 		//引数　Vec3(Rot),Vec3(Sca),Vec2(Pos.xy),float(Layer),wstring(ImageName),float(FlashSpeed)
 		AddGameObject<FlashingUI>(Vec3(0.0f), Vec3(100.0f, 100.0f, 1.0f), Vec2(150.0f, 0.0f), float(2.0f), L"FadeBG.png", 2.0f);
+		//AddGameObject<FlashingUI>(Vec3(0.0f), Vec3(1280.0f, 800.0f, 1.0f), Vec2(0.0f, 0.0f), float(3.0f), L"BGImage.png",3.5f);
+
 	}
 
 	//--------------------------------------------------------------------------------------
