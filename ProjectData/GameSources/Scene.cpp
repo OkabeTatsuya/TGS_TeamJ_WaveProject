@@ -114,7 +114,7 @@ namespace basecross{
 			//リザルトステージの設定
 			ResetActiveStage<ResultStage>();
 		}
-		else if (event->m_MsgStr == L"ToSanpleStage") {
+		else if (event->m_MsgStr == L"ToSampleStage") {
 			//サンプルステージの設定
 			ResetActiveStage<SanpleStage>();
 		}
