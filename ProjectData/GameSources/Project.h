@@ -31,3 +31,5 @@
 
 #include"TitleStage.h"
 #include"ResulfStage.h"
+
+#include "SanpleStage.h"
