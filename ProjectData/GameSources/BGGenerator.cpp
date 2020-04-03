@@ -16,7 +16,6 @@ namespace basecross {
 	}
 
 	void BGGenerator::OnCreate() {
-		//LoadCSV();
 		CreateObject();
 	}
 
@@ -35,22 +34,14 @@ namespace basecross {
 
 
 	void BGGenerator::GeneratBG() {
-		//if (!GameManager::GetInstance().GetIsStopSpawner() && !m_isStopSpawn) {
-		//	return;
-		//}
+		float gameSpeed = GameManager::GetInstance().GetGameSpeed();
 
-		if (!GameManager::GetInstance().GetIsStopSpawner() && !m_isStopSpawn) {
-			float gameSpeed = GameManager::GetInstance().GetGameSpeed();
+		m_spawnTimer += App::GetApp()->GetElapsedTime() * gameSpeed;
 
-			m_spawnTimer += App::GetApp()->GetElapsedTime() * gameSpeed;
-
-			if (10.0f <= m_spawnTimer) {
-				VisibleBG();
-				m_spawnTimer = 0.0f;
-			}
-			EndGeneratBG();
-			
-		}
+		if (10.0f <= m_spawnTimer) {
+			VisibleBG();
+			m_spawnTimer = 0.0f;
+		}			
 	}
 
 	void BGGenerator::VisibleBG() {
