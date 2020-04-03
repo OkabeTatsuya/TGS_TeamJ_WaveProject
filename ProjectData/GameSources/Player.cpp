@@ -66,6 +66,7 @@ namespace basecross {
 
         AddComponent<CollisionObb>()->SetMakedSize(1);
 
+		AddTag(L"Player");
     }
 
     void Player::OnUpdate() {
