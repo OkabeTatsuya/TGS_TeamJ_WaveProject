@@ -23,9 +23,13 @@
 #include "Wave.h"
 #include "WaveCollision.h"
 #include "MoveBG.h"
+#include "GoalObject.h"
+
 #include "SpawnerBase.h"
 #include "WaveSpawner.h"
 #include "BGGenerator.h"
+#include "GoalGenerator.h"
+
 #include "ImageUI.h"
 #include "FlashingUI.h"
 
