@@ -21,9 +21,15 @@ namespace basecross {
 
 		bool m_isPause;
 
+		//ï¿½Qï¿½[ï¿½ï¿½ï¿½ï¿½nï¿½ß‚ï¿½Oï¿½Ìdï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		float m_startTimeCount;
 		float m_maxStartTime;
 		bool m_isFrastStop;
+
+		//ï¿½Qï¿½[ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Égï¿½ï¿½
+		float m_loadStageTimeCount;
+		float m_maxLoadStageTime;
+		bool m_isFadeIn;
 
 	public:
 		//\’z‚Æ”jŠü
@@ -35,12 +41,16 @@ namespace basecross {
 		//Áœ
 		virtual void OnDestroy()override;
 
+		void LoadResultStage();
 
 		int SaveGameData();
 
 		int ReadGameData();
 
 		void FrastTimeCount();
+
+		void GameClear();
+
 	};
 
 

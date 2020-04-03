@@ -72,7 +72,23 @@ namespace basecross {
 		}
 	}
 
-	//�Q�[���̃Z�[�u
+	void GameStage::GameClear() {
+		bool isGameEnd = GameManager::GetInstance().GetIsGameEnd();
+		if (isGameEnd) {
+			SaveGameData();
+			LoadResultStage();
+		}
+	}
+
+	//���U���g�X�e�[�W�Ɉړ�
+	void GameStage::LoadResultStage() {
+		bool isGameEnd = GameManager::GetInstance().GetIsGameEnd();
+		if (isGameEnd) {
+			SaveGameData();
+			App::GetApp()->GetScene<Scene>()->LoadStage(L"ToResulfStage");
+		}
+	}
+
 	int GameStage::SaveGameData() {
 		int saveNum = GameManager::GetInstance().GetGameScore();
 		int num = 1;
