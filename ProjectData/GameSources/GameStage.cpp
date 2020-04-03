@@ -53,20 +53,23 @@ namespace basecross {
 		}
 	}
 
+	void GameStage::OnUpdate() {
+		GameClear();
+	}
+
 	void GameStage::OnDestroy() {
 		//BGM‚ÌƒXƒgƒbƒv
 		auto BGM = App::GetApp()->GetXAudio2Manager();
 		BGM->Stop(m_BGM);
 	}
 
-	//E½E½E½ß‚ÌdE½E½E½E½E½E½
+	//‰‚ß‚Ìd’¼ŠÔ
 	void GameStage::FrastTimeCount() {
 		if (m_startTimeCount < m_maxStartTime) {
 			auto delta = App::GetApp()->GetElapsedTime();
 			m_startTimeCount += delta;
-			return;
 		}
-		else {
+		else if(m_isFrastStop){
 			m_isFrastStop = false;
 			GameManager::GetInstance().SetIsStopSpawner(false);
 		}
@@ -80,7 +83,7 @@ namespace basecross {
 		}
 	}
 
-	//ï¿½ï¿½ï¿½Uï¿½ï¿½ï¿½gï¿½Xï¿½eï¿½[ï¿½Wï¿½ÉˆÚ“ï¿½
+	//ƒŠƒUƒ‹ƒgƒXƒe[ƒW‚ÉˆÚ“®
 	void GameStage::LoadResultStage() {
 		bool isGameEnd = GameManager::GetInstance().GetIsGameEnd();
 		if (isGameEnd) {
@@ -89,6 +92,7 @@ namespace basecross {
 		}
 	}
 
+	//ƒQ[ƒ€‚ÌƒZ[ƒu
 	int GameStage::SaveGameData() {
 		int saveNum = GameManager::GetInstance().GetGameScore();
 		int num = 1;
@@ -101,17 +105,17 @@ namespace basecross {
 		App::GetApp()->GetDataDirectory(mediaDir);
 
 		char saveFileName[] = "../media/GameData/SaveData/file.otb";
-		//ï¿½Jï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÍVï¿½Kï¿½ì¬
+		//ŠJ‚¯‚È‚©‚Á‚½‚ÍV‹Kì¬
 		fopen_s(&fp, saveFileName, "wb");
 
 		for (int i = 0; i < 2; i++) {
 
-			//ï¿½oï¿½Cï¿½iï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½oï¿½ï¿½
+			//ƒoƒCƒiƒŠ‚Ì‘‚«o‚µ
 			fwrite(&saveNum, sizeof(saveNum), 1, fp);
 		}
 
 		num = num * 4;
-		//ï¿½ê•”ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½Égï¿½ï¿½
+		//ˆê•”‚¾‚¯‘‚«o‚µ‚µ‚½‚¢ê‡‚Ég‚¤
 		fseek(fp, num , SEEK_SET);
 		fwrite(&save, sizeof(save), 1, fp);
 		
@@ -120,30 +124,31 @@ namespace basecross {
 		return 0;
 	}
 
-
-	//ï¿½oï¿½Cï¿½iï¿½ï¿½ï¿½fï¿½[ï¿½^ï¿½Ìƒï¿½ï¿½[ï¿½h
+	//ƒoƒCƒiƒŠƒf[ƒ^‚Ìƒ[ƒh
 	int GameStage::ReadGameData() {
 		char outfile[] = "file.otb";
 		int saveNum = 0;
 		ifstream fin(outfile, ios::in | ios::binary);
 
-		//ï¿½Ç‚İï¿½ï¿½ß‚È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1ï¿½ï¿½Ô‚ï¿½
+		//“Ç‚İ‚ß‚È‚©‚Á‚½1‚ğ•Ô‚·
 		if (!fin) {
 			fin.close();
 			return 1;
 		}
 
-		//ï¿½oï¿½Cï¿½iï¿½ï¿½ï¿½fï¿½[ï¿½^ï¿½Ì’ï¿½ï¿½gï¿½ï¿½ï¿½×‚Ä‚ï¿½mï¿½Fï¿½ï¿½ï¿½ï¿½
+		//ƒoƒCƒiƒŠƒf[ƒ^‚Ì’†g‚·‚×‚Ä‚ğŠm”F‚·‚é
 		while (!fin.eof()) {
-			//ï¿½Ç‚İï¿½ï¿½İ‚ï¿½ï¿½ï¿½ï¿½fï¿½[ï¿½^ï¿½ÌˆÊ’uï¿½ï¿½wï¿½è‚·ï¿½ï¿½ê‡ï¿½Égï¿½ï¿½
+			//“Ç‚İ‚İ‚½‚¢ƒf[ƒ^‚ÌˆÊ’u‚ğw’è‚·‚éê‡‚Ég‚¤
 			//int readBinaryItr = 0;
 			//fin.seekg(readBinaryItr * sizeof(int));
 
-			//ï¿½oï¿½Cï¿½iï¿½ï¿½ï¿½fï¿½[ï¿½^ï¿½ï¿½Ç‚İï¿½ï¿½ï¿½
+			//ƒoƒCƒiƒŠƒf[ƒ^‚ğ“Ç‚İ‚Ş
 			fin.read((char *)&saveNum, sizeof(int));
 		}
 		fin.close();
 		return 0;
 	}
+
+
 }
 //end basecross
