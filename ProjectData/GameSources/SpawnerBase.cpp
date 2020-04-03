@@ -22,40 +22,30 @@ namespace basecross {
 	void SpawnerBase::LoadCSV() {
 		wstring mediaDir;
 		App::GetApp()->GetDataDirectory(mediaDir);
+		int itr = 2;
+		auto csvFilePths = mediaDir + L"CSV/" + m_strFileNameCSV.stageStr[itr] + L".csv";
+		//auto csvFilePths = mediaDir + L"CSV/" + L"Stage1.csv";
+		CsvFile LoadCsvFile;
+		m_gameStageCs.SetFileName(csvFilePths);
+		m_gameStageCs.ReadCsv();
 
-		int itr = 0;
-		while (m_strFileNameCSV.stageStr.size() > itr) {
-			auto csvFilePths = mediaDir + L"CSV/" + m_strFileNameCSV.stageStr[itr] + L".csv";
-			//auto csvFilePths = mediaDir + L"CSV/" + L"Stage1.csv";
-			CsvFile LoadCsvFile;
-			m_gameStageCs.SetFileName(mediaDir + L"CSV/" + m_strFileNameCSV.stageStr[itr] + L".csv");
-			m_gameStageCs.ReadCsv();
-
-			auto& lineVec = m_gameStageCs.GetCsvVec();
-			for (size_t i = 0; i < lineVec.size(); i++) {
-				vector<wstring> tokens;
-				Util::WStrToTokenVector(tokens, lineVec[i], L',');
-				for (size_t j = 0; j < tokens.size(); j++) {
-					float num = stof(tokens[j]);
-					m_createPos.push_back(num);
-				}
-			};
-			//m_gameStageCsv.push_back(m_gameStageCs);
-			itr++;
-		}
+		auto& lineVec = m_gameStageCs.GetCsvVec();
+		for (size_t i = 0; i < lineVec.size(); i++) {
+			vector<wstring> tokens;
+			Util::WStrToTokenVector(tokens, lineVec[i], L',');
+			for (size_t j = 0; j < tokens.size(); j++) {
+				float num = stof(tokens[j]);
+				m_createPos.push_back(num);
+			}
+		};
 	}
 
 	void SpawnerBase::LoadCreatePostion() {
-		for (int i = 0; i < 10; i++) {
-			float SetPos = 15.0f * i;
-			m_createPos.push_back(SetPos);
-		}
 	}
 
 	//プールするオブジェクトの作成
 	void SpawnerBase::CreateObject() {
 		for (int i = 0; i < m_defaultObjectNum; i++) {
-			//m_moveObject.push_back(m_moveObjectTile[0]);
 			Vec3 firstPos = Vec3(-6.0f, m_spawnPos.y, m_spawnPos.z);
 			m_waveObject.push_back(GetStage()->AddGameObject<Wave>(Vec3(0.0f), Vec3(1.0f), firstPos));
 		}
@@ -99,9 +89,10 @@ namespace basecross {
 	void SpawnerBase::EndCreateObject() {
 		int spawnItr = (int)m_createPos.size() - 1;
 		if (m_spawnCount > spawnItr) {
-			//m_isStopSpawn = true;
-			m_spawnCount = 0;
-			m_spawnTimer = 0.0f;
+			m_isStopSpawn = true;
+			GameManager::GetInstance().SetIsStopSpawner(true);
+			//m_spawnCount = 0;
+			//m_spawnTimer = 0.0f;
 		}
 	}
 
