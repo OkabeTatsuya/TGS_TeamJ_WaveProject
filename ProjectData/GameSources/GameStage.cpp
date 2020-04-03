@@ -36,9 +36,15 @@ namespace basecross {
 			CreateViewLight();
             SetPhysicsActive(true);
 
+			GameManager::GetInstance().SetIsGameEnd(false);		
+			GameManager::GetInstance().SetIsStopSpawner(false);
+
+
 			AddGameObject<BGGenerator>();
 
 			AddGameObject<WaveSpawner>();
+			AddGameObject<GoalGenerator>();
+
             AddGameObject<Player>(Vec3(0, 0, 0), Vec3(1, 1, 1),Vec3(-4.0, 0, -3.0));
             AddGameObject<SeaCollision>(Vec3(0, 0, 0), Vec3(1, 0.5, 1), Vec3(-4, -2, -3.0));
             AddGameObject<Sea>(Vec3(0, 0, 0), Vec3(11, 4, 1), Vec3(0, -3.7, -5.0));
