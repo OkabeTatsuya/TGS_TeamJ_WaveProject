@@ -35,6 +35,11 @@ namespace basecross {
 		//Áœ
 		virtual void OnDestroy()override;
 
+
+		int SaveGameData();
+
+		int ReadGameData();
+
 		void FrastTimeCount();
 	};
 

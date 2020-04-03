@@ -72,6 +72,62 @@ namespace basecross {
 		}
 	}
 
+	//�Q�[���̃Z�[�u
+	int GameStage::SaveGameData() {
+		int saveNum = GameManager::GetInstance().GetGameScore();
+		int num = 1;
+		int save = 9999999;
+		ofstream fout;
 
+		FILE* fp;
+
+		wstring mediaDir;
+		App::GetApp()->GetDataDirectory(mediaDir);
+
+		char saveFileName[] = "../media/GameData/SaveData/file.otb";
+		//�J���Ȃ��������͐V�K�쐬
+		fopen_s(&fp, saveFileName, "wb");
+
+		for (int i = 0; i < 2; i++) {
+
+			//�o�C�i���̏����o��
+			fwrite(&saveNum, sizeof(saveNum), 1, fp);
+		}
+
+		num = num * 4;
+		//�ꕔ���������o���������ꍇ�Ɏg��
+		fseek(fp, num , SEEK_SET);
+		fwrite(&save, sizeof(save), 1, fp);
+		
+		fclose(fp);
+
+		return 0;
+	}
+
+
+	//�o�C�i���f�[�^�̃��[�h
+	int GameStage::ReadGameData() {
+		char outfile[] = "file.otb";
+		int saveNum = 0;
+		ifstream fin(outfile, ios::in | ios::binary);
+
+		//�ǂݍ��߂Ȃ�������1��Ԃ�
+		if (!fin) {
+			fin.close();
+			return 1;
+		}
+
+		//�o�C�i���f�[�^�̒��g���ׂĂ�m�F����
+		while (!fin.eof()) {
+			//�ǂݍ��݂����f�[�^�̈ʒu��w�肷��ꍇ�Ɏg��
+			//int readBinaryItr = 0;
+			//fin.seekg(readBinaryItr * sizeof(int));
+
+			//�o�C�i���f�[�^��ǂݍ���
+			fin.read((char *)&saveNum, sizeof(int));
+		}
+		fin.close();
+		return 0;
+	}
 }
 //end basecross
