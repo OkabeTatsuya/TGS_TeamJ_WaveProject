@@ -18,7 +18,9 @@ namespace basecross{
 		virtual void OnCreate() override;
         virtual void OnUpdate() override;
         void Stop();
-        void Awake();
+
+		//”g‚ª¶¬‚³‚ê‚½‚Æ‚«ƒRƒŠƒWƒ‡ƒ“‚ğ‹N‚±‚·
+        void AwakeCollision();
 	};
 }
 //end basecross

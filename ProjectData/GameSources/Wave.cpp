@@ -27,7 +27,7 @@ namespace basecross {
         transPtr->SetScale(m_scale);
         transPtr->SetRotation(m_rotation);
 
-        auto waveCol = GetStage()->AddGameObject<WaveCollision>(Vec3(0, 0, 0), Vec3(1, 1, 1), Vec3(m_position.x - 1, m_position.y, m_position.z));
+        auto waveCol = GetStage()->AddGameObject<WaveCollision>(Vec3(0, 0, 0), Vec3(1, 1, 1), Vec3(m_position.x - 1, m_position.y, -3.0f));
         waveCol->GetComponent<Transform>()->SetParent(GetThis<GameObject>());
         //SetTexture(L"");
     }

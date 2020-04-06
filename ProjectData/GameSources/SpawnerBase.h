@@ -15,8 +15,10 @@ namespace basecross {
 
 	struct FileNameCSV {
 		vector<wstring> stageStr{
-			L"Stage1",
-			//L"Stage2"
+			L"MapData1",
+			L"MapData2",
+			L"MapData3",
+			L"MapData4"
 		};
 
 		vector<wstring> itemStr{
