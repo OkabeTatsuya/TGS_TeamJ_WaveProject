@@ -38,8 +38,8 @@ namespace basecross {
 			//タイトル画像
 			AddGameObject<UIBase>(Vec3(0.0f), Vec3(600.0f, 300.0f, 1.0f), Vec2(-300.0f, 150.0f), float(2.0f), L"Red.png");
 
-			//点滅させるタイトルセレクトのUI
-			AddGameObject<FlashingUI>(Vec3(0.0f), Vec3(400.0f, 100.0f, 1.0f), Vec2(-400.0f, -200.0f), float(2.0f), L"Tx_GoStageSelect.png", 2.0f);
+			//点滅させてボタン押してくださいのUI
+			AddGameObject<FlashingUI>(Vec3(0.0f), Vec3(400.0f, 100.0f, 1.0f), Vec2(-400.0f, -200.0f), float(2.0f), L"Tx_PushButtons.png", 2.0f);
 
 			//BGM再生と音量調整
 			auto XAPtr = App::GetApp()->GetXAudio2Manager();
