@@ -19,7 +19,7 @@ namespace basecross {
 
     void Sea::OnCreate() {
 
-        DrawingImage(L"Sea_Image.png");
+        DrawingImage(L"Sea1.png");
         auto transPtr = AddComponent<Transform>();
         transPtr->SetPosition(m_position);
         transPtr->SetScale(m_scale);

@@ -55,7 +55,7 @@ namespace basecross {
 
     void Player::OnCreate() {
 
-        DrawingImage(L"player.png");
+        DrawingImage(L"Wait_01.png");
         auto transPtr = AddComponent<Transform>();
         transPtr->SetPosition(m_position);
         transPtr->SetScale(m_scale);
