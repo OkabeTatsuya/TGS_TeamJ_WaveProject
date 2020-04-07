@@ -13,11 +13,15 @@ namespace basecross {
 		bool m_isMove;
 		//âÊñ äOîªíËÇÃÇòç¿ïW
 		float m_offScreenX;
+
+		wstring m_texture;
 	public:
 		MoveBG(const shared_ptr<Stage>& stage,
 			Vec3& rotation,
 			Vec3& scale,
-			Vec3& position);
+			Vec3& position,
+			wstring tex,
+			float offScreenX);
 
 		virtual void OnUpdate() override;
 		virtual void OnCreate() override;
