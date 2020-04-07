@@ -112,6 +112,8 @@ namespace basecross{
         void Invincible();
         //スピード依存のスコア倍率計算処理
         void SpeedScoreMagnification();
+        //SEを鳴らす処理
+        void ActiveSE(wstring se);
     };
 
 }
