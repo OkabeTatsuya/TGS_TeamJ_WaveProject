@@ -12,7 +12,7 @@ namespace basecross {
 	{
 		m_defaultObjectNum = 5;
 		m_spawnCount = 0;
-		m_spawnPos = Vec3(6.0f, -1.5, -4.0f);
+		m_spawnPos = Vec3(6.0f, -3.2, -4.0f);
 	}
 
 	SpawnerBase::~SpawnerBase() {
