@@ -232,6 +232,7 @@ namespace basecross {
         m_isJump = true;
         GetComponent<RigidbodyBox>()->SetAutoGravity(true);
         GetComponent<RigidbodyBox>()->SetLinearVelocity(Vec3(0, m_highJumpMoveY * jumpMag, 0));
+        ActiveSE(L"se_maoudamashii_system37.wav");
     }
 
     //ロージャンプ
@@ -239,6 +240,7 @@ namespace basecross {
         m_isJump = true;
         GetComponent<RigidbodyBox>()->SetAutoGravity(true);
         GetComponent<RigidbodyBox>()->SetLinearVelocity(Vec3(0, m_lowJumpMoveY * jumpMag, 0));
+        ActiveSE(L"se_maoudamashii_system37.wav");
     }
 
     void Player::Invincible() {
@@ -252,6 +254,11 @@ namespace basecross {
         else {
             m_currentInvincibleTime = 0;
         }
+    }
+
+    void Player::ActiveSE(wstring se) {
+        auto XAPtr = App::GetApp()->GetXAudio2Manager();
+        auto SE = XAPtr->Start(se, 0, 0.5f);
     }
 
     //コリジョンの最初に当たった瞬間１回のみの処理
