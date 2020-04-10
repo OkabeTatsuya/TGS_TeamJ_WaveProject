@@ -39,6 +39,7 @@ namespace basecross {
 			GameManager::GetInstance().SetIsGameEnd(false);		
 			GameManager::GetInstance().SetIsStopSpawner(false);
 
+            AddGameObject<Fade>(Vec3(0.0f), Vec3(1400.0f,800.0f,1.0f), Vec2(0.0f), float(3.0f));
 
 			AddGameObject<BGGenerator>();
 
