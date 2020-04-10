@@ -8,27 +8,38 @@
 
 namespace basecross {
     Fade::Fade(const shared_ptr<Stage>& stage,
-        Vec3& rotation,
-        Vec3& scale,
-        Vec2& position,
-        float& layer,
-        bool isfadeOut) :
+        wstring nextStageKey) :
 
 
-        UIBase(stage, rotation,
-            scale,
-            position,
-            layer,
+        UIBase(stage, Vec3(0.0f),
+            Vec3(1400, 800, 0),
+            Vec2(0.0f),
+            float(5.0f),
             L"FadeBG.png"),
-        m_isFadeOut(isfadeOut)
+        m_nextStageKey(nextStageKey)
     {
-        m_currentFadeTime = 0;
+        m_currentFadeTime = 0.0f;
         m_maxFadeTime = 1.0f;
+        m_isFadeOut = true;
+    }
+
+    Fade::Fade(const shared_ptr<Stage>& stage
+    ) :
+        UIBase(stage, Vec3(0.0f),
+            Vec3(1400, 800, 0),
+            Vec2(0.0f),
+            float(5.0f),
+            L"FadeBG.png") 
+    {
+        m_currentFadeTime = 0.0f;
+        m_maxFadeTime = 1.0f;
+        m_isFadeOut = false;
     }
 
 
     void Fade::OnCreate() {
         DrawingImage();
+        InitializeTransfrom();
         Col4 color(1, 1, 1, 1);
         Vec2 tipSize = Vec2(1.0f, 1.0f);
 
@@ -77,6 +88,9 @@ namespace basecross {
         if (m_currentFadeTime >= m_maxFadeTime) {
             if (!m_isFadeOut) {
                 GetStage()->RemoveGameObject<Fade>(GetThis<Fade>());
+            }
+            else {
+                GetStage()->PostEvent(0.0f, GetStage()->GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), m_nextStageKey);
             }
             
         }

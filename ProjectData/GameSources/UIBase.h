@@ -13,16 +13,16 @@ namespace basecross {
 		wstring m_textureName;
 
 	public:
-		Vec3& m_rotation;
-		Vec3& m_scale;
-		Vec2& m_position;
-		float& m_layer;
+		Vec3 m_rotation;
+		Vec3 m_scale;
+		Vec2 m_position;
+		float m_layer;
 
 		UIBase(const shared_ptr<Stage>& stage,
 			Vec3& rotation,
 			Vec3& scale,
 			Vec2& position,
-			float& layer,
+			float layer,
 			wstring tex);
 
 		//セッター

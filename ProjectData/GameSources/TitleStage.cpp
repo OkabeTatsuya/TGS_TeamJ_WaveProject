@@ -80,7 +80,7 @@ namespace basecross {
 
 		//ƒV[ƒ“ˆÚ“®
 		if (m_time >= 3) {
-			PostEvent(0.0f, GetThis <ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
+			AddGameObject<Fade>(L"ToGameStage");
 		}
 	}
 
