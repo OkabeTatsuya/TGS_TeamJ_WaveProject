@@ -14,13 +14,12 @@ namespace basecross {
         float m_maxFadeTime;
         //現在フェードにかかっている時間
         float m_currentFadeTime;
+        //フェードアウトの時に使う次のステージのkey
+        wstring m_nextStageKey;
     public:
         Fade(const shared_ptr<Stage>& stage,
-            Vec3& rotation,
-            Vec3& scale,
-            Vec2& position,
-            float& layer,
-            bool isfadeOut);
+            wstring nextStageKey);
+        Fade(const shared_ptr<Stage>& stage);
 
         virtual void OnCreate() override;
         virtual void OnUpdate() override;

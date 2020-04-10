@@ -85,6 +85,9 @@ namespace basecross {
 			//画像を表示するUI
 			//引数　Vec3(Rot),Vec3(Sca),Vec2(Pos.xy),float(Layer),wstring(ImageName)
 
+            /*Fade*/
+            AddGameObject<Fade>();
+
 			/*BG(バックグラウンド)*/
 			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1300.0f, 800.0f, 1.0f), Vec2(0.0f, 0.0f), float(2.0f), L"FadeBG.png");
 			
@@ -100,8 +103,6 @@ namespace basecross {
 			/*	次のステージへ*/
 			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(250.0f, 100.0f, 1.0f), Vec2(400.0f, -250.0f), float(2.0f), L"Tx_GoNextStage.png");
 
-			AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(130.0f, 130.0f, 1.0f), Vec2(400.0f, 0.0f), float(2.0f), L"", 7);
-			GameManager::GetInstance().DrawScore();
 
 			//AddGameObject<UIBase>(Vec3(0.0f), Vec3(40.0f, 40.0f, 1.0f), Vec2(-600.0f, 350.0f), float(2.0f), L"trace.png");
 			//シーン移動                                 (ゲームステージへ)
@@ -156,7 +157,7 @@ namespace basecross {
 
 			if (m_Time >= 3)
 			{
-				App::GetApp()->GetScene<Scene>()->LoadStage(m_ResultUi[m_ResultUiCount]);
+				AddGameObject<Fade>(m_ResultUi[m_ResultUiCount]);
 			}
 			GetMoveVector();
 		}
