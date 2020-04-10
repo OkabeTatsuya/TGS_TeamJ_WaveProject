@@ -43,6 +43,8 @@ namespace basecross {
 			ObjectState BGState = { Vec3(0.0f), Vec3(10.05f, 10.0f, 1.0f), Vec3(-10.0f, 0.0f, 0.0f), L"Sea2.png", -6.0f };
 			ObjectState SeaState = { Vec3(0.0f), Vec3(10.05f, 2.0f, 1.0f), Vec3(0.0, -4.0, -5.0), L"Sea1.png", -6.0f };
 
+            AddGameObject<Fade>(Vec3(0.0f),Vec3(1400,800,0),Vec2(0.0f),float(5.0f),true);
+
 			AddGameObject<BGGenerator>(BGState);
 
 			AddGameObject<WaveSpawner>();

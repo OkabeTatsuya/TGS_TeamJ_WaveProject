@@ -37,3 +37,5 @@
 #include"ResulfStage.h"
 
 #include "SanpleStage.h"
+
+#include "Fade.h"
