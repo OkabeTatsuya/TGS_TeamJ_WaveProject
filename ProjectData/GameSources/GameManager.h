@@ -53,7 +53,6 @@ namespace basecross {
 		bool m_isStopSpawner;
 		bool m_isGameEnd;
 
-
 	public :
 		static GameManager& GetInstance() {
 			static GameManager inst;
@@ -72,6 +71,7 @@ namespace basecross {
 		void SetGameSpeed(float set ) { m_gameSpeed = set; }
 		void SetIsStopSpawner(bool set) { m_isStopSpawner = set; }
         void SetScoreUIPanel(shared_ptr<ScoreUIPanel> set) { m_scoreUIPanel = set; }
+		void ReSetGameScore() { m_gameScore = 0; }
 
 		//ジャンプのスコア加算処理
 		///magnification 倍率、　combo 続けてジャンプした回数
@@ -80,6 +80,9 @@ namespace basecross {
 		//ジャンプアクションのスコア加算処理
 		///magnification 倍率、　combo 続けてアクションした回数
 		void AddActionScore(float magnification, float comboMagnification);
+
+		//リザルトで使うスコアを写す処理
+		void DrawScore();
 	};
 
 }

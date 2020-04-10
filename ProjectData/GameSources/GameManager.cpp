@@ -27,5 +27,7 @@ namespace basecross {
         m_scoreUIPanel->ScoreDraw(m_gameScore);
 	}
 
-
+	void GameManager::DrawScore() {
+		m_scoreUIPanel->ScoreDraw(m_gameScore);
+	}
 }

@@ -42,7 +42,7 @@ namespace basecross {
 
 		ptrTransform->SetScale(m_scale);
 		//ptrTransform->SetRotation(0, 0, 0);
-		ptrTransform->SetPosition(m_position.x, m_position.y, m_layer);
+		ptrTransform->SetPosition(m_position.x, m_position.y, 0.0f);
 
 		// テクスチャの貼り付け
 		auto drawComp = AddComponent<PCTSpriteDraw>(vertices, indices);
@@ -54,7 +54,7 @@ namespace basecross {
 
 		//auto defColor = Col4(1, 1, 1, 1);
 		//drawComp->SetDiffuse(defColor);
-
+		SetDrawLayer(m_layer);
 	}
 
 	void UIBase::OnCreate() {

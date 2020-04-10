@@ -49,6 +49,9 @@ namespace basecross {
 
 		drawComp->SetTextureResource(m_textureName);
 		this->SetAlphaActive(true);
+
+		float Layer = m_position.z * (-1.0f);
+		SetDrawLayer(Layer);
 	}
 
 }

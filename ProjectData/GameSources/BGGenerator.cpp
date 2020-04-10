@@ -7,11 +7,11 @@
 #include "Project.h"
 
 namespace basecross {
-	BGGenerator::BGGenerator(const shared_ptr<Stage>& StagePtr) :
+	BGGenerator::BGGenerator(const shared_ptr<Stage>& StagePtr,ObjectState ObjectState) :
 		SpawnerBase(StagePtr)
 	{
 		//m_objState = { Vec3(0.0f), Vec3(1280.0f, 800.0f, 1.0f), Vec2(-1280.0f,0.0f), 6.0f, L"BGImage.png" };
-		m_objState = { Vec3(0.0f), Vec3(10.0f, 10.0f, 1.0f), Vec3(-10.0f,0.0f,0.0f), L"BGImage.png" };
+		m_objState = ObjectState;
 		m_defaultObjectNum = 1;
 	}
 
@@ -26,10 +26,10 @@ namespace basecross {
 	void BGGenerator::CreateObject() {
 		for (int i = 0; i < m_defaultObjectNum; i++) {
 			//m_moveObject.push_back(m_moveObjectTile[0]);
-			m_BGObject.push_back(GetStage()->AddGameObject<MoveBG>(m_objState.Rot, m_objState.Scr, m_objState.Pos));
+			m_BGObject.push_back(GetStage()->AddGameObject<MoveBG>(m_objState.Rot, m_objState.Scr, m_objState.Pos, m_objState.Tex, m_objState.OffScreenX));
 		}
-		m_BGObject.push_back(GetStage()->AddGameObject<MoveBG>(m_objState.Rot, m_objState.Scr, Vec3(0.0f, m_objState.Pos.y, m_objState.Pos.z)));
-		m_BGObject.push_back(GetStage()->AddGameObject<MoveBG>(m_objState.Rot, m_objState.Scr, Vec3(10.0f, m_objState.Pos.y, m_objState.Pos.z)));
+		m_BGObject.push_back(GetStage()->AddGameObject<MoveBG>(m_objState.Rot, m_objState.Scr, Vec3(0.0f, m_objState.Pos.y, m_objState.Pos.z), m_objState.Tex, m_objState.OffScreenX));
+		m_BGObject.push_back(GetStage()->AddGameObject<MoveBG>(m_objState.Rot, m_objState.Scr, Vec3(10.0f, m_objState.Pos.y, m_objState.Pos.z), m_objState.Tex, m_objState.OffScreenX));
 	}
 
 
@@ -56,7 +56,7 @@ namespace basecross {
 
 			//“®‚©‚¹‚é‚à‚Ì‚ª‚È‚©‚Á‚½‚çì¬‚·‚é
 			if (m_BGObject.size() - 1 == i) {
-				m_BGObject.push_back(GetStage()->AddGameObject<MoveBG>(m_objState.Rot, m_objState.Scr, m_objState.Pos));
+				m_BGObject.push_back(GetStage()->AddGameObject<MoveBG>(m_objState.Rot, m_objState.Scr, m_objState.Pos, m_objState.Tex, m_objState.OffScreenX));
 				m_BGObject[m_BGObject.size() - 1]->SetIsMove(true);
 				m_spawnCount++;
 				break;

@@ -12,6 +12,7 @@ namespace basecross {
 		Vec3 Scr;
 		Vec3 Pos;
 		wstring Tex;
+		float OffScreenX;
 	};
 
 	class BGGenerator : public SpawnerBase {
@@ -29,7 +30,7 @@ namespace basecross {
 		bool m_isStopSpawn;
 
 	public:
-		BGGenerator(const shared_ptr<Stage>& StagePtr);
+		BGGenerator(const shared_ptr<Stage>& StagePtr, ObjectState ObjectState);
 
 		virtual void OnCreate();
 
