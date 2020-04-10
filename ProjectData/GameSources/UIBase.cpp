@@ -40,10 +40,6 @@ namespace basecross {
 		auto ptrTransform = GetComponent<Transform>();
 		ptrTransform->SetPivot(0.0f, 0.0f, 0.0f);
 
-		ptrTransform->SetScale(m_scale);
-		//ptrTransform->SetRotation(0, 0, 0);
-		ptrTransform->SetPosition(m_position.x, m_position.y, 0.0f);
-
 		// テクスチャの貼り付け
 		auto drawComp = AddComponent<PCTSpriteDraw>(vertices, indices);
 		drawComp->SetSamplerState(SamplerState::LinearWrap);
@@ -54,11 +50,21 @@ namespace basecross {
 
 		//auto defColor = Col4(1, 1, 1, 1);
 		//drawComp->SetDiffuse(defColor);
-		SetDrawLayer(m_layer);
+		SetDrawLayer((int)m_layer);
 	}
+
+	//トランスフォームを設定
+	void UIBase::InitializeTransfrom() {
+		auto ptrTransform = GetComponent<Transform>();
+		ptrTransform->SetScale(m_scale);
+		ptrTransform->SetRotation(m_rotation);
+		ptrTransform->SetPosition(m_position.x, m_position.y, 0.0f);
+	}
+
 
 	void UIBase::OnCreate() {
 		DrawingImage();
+		InitializeTransfrom();
 	}
 
 }

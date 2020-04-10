@@ -23,6 +23,8 @@ namespace basecross {
 
     void ScoreUI::OnCreate() {
         DrawingImage();
+		InitializeTransfrom();
+
         Col4 color(1, 1, 1, 1);
         Vec2 tipSize = Vec2(1.0f, 1.0f);
 

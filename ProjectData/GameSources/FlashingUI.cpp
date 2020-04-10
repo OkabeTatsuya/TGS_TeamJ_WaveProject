@@ -28,6 +28,7 @@ namespace basecross {
 
 	void FlashingUI::OnCreate() {
 		DrawingImage();
+		InitializeTransfrom();
 	}
 
 	void FlashingUI::OnUpdate() {

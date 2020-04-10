@@ -22,5 +22,6 @@ namespace basecross {
 
 	void ImageUI::OnCreate() {
 		DrawingImage();
+		InitializeTransfrom();
 	}
 }

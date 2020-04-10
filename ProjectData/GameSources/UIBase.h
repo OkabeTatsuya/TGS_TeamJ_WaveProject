@@ -34,6 +34,9 @@ namespace basecross {
 		//テクスチャを張り付ける
 		void DrawingImage();
 
+		//テクスチャを張り付ける
+		void InitializeTransfrom();
+
 		virtual void OnCreate() override;
 
 	};
