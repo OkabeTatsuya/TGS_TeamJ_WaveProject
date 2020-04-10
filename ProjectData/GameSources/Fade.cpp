@@ -11,15 +11,20 @@ namespace basecross {
         Vec3& rotation,
         Vec3& scale,
         Vec2& position,
-        float& layer) :
+        float& layer,
+        bool isfadeOut) :
 
 
         UIBase(stage, rotation,
             scale,
             position,
             layer,
-            L"FadeBG.png")
-    {}
+            L"FadeBG.png"),
+        m_isFadeOut(isfadeOut)
+    {
+        m_currentFadeTime = 0;
+        m_maxFadeTime = 1.0f;
+    }
 
 
     void Fade::OnCreate() {
@@ -39,12 +44,41 @@ namespace basecross {
         // テクスチャの貼り付け
         auto drawPtr = GetComponent<PCTSpriteDraw>();
         drawPtr->UpdateVertices(vertices);
+        if (m_isFadeOut) {
+            auto colors = drawPtr->GetDiffuse();
+            colors.w = 0.0f;
+            drawPtr->SetDiffuse(colors);
+        }
+    }
 
+    void Fade::FadeIn() {
+        auto drawPtr = GetComponent<PCTSpriteDraw>();
+        auto color = drawPtr->GetDiffuse();
+        color.w -= 1.0f / m_maxFadeTime * App::GetApp()->GetElapsedTime();
+        drawPtr->SetDiffuse(color);
+    }
+
+    void Fade::FadeOut() {
+        auto drawPtr = GetComponent<PCTSpriteDraw>();
+        auto color = drawPtr->GetDiffuse();
+        color.w += 1.0f / m_maxFadeTime * App::GetApp()->GetElapsedTime();
+        drawPtr->SetDiffuse(color);
     }
 
     void Fade::OnUpdate() {
-        auto drawPtr = GetComponent<PCTSpriteDraw>();
-        auto color = drawPtr->GetDiffuse();
-        color.w += 1.0f / 0.4f * App::GetApp()->GetElapsedTime();
+        m_currentFadeTime += App::GetApp()->GetElapsedTime();
+        if (m_isFadeOut) {
+            FadeOut();
+        }
+        else {
+            FadeIn();
+        }
+
+        if (m_currentFadeTime >= m_maxFadeTime) {
+            if (!m_isFadeOut) {
+                GetStage()->RemoveGameObject<Fade>(GetThis<Fade>());
+            }
+            
+        }
     }
 }
