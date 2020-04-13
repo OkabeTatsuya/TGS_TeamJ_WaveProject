@@ -8,6 +8,7 @@
 
 namespace basecross {
 	class FlashingUI : public UIBase {
+	protected:
 		float m_totalTime;
 		float m_flashSpeed;
 		Col4 m_nowColor;
