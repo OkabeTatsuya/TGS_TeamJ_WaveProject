@@ -30,6 +30,7 @@
 #include "BGGenerator.h"
 #include "GoalGenerator.h"
 
+#include "AnimationUI.h"
 #include "ImageUI.h"
 #include "FlashingUI.h"
 
