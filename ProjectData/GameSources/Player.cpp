@@ -17,6 +17,7 @@ namespace basecross {
             rotation, scale, position
         )
     {
+        m_currentWaitingAnimationKeyCount = 0;
         m_isWaveTouch = false;
         m_jumpActionTime = 0.5f;
         m_highJumpMoveY = 8.0f;
@@ -51,11 +52,14 @@ namespace basecross {
         m_comboMagnification = 0.1f;
         m_combo = 0;
         m_greatJumpMagnification = 1.5;
+        m_maxAnimationTime = 0.1f;
+        m_currentAnimationTime = 0.0f;
     }
 
     void Player::OnCreate() {
 
-        DrawingImage(L"Wait_01.png");
+        DrawingImage(L"Wait_0.png");
+        InitWaitingAnimation();
         auto transPtr = AddComponent<Transform>();
         transPtr->SetPosition(m_position);
         transPtr->SetScale(m_scale);
@@ -69,7 +73,18 @@ namespace basecross {
 		AddTag(L"Player");
     }
 
+    void Player::InitWaitingAnimation() {
+        wstring wait = L"Wait_";
+        wstring number;
+        wstring png = L".png";
+        for (int i = 0; i < m_waitingAnimationKeyCounts; i++) {
+            number = std::to_wstring(i * 5);
+            m_waitingAnimationKeys[i] = wait + number + png;
+        }
+    }
+
     void Player::OnUpdate() {
+        WaitingAnimation();
         JudgeJumpAction();
         Invincible();
         SpeedScoreMagnification();
@@ -77,6 +92,19 @@ namespace basecross {
 
     void Player::OnUpdate2() {
         JumpAction();
+    }
+
+    //待機アニメーション
+    void Player::WaitingAnimation() {
+        m_currentAnimationTime += App::GetApp()->GetElapsedTime();
+        if (m_currentWaitingAnimationKeyCount >= m_waitingAnimationKeyCounts) {
+            m_currentWaitingAnimationKeyCount = 0;
+        }
+        if (m_currentAnimationTime >= m_maxAnimationTime) {
+            DrawingImage(m_waitingAnimationKeys[m_currentWaitingAnimationKeyCount]);
+            m_currentWaitingAnimationKeyCount++;
+            m_currentAnimationTime = 0;
+        }
     }
 
     //スピード依存のスコア倍率計算処理
@@ -243,6 +271,7 @@ namespace basecross {
         ActiveSE(L"se_maoudamashii_system37.wav");
     }
 
+    //無敵
     void Player::Invincible() {
         if (m_isInvincible) {
             m_currentInvincibleTime += App::GetApp()->GetElapsedTime();
@@ -256,6 +285,7 @@ namespace basecross {
         }
     }
 
+    //効果音
     void Player::ActiveSE(wstring se) {
         auto XAPtr = App::GetApp()->GetXAudio2Manager();
         auto SE = XAPtr->Start(se, 0, 0.5f);

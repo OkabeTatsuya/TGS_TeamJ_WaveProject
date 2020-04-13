@@ -9,6 +9,16 @@
 namespace basecross{
     class Player : public ObjectBase {
     protected:
+        //待機アニメーションのコマ数
+        static const int m_waitingAnimationKeyCounts = 13;
+        //待機アニメーションのkey
+        wstring m_waitingAnimationKeys[m_waitingAnimationKeyCounts];
+        //現在の待機アニメーション表示コマ
+        int m_currentWaitingAnimationKeyCount;
+        //アニメーション１コマに対するフレーム数
+        float m_maxAnimationTime;
+        //現在のアニメーションのフレーム数
+        float m_currentAnimationTime;
         //ジャンプアクションの１回転にかかる時間
         float m_jumpActionTime;
         //ジャンプのフラグ
@@ -114,6 +124,10 @@ namespace basecross{
         void SpeedScoreMagnification();
         //SEを鳴らす処理
         void ActiveSE(wstring se);
+        //待機アニメーション数初期化
+        void InitWaitingAnimation();
+        //待機アニメーション
+        void WaitingAnimation();
     };
 
 }
