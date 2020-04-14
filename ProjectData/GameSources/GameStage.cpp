@@ -37,20 +37,16 @@ namespace basecross {
             SetPhysicsActive(true);
 
 			GameManager::GetInstance().SetIsGameEnd(false);		
-			GameManager::GetInstance().SetIsStopSpawner(false);
+			GameManager::GetInstance().SetIsStopSpawner(true);
 			GameManager::GetInstance().ReSetGameScore();
-
-			ObjectState BGState = { Vec3(0.0f), Vec3(10.05f, 10.0f, 1.0f), Vec3(-10.0f, 0.0f, 0.0f), L"Sea2.png", -6.0f };
-			ObjectState SeaState = { Vec3(0.0f), Vec3(10.05f, 2.0f, 1.0f), Vec3(0.0, -4.0, -5.0), L"Sea1.png", -6.0f };
 
             AddGameObject<Fade>();
 
-			AddGameObject<BGGenerator>(BGState);
+			CreateAnimUI();
+			CreateGoalUI();
 
-			AddGameObject<WaveSpawner>();
-			AddGameObject<GoalGenerator>();
+			CreateGenerator();
 
-            AddGameObject<Sea>(Vec3(0.0f), Vec3(10.05f, 2.0f, 1.0f), Vec3(0.0, -4.1, -5.0));
             AddGameObject<Player>(Vec3(0, 0, 0), Vec3(1.5f, 1.5f, 1),Vec3(-4.0, -2, -3.0));
             AddGameObject<SeaCollision>(Vec3(0, 0, 0), Vec3(1, 0.5, 1), Vec3(-4, -4, -3.0));
 
@@ -65,6 +61,7 @@ namespace basecross {
 	}
 
 	void GameStage::OnUpdate() {
+		FrastTimeCount();
 		GameClear();
 	}
 
@@ -72,6 +69,66 @@ namespace basecross {
 		//BGMのストップ
 		auto BGM = App::GetApp()->GetXAudio2Manager();
 		BGM->Stop(m_BGM);
+	}
+
+	//アニメーションするUIを作成
+	void GameStage::CreateAnimUI() {
+		St_AnimUI statUIState1 = {
+			Vec2(1000.0f,200.0f),Vec3(0.0f),m_textScale,
+			Vec2(0.0f,200.0f),Vec3(0.0f),m_textScale,
+			2.0f,0.0f,0.5f,AnimType::Delete
+		};
+		St_AnimUI statUIState2 = {
+			Vec2(1000.0f,-200.0f),Vec3(0.0f),m_textScale,
+			Vec2(0.0f,-200.0f),Vec3(0.0f),m_textScale,
+			2.0f,2.0f,2.5f,AnimType::Delete
+		};
+
+		
+		vector<St_AnimUI> animUIState{
+			statUIState1,
+			statUIState2
+		};
+
+		//張り付けるテクスチャ
+		vector<wstring> texter {
+			L"Tx_Ledy.png",
+			L"Tx_Start.png"
+		};
+
+		for (int i = 0; i < animUIState.size(); i++) {
+			m_startUI.push_back(AddGameObject<AnimationUI>(animUIState[i], texter[i], m_maxStartTime));
+			m_startUI[i]->SetIsStartAnim(true);
+		}
+	}
+
+	//ゴールした時のアニメーションUIを作成
+	void GameStage::CreateGoalUI() {
+		St_AnimUI GoalUIState = {
+			Vec2(1000.0f,200.0f),Vec3(0.0f),m_textScale,
+			Vec2(0.0f,200.0f),Vec3(0.0f),m_textScale,
+			2.0f,0.0f,0.5f,AnimType::Delete
+		};
+
+		//張り付けるテクスチャ
+		wstring texter{
+			L"Tx_Goal.png",
+		};
+
+		m_goalUI = AddGameObject<AnimationUI>(GoalUIState, texter, m_maxLoadStageTime);
+		m_isCreateGoalUI = true;
+	}
+
+	//ジェネレーターを作成
+	void GameStage::CreateGenerator() {
+		ObjectState BGState = { Vec3(0.0f), Vec3(10.1f, 10.0f, 1.0f), Vec3(-10.0f, 0.0f, 0.0f), L"Sea2.png", -6.0f };
+		ObjectState SeaState = { Vec3(0.0f), Vec3(10.1f, 2.0f, 1.0f), Vec3(0.0, -4.2, -5.0), L"Sea1.png", -6.0f };
+
+		AddGameObject<BGGenerator>(BGState);
+		AddGameObject<BGGenerator>(SeaState);
+
+		AddGameObject<WaveSpawner>();
+		AddGameObject<GoalGenerator>();
 	}
 
 	//初めの硬直時間
@@ -88,16 +145,23 @@ namespace basecross {
 
 	void GameStage::GameClear() {
 		bool isGameEnd = GameManager::GetInstance().GetIsGameEnd();
-		if (isGameEnd) {
+
+		if (isGameEnd && !m_isLoadStage) {
+			auto time = App::GetApp()->GetElapsedTime();
+			m_loadStageTimeCount += time;
+			m_goalUI->SetIsStartAnim(true);
+		}
+
+		if (m_loadStageTimeCount > m_maxLoadStageTime) {
 			//SaveGameData();
+			m_isLoadStage = true;
 			LoadResultStage();
 		}
 	}
 
 	//リザルトステージに移動
 	void GameStage::LoadResultStage() {
-		bool isGameEnd = GameManager::GetInstance().GetIsGameEnd();
-		if (isGameEnd) {
+		if (m_isLoadStage) {
             AddGameObject<Fade>(L"ToResulfStage");
 		}
 	}
@@ -159,6 +223,30 @@ namespace basecross {
 		return 0;
 	}
 
+
+	//ビットフラグを上げる
+	void GameStage::TrueSpawnFlag(unsigned int bit_flag) {
+		if (!(m_spawnFlag & bit_flag)) {
+			m_spawnFlag |= bit_flag;
+		}
+	}
+
+	//ビットフラグを下げる
+	void GameStage::FalseSpawnFlag(unsigned int bit_flag) {
+		if (m_spawnFlag & bit_flag) {
+			m_spawnFlag &= ~(bit_flag);
+		}
+	}
+
+	//フラグの状態を確認する
+	bool GameStage::ConfirmSpawnFlag(unsigned int bit_flag) {
+		if (m_spawnFlag & bit_flag) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 
 }
 //end basecross
