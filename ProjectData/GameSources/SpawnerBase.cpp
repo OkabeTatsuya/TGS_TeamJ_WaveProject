@@ -90,7 +90,12 @@ namespace basecross {
 		int spawnItr = (int)m_createPos.size() - 1;
 		if (m_spawnCount > spawnItr) {
 			m_isStopSpawn = true;
-			GameManager::GetInstance().SetIsStopSpawner(true);
+			//GameManager::GetInstance().SetIsStopSpawner(true);
+			Bit_SpawnFlag spawnFlag;
+			auto gameStage = App::GetApp()->GetScene<Scene>()->GetActiveTypeStage<GameStage>();
+			gameStage->TrueSpawnFlag(spawnFlag.item);
+			gameStage->TrueSpawnFlag(spawnFlag.wave);
+
 			//m_spawnCount = 0;
 			//m_spawnTimer = 0.0f;
 		}
