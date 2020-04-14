@@ -10,8 +10,8 @@ namespace basecross {
 	GoalGenerator::GoalGenerator(const shared_ptr<Stage>& StagePtr) :
 		SpawnerBase(StagePtr)
 	{
-		m_objState1 = { Vec3(0.0f), Vec3(10.0f, 10.0f, 1.0f), Vec3(-6.0f,-2.0f,-3.0f), L"Goal1.png" };
-		m_objState2 = { Vec3(0.0f), Vec3(10.0f, 10.0f, 1.0f), Vec3(-6.0f,-2.0f,-3.0f), L"Goal2.png" };
+		m_objState1 = { Vec3(0.0f), Vec3(10.0f, 10.0f, 1.0f), Vec3(-7.0f,-2.0f,-3.0f), L"Goal1.png" };
+		m_objState2 = { Vec3(0.0f), Vec3(10.0f, 10.0f, 1.0f), Vec3(-7.0f,-2.0f,-3.0f), L"Goal2.png" };
 
 		m_offsetPos = 7.5f;
 
