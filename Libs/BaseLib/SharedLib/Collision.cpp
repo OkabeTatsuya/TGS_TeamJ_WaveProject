@@ -16,7 +16,6 @@ namespace basecross {
 		bool m_Fixed;		//静止オブジェクトかどうか
 		weak_ptr<MeshResource> m_MeshResource;	//メッシュリソース
 		weak_ptr<GameObjectGroup> m_ExcludeCollisionGroup;	//判定から除外するグループ
-		vector<weak_ptr<GameObject>> m_ExcludeCollisionGameObjects; //判定から除外するゲームオブジェクトの配列
 		//判定から除外するタグ
 		set<wstring> m_ExcludeCollisionTags;
 		//衝突後の処理
@@ -71,28 +70,6 @@ namespace basecross {
 	bsm::Vec3 Collision::GetVelocity() const {
 		return GetGameObject()->GetComponent<Transform>()->GetVelocity();
 	}
-
-	vector<weak_ptr<GameObject>>& Collision::GetExcludeCollisionGameObjects() const {
-		return pImpl->m_ExcludeCollisionGameObjects;
-	}
-
-	void Collision::AddExcludeCollisionGameObject(const shared_ptr<GameObject>& obj) {
-		pImpl->m_ExcludeCollisionGameObjects.push_back(obj);
-	}
-
-	void  Collision::RemoveExcludeCollisionGameObject(const shared_ptr<GameObject>& obj) {
-		for (auto it = pImpl->m_ExcludeCollisionGameObjects.begin();
-			it != pImpl->m_ExcludeCollisionGameObjects.end();
-			it++ ) 
-		{
-			auto shobj = (*it).lock();
-			if (shobj && (shobj == obj)) {
-				pImpl->m_ExcludeCollisionGameObjects.erase(it);
-				return;
-			}
-		}
-	}
-
 
 
 	shared_ptr<GameObjectGroup> Collision::GetExcludeCollisionGroup() const {
@@ -156,13 +133,6 @@ namespace basecross {
 				}
 			}
 		}
-		for (auto v : pImpl->m_ExcludeCollisionGameObjects) {
-			auto shobj = v.lock();
-			if (shobj && (shobj == Obj)) {
-				return true;
-			}
-		}
-
 		return false;
 	}
 
@@ -959,7 +929,8 @@ namespace basecross {
 	//	用途: コンポーネントImplクラス
 	//--------------------------------------------------------------------------------------
 	struct CollisionObb::Impl {
-		float m_Size;					//作成時のサイズ
+		//float m_Size;					//作成時のサイズ
+		Vec3 m_Size;
 		float m_ChkOnUnderLaySize;
 		bsm::Mat4x4 m_BeforeWorldMatrix;
 		bsm::Mat4x4 m_WorldMatrix;
@@ -998,37 +969,70 @@ namespace basecross {
 
 
 	//アクセサ
-	float CollisionObb::GetMakedSize() const {
+	//float CollisionObb::GetMakedSize() const {
+	//	return pImpl->m_Size;
+	//}
+	//void CollisionObb::SetMakedSize(float f) {
+	//	pImpl->m_Size = f;
+	//}
+
+	bsm::Vec3 CollisionObb::GetMakedSize() const {
 		return pImpl->m_Size;
 	}
-	void CollisionObb::SetMakedSize(float f) {
+	void CollisionObb::SetMakedSize(bsm::Vec3 f) {
 		pImpl->m_Size = f;
 	}
 
+	//OBB CollisionObb::GetObb() const {
+	//	auto TransPtr = GetGameObject()->GetComponent<Transform>();
+//	//	if (pImpl->m_FirstCalc) {
+	//		pImpl->m_WorldMatrix = TransPtr->GetWorldMatrix();
+	//		bsm::Mat4x4 MatBase;
+	//		MatBase.scale(bsm::Vec3(pImpl->m_Size, pImpl->m_Size, pImpl->m_Size));
+	//		MatBase *= pImpl->m_WorldMatrix;
+	//		pImpl->m_WorldObb = OBB(bsm::Vec3(pImpl->m_Size, pImpl->m_Size, pImpl->m_Size), MatBase);
+	//		pImpl->m_FirstCalc = false;
+//	//	}
+	//	return pImpl->m_WorldObb;
+	//}
+
 	OBB CollisionObb::GetObb() const {
 		auto TransPtr = GetGameObject()->GetComponent<Transform>();
-//		if (pImpl->m_FirstCalc) {
-			pImpl->m_WorldMatrix = TransPtr->GetWorldMatrix();
-			bsm::Mat4x4 MatBase;
-			MatBase.scale(bsm::Vec3(pImpl->m_Size, pImpl->m_Size, pImpl->m_Size));
-			MatBase *= pImpl->m_WorldMatrix;
-			pImpl->m_WorldObb = OBB(bsm::Vec3(pImpl->m_Size, pImpl->m_Size, pImpl->m_Size), MatBase);
-			pImpl->m_FirstCalc = false;
-//		}
+		//		if (pImpl->m_FirstCalc) {
+		pImpl->m_WorldMatrix = TransPtr->GetWorldMatrix();
+		bsm::Mat4x4 MatBase;
+		MatBase.scale(bsm::Vec3(pImpl->m_Size));
+		MatBase *= pImpl->m_WorldMatrix;
+		pImpl->m_WorldObb = OBB(bsm::Vec3(pImpl->m_Size), MatBase);
+		pImpl->m_FirstCalc = false;
+		//		}
 		return pImpl->m_WorldObb;
 	}
 
 
+	//OBB CollisionObb::GetBeforeObb() const {
+	//	auto TransPtr = GetGameObject()->GetComponent<Transform>();
+//	//	if (pImpl->m_FirstBeforeCalc) {
+	//		pImpl->m_BeforeWorldMatrix = TransPtr->GetBeforeWorldMatrix();
+	//		bsm::Mat4x4 MatBase;
+	//		MatBase.scale(bsm::Vec3(pImpl->m_Size, pImpl->m_Size, pImpl->m_Size));
+	//		MatBase *= pImpl->m_BeforeWorldMatrix;
+	//		pImpl->m_BeforeWorldObb = OBB(bsm::Vec3(pImpl->m_Size, pImpl->m_Size, pImpl->m_Size), MatBase);
+	//		pImpl->m_FirstBeforeCalc = false;
+//	//	}
+	//	return pImpl->m_BeforeWorldObb;
+	//}
+
 	OBB CollisionObb::GetBeforeObb() const {
 		auto TransPtr = GetGameObject()->GetComponent<Transform>();
-//		if (pImpl->m_FirstBeforeCalc) {
-			pImpl->m_BeforeWorldMatrix = TransPtr->GetBeforeWorldMatrix();
-			bsm::Mat4x4 MatBase;
-			MatBase.scale(bsm::Vec3(pImpl->m_Size, pImpl->m_Size, pImpl->m_Size));
-			MatBase *= pImpl->m_BeforeWorldMatrix;
-			pImpl->m_BeforeWorldObb = OBB(bsm::Vec3(pImpl->m_Size, pImpl->m_Size, pImpl->m_Size), MatBase);
-			pImpl->m_FirstBeforeCalc = false;
-//		}
+		//		if (pImpl->m_FirstBeforeCalc) {
+		pImpl->m_BeforeWorldMatrix = TransPtr->GetBeforeWorldMatrix();
+		bsm::Mat4x4 MatBase;
+		MatBase.scale(bsm::Vec3(pImpl->m_Size));
+		MatBase *= pImpl->m_BeforeWorldMatrix;
+		pImpl->m_BeforeWorldObb = OBB(bsm::Vec3(pImpl->m_Size), MatBase);
+		pImpl->m_FirstBeforeCalc = false;
+		//		}
 		return pImpl->m_BeforeWorldObb;
 	}
 
