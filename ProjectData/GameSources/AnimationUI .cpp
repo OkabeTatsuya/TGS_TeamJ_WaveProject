@@ -57,47 +57,41 @@ namespace basecross {
 	}
 
 	void AnimationUI::ConfirmTime() {
-		//
-		if (m_typeActionTime > m_nowTime) {
-			auto delta = App::GetApp()->GetElapsedTime();
-			m_nowTime += delta;
-		}
-		else if(m_isEndAnim){
-			TypeAction();
-		}
-
 		//アニメーションをスタートさせる
-		if (m_st_animUI.StartTime < m_nowTime) {
-			m_isStartAnim = true;
-		}
+		if (m_isStartAnim) {
+			//
+			if (m_typeActionTime > m_nowTime) {
+				auto delta = App::GetApp()->GetElapsedTime();
+				m_nowTime += delta;
+			}
+			else if (m_isEndAnim) {
+				TypeAction();
+			}
 
-		//アニメーションを止める
-		if (m_st_animUI.EndTime < m_nowTime) {
-			auto a = GetComponent<Transform>()->GetPosition();
-			GetComponent<Transform>()->SetPosition(m_st_animUI.EndPos.x, m_st_animUI.EndPos.y,0.0f);
-			m_isEndAnim = true;
+			//アニメーションを止める
+			if (m_st_animUI.EndTime < m_nowTime) {
+				auto a = GetComponent<Transform>()->GetPosition();
+				GetComponent<Transform>()->SetPosition(m_st_animUI.EndPos.x, m_st_animUI.EndPos.y, 0.0f);
+				m_isEndAnim = true;
+			}
 		}
 	}
 
+	//時間内に指定した場所へ動かす
 	void AnimationUI::MovePos() {
-		if (m_st_animUI.EndTime > m_nowTime && m_isStartAnim)
+		bool moveflag = m_st_animUI.StartTime < m_nowTime && m_st_animUI.EndTime > m_nowTime;
+		if (moveflag && m_isStartAnim)
 		{
 			auto nowPos = GetComponent<Transform>()->GetPosition();
 
 			auto moveVecX = m_st_animUI.EndPos.x - m_st_animUI.StartPos.x;
 			auto moveVecY = m_st_animUI.EndPos.y - m_st_animUI.StartPos.y;
 
-			auto moveVec = moveVecX * moveVecX + moveVecY * moveVecY;
-			auto nowVec = nowPos.x * nowPos.x + nowPos.y * nowPos.y;
-
 			auto time = App::GetApp()->GetElapsedTime();
 			auto moveDelta = Vec2(moveVecX, moveVecY) / (m_st_animUI.EndTime - m_st_animUI.StartTime);
 
-			//if (nowVec < moveVec)
-			{
-				auto movePos = nowPos + Vec3(moveDelta.x * time, moveDelta.y * time, 0.0f);
-				GetComponent<Transform>()->SetPosition(movePos);
-			}
+			auto movePos = nowPos + Vec3(moveDelta.x * time, moveDelta.y * time, 0.0f);
+			GetComponent<Transform>()->SetPosition(movePos);
 		}
 	}
 
