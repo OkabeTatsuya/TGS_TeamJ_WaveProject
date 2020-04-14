@@ -12,12 +12,14 @@ namespace basecross {
 		//ˆÚ“®”»’è
 		bool m_isMove;
 		float m_offsetPosX;
+		wstring m_textureName;
 
 	public:
 		GoalObject(const shared_ptr<Stage>& StagePtr,
 			Vec3& rotation,
 			Vec3& scale,
-			Vec3& position);
+			Vec3& position,
+			wstring tex);
 
 		virtual void OnCreate()override;
 

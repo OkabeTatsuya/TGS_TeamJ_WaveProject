@@ -10,14 +10,16 @@ namespace basecross {
 	GoalObject::GoalObject(const shared_ptr<Stage>& StagePtr,
 		Vec3& rotation,
 		Vec3& scale,
-		Vec3& position) :
+		Vec3& position,
+		wstring tex) :
 		MoveSpriteBase(StagePtr, rotation, scale, position)
 	{
-		m_offsetPosX = -6.0f;
+		m_offsetPosX = -7.5f;
+		m_textureName = tex;
 	}
 
 	void GoalObject::OnCreate() {
-		DrawingImage(L"Red.png");
+		DrawingImage(m_textureName);
 
 		auto transPtr = AddComponent<Transform>();
 		transPtr->SetPosition(m_position);
@@ -26,8 +28,7 @@ namespace basecross {
 
 		auto collision = AddComponent<CollisionObb>();
 		collision->SetAfterCollision(AfterCollision::None);
-		collision->SetDrawActive(true);
-
+		collision->SetMakedSize(Vec3(0.5f, 15.0f, 0.1f));
 	}
 
 	void GoalObject::OnUpdate() {
