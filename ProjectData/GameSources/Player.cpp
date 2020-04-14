@@ -68,7 +68,7 @@ namespace basecross {
         PsBoxParam param(transPtr->GetWorldMatrix(), 1.0f, false, PsMotionType::MotionTypeActive);
         AddComponent<RigidbodyBox>(param)->SetDrawActive(true);
 
-        AddComponent<CollisionObb>()->SetMakedSize(1);
+        AddComponent<CollisionObb>()->SetMakedSize(Vec3(1.0f));
 
 		AddTag(L"Player");
     }

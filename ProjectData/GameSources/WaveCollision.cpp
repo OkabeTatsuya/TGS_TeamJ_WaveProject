@@ -27,7 +27,7 @@ namespace basecross{
         
         auto collision = AddComponent<CollisionObb>();
         collision->SetDrawActive(true);
-        collision->SetMakedSize(1);
+        collision->SetMakedSize(Vec3(1.0f));
         collision->SetAfterCollision(AfterCollision::None);
 
 
