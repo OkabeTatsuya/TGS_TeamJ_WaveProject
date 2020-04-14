@@ -21,7 +21,7 @@ namespace basecross {
     }
 
     void Wave::OnCreate() {
-        DrawingImage(L"SamllWave.png");
+        DrawingImage(L"SamllWave2ver.png");
         auto transPtr = AddComponent<Transform>();
         transPtr->SetPosition(m_position);
         transPtr->SetScale(m_scale);
