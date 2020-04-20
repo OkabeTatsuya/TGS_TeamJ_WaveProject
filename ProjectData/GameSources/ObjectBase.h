@@ -33,6 +33,9 @@ namespace basecross {
 		//テクスチャを張り付ける
 		void DrawingImage(wstring texStr);
 
+		//テクスチャを張り付ける
+		void DrawingImage(wstring texStr, Vec2 imageSize);
+
 	};
 }
 

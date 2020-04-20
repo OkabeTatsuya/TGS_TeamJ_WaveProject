@@ -55,5 +55,42 @@ namespace basecross {
 		SetDrawLayer((int)Layer);
 	}
 
+	//画像サイズを変えられる描画処理
+	void ObjectBase::DrawingImage(wstring texStr, Vec2 imageSize) {
+		m_textureName = texStr;
+		Col4 color(1, 1, 1, 1);
+		float maxTipSize = 1.0f;
+		float mimTipSize = 0.0f;
+
+		m_vertices =
+		{
+			{Vec3(-imageSize.x,+imageSize.y,0.0f),color,Vec2(mimTipSize,mimTipSize)},
+			{Vec3(+imageSize.x,+imageSize.y,0.0f),color,Vec2(maxTipSize,mimTipSize)},
+			{Vec3(-imageSize.x,-imageSize.y,0.0f),color,Vec2(mimTipSize,maxTipSize)},
+			{Vec3(+imageSize.x,-imageSize.y,0.0f),color,Vec2(maxTipSize,maxTipSize)},
+		};
+
+		vector<uint16_t> indices =
+		{
+			0,1,2,
+			2,1,3,
+		};
+
+		auto drawComp = AddComponent<PCTStaticDraw>();
+		drawComp->CreateOriginalMesh<VertexPositionColorTexture>(m_vertices, indices);
+		drawComp->SetOriginalMeshUse(true);
+
+		///テクスチャの取得、貼り付け
+		auto &app = App::GetApp();
+		auto texDir = app->GetDataDirWString();
+
+		//アルファ値を有効にする
+		drawComp->SetTextureResource(m_textureName);
+		this->SetAlphaActive(true);
+
+		float Layer = m_position.z * (-1.0f);
+		SetDrawLayer((int)Layer);
+	}
+
 }
 //end basecross
