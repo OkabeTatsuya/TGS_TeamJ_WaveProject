@@ -8,6 +8,8 @@
 
 namespace basecross {
     class MoveSpriteBase : public ObjectBase {
+	protected:
+		float m_objSpeed;
 
     public:
         MoveSpriteBase(const shared_ptr<Stage>& stage,

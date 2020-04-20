@@ -15,12 +15,14 @@ namespace basecross {
         ObjectBase(stage,
             rotation, scale, position
         )
-    {}
+    {
+		m_objSpeed = 1.0f;
+	}
 
     //スプライト自体の移動処理
     void MoveSpriteBase::Movement(shared_ptr<Transform> transPtr) {
         auto pos = transPtr->GetPosition();
-        pos.x -= GameManager::GetInstance().GetGameSpeed() * App::GetApp()->GetElapsedTime();
+        pos.x -= GameManager::GetInstance().GetGameSpeed() * App::GetApp()->GetElapsedTime() * m_objSpeed;
         GetComponent<Transform>()->SetPosition(pos);
     }
 }
