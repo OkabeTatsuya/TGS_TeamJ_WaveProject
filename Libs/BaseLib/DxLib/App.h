@@ -95,6 +95,17 @@ namespace basecross {
 		shared_ptr<SoundItem> Start(const wstring& ResKey, size_t LoopCount = 0, float Volume = 1.0f);
 		//--------------------------------------------------------------------------------------
 		/*!
+		@brief	再生開始(Okabe追加)。
+		@param[in]	ResKey	リソースキー
+		@param[in]	LoopCount = 0	ループ回数（XAUDIO2_LOOP_INFINITEで無限ループ）
+		@param[in]	Volume = 1.0f	ボリューム
+		@param[in]	Pitch = 1.0f	ピッチ
+		@return	SoundItemのポインタ。失敗でnullptr
+		*/
+		//--------------------------------------------------------------------------------------
+		shared_ptr<SoundItem> MyStart(const wstring& ResKey, size_t LoopCount = 0, float Volume = 1.0f, float Pitch = 1.0f);
+		//--------------------------------------------------------------------------------------
+		/*!
 		@brief	サウンドの強制終了
 		@param[in]	Item	アイテム
 		@return	なし（指定のサウンドがまだ再生中なら終了させる）

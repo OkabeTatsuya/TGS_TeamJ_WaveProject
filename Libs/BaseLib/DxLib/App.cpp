@@ -174,6 +174,32 @@ namespace basecross {
 		return Ptr;
 	}
 
+	shared_ptr<SoundItem>  XAudio2Manager::MyStart(const wstring& ResKey, size_t LoopCount, float Volume, float Pitch) {
+		if (!IsAudioActive()) {
+			return nullptr;
+		}
+		auto SoundRes = App::GetApp()->GetResource<AudioResource>(ResKey);
+		//ソースボイスの作成
+		SoundItem Item;
+		HRESULT hr = pImpl->m_IXAudio2->CreateSourceVoice(&Item.m_SourceVoice, SoundRes->GetOutputWaveFormatEx());
+		if (FAILED(hr)) {
+			pImpl->m_IsAudioActive = false;
+			return nullptr;
+		}
+		Item.m_AudioResource = SoundRes;
+		auto Ptr = pImpl->ChkAndPushBackItem(Item);
+		XAUDIO2_BUFFER buffer = { 0 };
+		buffer.AudioBytes = (UINT32)SoundRes->GetSoundData().size();
+		buffer.LoopCount = (UINT32)LoopCount;
+		buffer.pAudioData = &SoundRes->GetSoundData().front();
+		buffer.Flags = XAUDIO2_END_OF_STREAM;
+		Ptr->m_SourceVoice->SetVolume(Volume);
+		Ptr->m_SourceVoice->SetFrequencyRatio(Pitch);
+		Ptr->m_SourceVoice->SubmitSourceBuffer(&buffer);
+		Ptr->m_SourceVoice->Start();
+		return Ptr;
+	}
+
 	void XAudio2Manager::Stop(const shared_ptr<SoundItem>& Item) {
 		if (!IsAudioActive()) {
 			return;
