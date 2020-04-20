@@ -33,7 +33,7 @@ namespace basecross {
 			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1300.0f, 800.0f, 1.0f), Vec2(0.0f, 0.0f), float(2.0f), L"FadeBG.png");
 
 			//‰æ‘œ
-			AddGameObject<UIBase>(Vec3(0.0f), Vec3(500.0f, 400.0f, 1.0f), Vec2(350.0f, -100.0f), float(2.0f), L"Red.png");
+			AddGameObject<TitleAnimationUI>(Vec3(0.0f), Vec3(500.0f, 400.0f, 1.0f), Vec2(350.0f, -100.0f), float(2.0f), L"player.png");
 
 			//ƒ^ƒCƒgƒ‹‰æ‘œ
 			AddGameObject<UIBase>(Vec3(0.0f), Vec3(600.0f, 300.0f, 1.0f), Vec2(-300.0f, 150.0f), float(2.0f), L"Red.png");
@@ -43,7 +43,7 @@ namespace basecross {
 
 			//BGMÄ¶‚Æ‰¹—Ê’²®
 			auto XAPtr = App::GetApp()->GetXAudio2Manager();
-			m_BGM = XAPtr->Start(L"SampleBGM.wav", XAUDIO2_LOOP_INFINITE, 0.5f);
+			m_BGM = XAPtr->Start(L"SampleBGM.wav", XAUDIO2_LOOP_INFINITE, 0.3f);
 			
 			//App::GetApp()->GetScene<Scene>()->LoadStage(L"ToGameStage");
 
