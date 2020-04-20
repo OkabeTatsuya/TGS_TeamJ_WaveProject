@@ -33,6 +33,7 @@
 #include "AnimationUI.h"
 #include "ImageUI.h"
 #include "FlashingUI.h"
+#include"TitleAnimationUI.h"
 
 #include"TitleStage.h"
 #include"ResulfStage.h"
@@ -40,3 +41,4 @@
 #include "SanpleStage.h"
 
 #include "Fade.h"
+
