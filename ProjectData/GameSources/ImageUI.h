@@ -18,6 +18,8 @@ namespace basecross {
 			wstring tex);
 
 		virtual void OnCreate() override;
+
+		void ChangeImage(wstring tex);
 	};
 }
 //end basecross
