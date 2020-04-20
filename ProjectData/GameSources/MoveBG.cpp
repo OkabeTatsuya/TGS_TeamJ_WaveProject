@@ -9,21 +9,24 @@
 namespace basecross {
 	MoveBG::MoveBG(const shared_ptr<Stage>& stage,
 		Vec3& rotation,
-		Vec3& scale,
 		Vec3& position,
+		Vec2& image,
 		wstring tex,
-		float offScreenX) :
+		float offScreenX,
+		float moveSpeed) :
 		MoveSpriteBase(stage,
-			rotation, scale, position),
+			rotation, Vec3(1.0f), position),
 		m_texture(tex),
-		m_offScreenX(offScreenX)
+		m_offScreenX(offScreenX),
+		m_imageSize(image)
 	{
 		m_isMove = true;
+		m_objSpeed = moveSpeed;
 		m_offScreenX = -10.0f;
 	}
 
 	void MoveBG::OnCreate() {
-		DrawingImage(m_texture);
+		DrawingImage(m_texture, m_imageSize);
 		auto transComp = GetComponent<Transform>();
 		transComp->SetScale(m_scale);
 		transComp->SetRotation(m_rotation);

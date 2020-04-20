@@ -15,12 +15,20 @@ namespace basecross {
 		float OffScreenX;
 	};
 
+	struct BackGroundState {
+		Vec3 Rot;
+		Vec3 Pos;
+		Vec2 ImageSize;
+		wstring Tex;
+		float OffScreenX;
+		float MoveSpeed;
+	};
+
 	class BGGenerator : public SpawnerBase {
-		ObjectState m_objState;
+		BackGroundState m_objState;
 		
 		vector<shared_ptr<MoveBG>> m_BGObject;
-		vector<float> m_createPos;
-		
+		vector<float> m_createPos;	
 
 		Vec3 m_spawnPos;
 
@@ -30,7 +38,7 @@ namespace basecross {
 		bool m_isStopSpawn;
 
 	public:
-		BGGenerator(const shared_ptr<Stage>& StagePtr, ObjectState ObjectState);
+		BGGenerator(const shared_ptr<Stage>& StagePtr, BackGroundState ObjectState);
 
 		virtual void OnCreate();
 

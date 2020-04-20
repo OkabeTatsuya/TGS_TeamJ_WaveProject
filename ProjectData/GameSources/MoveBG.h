@@ -14,23 +14,23 @@ namespace basecross {
 		//画面外判定のｘ座標
 		float m_offScreenX;
 
+		Vec2 m_imageSize;
 		wstring m_texture;
+
 	public:
 		MoveBG(const shared_ptr<Stage>& stage,
 			Vec3& rotation,
-			Vec3& scale,
 			Vec3& position,
+			Vec2& image,
 			wstring tex,
-			float offScreenX);
+			float offScreenX,
+			float moveSpeed);
 
 		virtual void OnUpdate() override;
 		virtual void OnCreate() override;
 
 		//移動処理
 		void Move();
-
-		//
-		//void Movement(shared_ptr<Transform> transPtr);
 
 		//移動判定のゲッター
 		bool GetIsMove();
