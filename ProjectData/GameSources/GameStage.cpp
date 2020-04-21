@@ -121,9 +121,11 @@ namespace basecross {
 
 	//ジェネレーターを作成
 	void GameStage::CreateGenerator() {
+		BackGroundState SkyState = { Vec3(0.0f), Vec3(-10.0f, 0.0f, 0.0f), Vec2(5.0f, 5.0f), L"Sky.png", -10.0f, 0.5f };
 		BackGroundState BGState =  { Vec3(0.0f), Vec3(-10.0f, 0.0f, 0.0f), Vec2(5.0f, 5.0f), L"Sea2.png", -10.0f, 0.5f};
-		BackGroundState SeaState = { Vec3(0.0f), Vec3(-10.0f, 0.0f, -5.0), Vec2(5.0f, 5.0f), L"Sea1.png", -10.0f, 1.5f};
+		BackGroundState SeaState = { Vec3(0.0f), Vec3(-10.0f, -0.12f, -4.0), Vec2(5.0f, 5.0f), L"Sea1.png", -10.0f, 1.5f};
 
+		AddGameObject<BGGenerator>(SkyState);
 		AddGameObject<BGGenerator>(BGState);
 		AddGameObject<BGGenerator>(SeaState);
 
