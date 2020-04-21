@@ -11,6 +11,8 @@ namespace basecross {
 		ObjectState m_objState1;
 		ObjectState m_objState2;
 
+		vector<ObjectState> m_goalObjState;
+
 		vector<shared_ptr<GoalObject>> m_goalObject;
 		vector<float> m_createPos;
 

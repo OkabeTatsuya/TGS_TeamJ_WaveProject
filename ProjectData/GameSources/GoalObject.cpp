@@ -14,7 +14,7 @@ namespace basecross {
 		wstring tex) :
 		MoveSpriteBase(StagePtr, rotation, scale, position)
 	{
-		m_offsetPosX = -7.5f;
+		m_offsetPosX = -8.5f;
 		m_textureName = tex;
 	}
 
@@ -22,13 +22,13 @@ namespace basecross {
 		DrawingImage(m_textureName);
 
 		auto transPtr = AddComponent<Transform>();
-		transPtr->SetPosition(m_position);
+		transPtr->SetPosition(m_position.x, m_position.y, -3.0f);
 		transPtr->SetRotation(m_rotation);
 		transPtr->SetScale(m_scale);
 
 		auto collision = AddComponent<CollisionObb>();
 		collision->SetAfterCollision(AfterCollision::None);
-		collision->SetMakedSize(Vec3(0.5f, 15.0f, 0.1f));
+		collision->SetMakedSize(Vec3(0.5f, 15.0f, 1.0f));
 	}
 
 	void GoalObject::OnUpdate() {

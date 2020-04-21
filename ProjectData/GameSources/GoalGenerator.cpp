@@ -10,9 +10,9 @@ namespace basecross {
 	GoalGenerator::GoalGenerator(const shared_ptr<Stage>& StagePtr) :
 		SpawnerBase(StagePtr)
 	{
-		m_objState1 = { Vec3(0.0f), Vec3(10.0f, 10.0f, 1.0f), Vec3(-7.0f,-2.0f,-3.0f), L"Goal1.png" };
-		m_objState2 = { Vec3(0.0f), Vec3(10.0f, 10.0f, 1.0f), Vec3(-7.0f,-2.0f,-3.0f), L"Goal2.png" };
-
+		m_objState1 = { Vec3(0.0f), Vec3(10.0f, 10.0f, 1.0f), Vec3(-10.0f,-0.5f,-5.0f), L"Goal12ver.png" };
+		m_objState2 = { Vec3(0.0f), Vec3(10.0f, 10.0f, 1.0f), Vec3(-10.0f,-0.5f,-2.0f), L"Goal2ver.png" };
+		m_goalObjState = { m_objState1,m_objState2 };
 		m_offsetPos = 7.5f;
 
 		m_spawnTimer = 0.0f;
@@ -57,12 +57,12 @@ namespace basecross {
 	void GoalGenerator::VisibleGoal() {
 		for (int i = 0; i < m_goalObject.size(); i++) {
 			if (!m_goalObject[i]->GetIsMove()) {
-				m_goalObject[i]->GetComponent<Transform>()->SetPosition(Vec3(m_offsetPos, m_objState1.Pos.y, m_objState1.Pos.z));
+				m_goalObject[i]->GetComponent<Transform>()->SetPosition(Vec3(m_offsetPos, m_goalObjState[i].Pos.y, m_goalObjState[i].Pos.z));
 				m_goalObject[i]->SetIsMove(true);
 				//m_isStopSpawn = true;
 			}
 			else {
-				m_goalObject[i]->GetComponent<Transform>()->SetPosition(Vec3(m_offsetPos, m_objState1.Pos.y, m_objState1.Pos.z));
+				m_goalObject[i]->GetComponent<Transform>()->SetPosition(Vec3(m_offsetPos, m_goalObjState[i].Pos.y, m_goalObjState[i].Pos.z));
 				m_goalObject[i]->SetIsMove(true);
 				//m_isStopSpawn = true;
 			}
