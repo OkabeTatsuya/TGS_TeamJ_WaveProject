@@ -8,7 +8,7 @@
 
 namespace basecross {
     class ScoreUI : public UIBase {
-
+        int m_number;
     public:
         ScoreUI(const shared_ptr<Stage>& stage,
             Vec3& rotation,
@@ -19,6 +19,7 @@ namespace basecross {
 
         virtual void OnCreate() override;
         void SetNumber(int number);
+        int GetNumber() { return m_number; }
     };
 }
 //end basecross

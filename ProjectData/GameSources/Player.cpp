@@ -17,12 +17,14 @@ namespace basecross {
             rotation, scale, position
         )
     {
+        m_currentFlightTime = 0;
+        m_maxFlightTime = 0.5f;
         m_currentWaitingAnimationKeyCount = 0;
         m_isWaveTouch = false;
         m_jumpActionTime = 0.5f;
         m_highJumpMoveY = 8.0f;
         m_lowJumpMoveY = 5.0f;
-        m_maxSpeed = 4.0f;
+        m_maxSpeed = 6.0f;
         m_minSpeed = 2.0f;
         GameManager::GetInstance().SetGameSpeed((m_maxSpeed - m_minSpeed) / 3 + m_minSpeed);
         m_jumpGradeSpeedMagnification = 1.5;
@@ -70,6 +72,9 @@ namespace basecross {
 
         AddComponent<CollisionObb>()->SetMakedSize(Vec3(1.0f));
 
+        m_scoreUpUI = GetStage()->AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(30.0f, 20.0f, 1.0f), Vec2(0.0f), float(2.0f), L"", 4, true);
+        GameManager::GetInstance().SetScoreUpUIPanel(m_scoreUpUI);
+
 		AddTag(L"Player");
     }
 
@@ -86,8 +91,10 @@ namespace basecross {
     void Player::OnUpdate() {
         WaitingAnimation();
         JudgeJumpAction();
+        FlightAction();
         Invincible();
         SpeedScoreMagnification();
+        m_scoreUpUI->AdjustPosition(GetComponent<Transform>()->GetPosition());
     }
 
     void Player::OnUpdate2() {
@@ -203,6 +210,26 @@ namespace basecross {
         }
     }
 
+    //滞空アクション処理
+    void Player::FlightAction() {
+        auto controller = App::GetApp()->GetInputDevice().GetControlerVec()[0];
+        if (m_isJump && controller.wPressedButtons & XINPUT_GAMEPAD_A && m_isEnableFlightAction && GetComponent<RigidbodyBox>()->GetLinearVelocity().y <=0) {
+            m_isFlightAction = true;
+            GetComponent<RigidbodyBox>()->SetAutoGravity(false);
+        }
+        if (m_isFlightAction) {
+            m_currentFlightTime += App::GetApp()->GetElapsedTime();
+            GetComponent<RigidbodyBox>()->SetLinearVelocity(Vec3(0.0f,-0.2f,0.0f));
+            if (m_currentFlightTime >= m_maxFlightTime) {
+                m_isFlightAction = false;
+                m_isEnableFlightAction = false;
+                m_currentFlightTime = 0.0f;
+                GetComponent<RigidbodyBox>()->SetAutoGravity(true);
+
+            }
+        }
+    }
+
     //ジャンプアクション処理
     void Player::JumpAction() {
         if (m_isJumpAction) {
@@ -294,6 +321,7 @@ namespace basecross {
     //コリジョンの最初に当たった瞬間１回のみの処理
     void Player::OnCollisionEnter(shared_ptr<GameObject>& other) {
         if (other->FindTag(L"Sea")) {
+            m_isEnableFlightAction = true;
             m_isJump=false;
             m_isLanding = true;
             if (m_rot.z!=0) {

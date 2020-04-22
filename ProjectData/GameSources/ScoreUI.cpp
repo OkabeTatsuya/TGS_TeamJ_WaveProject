@@ -44,6 +44,7 @@ namespace basecross {
     }
 
     void ScoreUI::SetNumber(int number) {
+        m_number = number;
         number += 1;
         Col4 color(1, 1, 1, 1);
         Vec2 tipSize = Vec2(1.0f, 1.0f);

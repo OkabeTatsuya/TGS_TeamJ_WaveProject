@@ -18,12 +18,14 @@ namespace basecross {
         }
         else
 	        m_gameScore += (int)(m_baseJumpScore * magnification * comboMagnification);
+        m_scoreUpUIPanel->ScoreDraw(m_baseJumpScore * magnification * comboMagnification);
         m_scoreUIPanel->ScoreDraw(m_gameScore);
 	}
 
 	void GameManager::AddActionScore(float magnification, float comboMagnification) {
         comboMagnification += 1;
 		m_gameScore += (int)(m_baseActionScore * magnification * comboMagnification);
+        m_scoreUpUIPanel->ScoreDraw(m_baseJumpScore * magnification * comboMagnification);
         m_scoreUIPanel->ScoreDraw(m_gameScore);
 	}
 

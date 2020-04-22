@@ -9,6 +9,14 @@
 namespace basecross{
     class Player : public ObjectBase {
     protected:
+        //ジャンプ中滞空アクションの最大時間
+        float m_maxFlightTime;
+        //現在のジャンプ中滞空アクションの時間
+        float m_currentFlightTime;
+        //滞空アクションフラグ
+        bool m_isFlightAction;
+        //滞空アクション連続不使用フラグ
+        bool m_isEnableFlightAction;
         //待機アニメーションのコマ数
         static const int m_waitingAnimationKeyCounts = 13;
         //待機アニメーションのkey
@@ -82,6 +90,8 @@ namespace basecross{
         int m_combo;
         //１コンボで増える倍率
         float m_comboMagnification;
+        //スコアアップUI
+        shared_ptr<ScoreUIPanel> m_scoreUpUI;
     private:
         //プレイヤーの角度
         Vec3 m_rot;
@@ -128,6 +138,8 @@ namespace basecross{
         void InitWaitingAnimation();
         //待機アニメーション
         void WaitingAnimation();
+        //ジャンプ中の滞空アクション
+        void FlightAction();
     };
 
 }
