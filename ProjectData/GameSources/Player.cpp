@@ -17,6 +17,7 @@ namespace basecross {
             rotation, scale, position
         )
     {
+        m_isFirstJump = false;
         m_currentFlightTime = 0;
         m_maxFlightTime = 0.5f;
         m_currentWaitingAnimationKeyCount = 0;
@@ -331,6 +332,7 @@ namespace basecross {
             GetComponent<RigidbodyBox>()->SetAutoGravity(false);
         }
         if (other->FindTag(L"Wave")) {
+            m_isFirstJump = true;
             float collisionSize = 2.0f;
             auto currentSpeed = GameManager::GetInstance().GetGameSpeed();
             auto a = collisionSize / currentSpeed * m_groundWaveDownSpeedValue;
@@ -349,7 +351,7 @@ namespace basecross {
         //óéâ∫ñhé~èàóù
         if (other->FindTag(L"Sea")&&!m_isJump) {
             GetComponent<RigidbodyBox>()->SetLinearVelocity(Vec3(0, 0, 0));
-            if (!m_isInvincible&&!m_isWaveTouch) {
+            if (!m_isInvincible&&!m_isWaveTouch&&m_isFirstJump) {
                 GroundWaveSpeedDown();
             }
         }
@@ -358,7 +360,7 @@ namespace basecross {
     //ÉRÉäÉWÉáÉìÇ©ÇÁî≤ÇØÇΩèuä‘ÇPâÒÇÃÇ›ÇÃèàóù
     void Player::OnCollisionExit(shared_ptr<GameObject>&other) {
         if (other->FindTag(L"Wave") && !m_isJump) {
-            if (!m_isInvincible) {
+            if (!m_isInvincible&&m_isFirstJump) {
                 JumpMissSpeedDown();
                 m_isInvincible = true;
             }

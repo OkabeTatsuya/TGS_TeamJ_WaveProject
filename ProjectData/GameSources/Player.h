@@ -92,6 +92,8 @@ namespace basecross{
         float m_comboMagnification;
         //スコアアップUI
         shared_ptr<ScoreUIPanel> m_scoreUpUI;
+        //最初のジャンプするまで減速を止める
+        bool m_isFirstJump;
     private:
         //プレイヤーの角度
         Vec3 m_rot;
