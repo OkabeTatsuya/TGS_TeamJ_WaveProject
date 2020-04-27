@@ -47,12 +47,15 @@ namespace basecross {
 
 		float m_saveNum;
 
+		vector<int> m_saveScore;
+
 		//選ばれたステージの番号
 		int m_selectStageNum;
 
 		bool m_isFirstStop;
 		bool m_isStopSpawner;
 		bool m_isGameEnd;
+		bool m_isGameClear;
 
 	public :
 		static GameManager& GetInstance() {
@@ -66,6 +69,7 @@ namespace basecross {
 		bool GetIsStopSpawner() { return m_isStopSpawner; }
 		bool GetIsGameEnd() { return m_isGameEnd; }
 		int GetSelectStageNum() { return m_selectStageNum; }
+		vector<int> GetSaveScore() { return m_saveScore; }
 
 		//セッター
 		void SetIsGameEnd(bool set) { m_isGameEnd = set; }
@@ -75,6 +79,8 @@ namespace basecross {
         void SetScoreUpUIPanel(shared_ptr<ScoreUIPanel> set) { m_scoreUpUIPanel = set; }
 		void ReSetGameScore() { m_gameScore = 0; }
 		void SetSelectStageNum(int set) { m_selectStageNum = set; }
+		void SetSaveScore(vector<int> set) { m_saveScore = set; }
+		void SetIsGameClear(bool set) { m_isGameClear = set; }
 
 		//ジャンプのスコア加算処理
 		///magnification 倍率、　combo 続けてジャンプした回数
