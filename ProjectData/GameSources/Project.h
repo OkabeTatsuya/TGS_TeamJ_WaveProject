@@ -37,6 +37,7 @@
 
 #include"TitleStage.h"
 #include"ResulfStage.h"
+#include "SelectStage.h"
 
 #include "SanpleStage.h"
 
