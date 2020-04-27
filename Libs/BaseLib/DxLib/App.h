@@ -18,6 +18,10 @@ namespace basecross {
 	struct SoundItem {
 		weak_ptr<AudioResource> m_AudioResource;
 		IXAudio2SourceVoice* m_SourceVoice;
+		float m_fadeTime;
+		float m_TargetVolume;
+		float m_TargetTime;
+		bool m_IsFade;
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief	コンストラクタ
@@ -105,6 +109,27 @@ namespace basecross {
 		//--------------------------------------------------------------------------------------
 		shared_ptr<SoundItem> MyStart(const wstring& ResKey, size_t LoopCount = 0, float Volume = 1.0f, float Pitch = 1.0f);
 		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	フェードイン(Okabe追加)。
+		@param[in]	ResKey	リソースキー
+		@param[in]	MaxVolume = 1.0f	最大ボリューム
+		@param[in]	Speed = 1.0f	フェードスピード
+		@return	フェード終了フラグ。フェード中はtrue、終了でfalse。  リソースキー読み込み失敗でfalse
+		*/
+		//--------------------------------------------------------------------------------------
+		bool MyFadeIn(const shared_ptr<SoundItem>& Item, float TargetVolume = 1.0f, float TargetTime = 1.0f);
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	フェードアウト(Okabe追加)。
+		@param[in]	ResKey	リソースキー
+		@param[in]	MaxVolume = 1.0f	最大ボリューム
+		@param[in]	Speed = 1.0f	フェードスピード
+		@return	フェード終了フラグ。フェード中はtrue、終了でfalse。  リソースキー読み込み失敗でfalse
+		*/
+		//--------------------------------------------------------------------------------------
+		bool MyFadeOut(const shared_ptr<SoundItem>& Item, float TargetVolume = 1.0f, float TargetTime = 1.0f);
+		//--------------------------------------------------------------------------------------
+
 		/*!
 		@brief	サウンドの強制終了
 		@param[in]	Item	アイテム

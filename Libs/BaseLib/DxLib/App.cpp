@@ -200,6 +200,75 @@ namespace basecross {
 		return Ptr;
 	}
 
+	bool XAudio2Manager::MyFadeIn(const shared_ptr<SoundItem>& Item, float TargetVolume, float TargetTime) {
+		if (!IsAudioActive()) {
+			return false;
+		}
+		if (!Item) {
+			return false;
+		}
+
+		float vol = 0;
+		Item->m_SourceVoice->GetVolume(&vol);
+
+		float setVolumeNum = 10.0f;
+
+		Item->m_fadeTime += App::GetApp()->GetElapsedTime();
+		auto s = TargetTime / setVolumeNum;
+
+		if (vol < TargetVolume) {
+			if (Item->m_fadeTime > s) {
+				Item->m_SourceVoice->SetVolume(vol + TargetVolume / setVolumeNum);
+				Item->m_fadeTime = 0.0f;
+			}
+		}
+		else {
+			Item->m_fadeTime = 0.0f;
+			Item->m_SourceVoice->SetVolume(TargetVolume);
+			Item->m_IsFade = false;
+			return false;
+		}
+
+		Item->m_IsFade = true;
+		return true;
+	}
+
+	bool XAudio2Manager::MyFadeOut(const shared_ptr<SoundItem>& Item, float TargetVolume, float TargetTime) {
+		if (!IsAudioActive()) {
+			return false;
+		}
+		if (!Item) {
+			return false;
+		}
+
+		float setVolumeNum = 10.0f;
+		float vol = 0;
+		Item->m_SourceVoice->GetVolume(&vol);
+
+		if (!Item->m_IsFade) {
+			Item->m_SourceVoice->GetVolume(&Item->m_TargetVolume);
+			Item->m_IsFade = true;
+		}
+
+		Item->m_fadeTime += App::GetApp()->GetElapsedTime();
+		auto s = Item->m_TargetVolume / setVolumeNum;
+
+		if (vol > TargetVolume) {
+			if (Item->m_fadeTime > s) {
+				Item->m_SourceVoice->SetVolume(vol - s);
+				Item->m_fadeTime = 0.0f;
+			}
+		}
+		else {
+			Item->m_fadeTime = 0.0f;
+			Item->m_SourceVoice->SetVolume(TargetVolume);
+			Item->m_IsFade = false;
+			return false;
+		}
+
+		return true;
+	}
+
 	void XAudio2Manager::Stop(const shared_ptr<SoundItem>& Item) {
 		if (!IsAudioActive()) {
 			return;
@@ -219,8 +288,6 @@ namespace basecross {
 			Item->m_SourceVoice = nullptr;
 		}
 	}
-
-
 
 	//--------------------------------------------------------------------------------------
 	//	struct AudioResource::Impl;
