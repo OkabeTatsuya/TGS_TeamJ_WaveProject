@@ -66,11 +66,6 @@ namespace basecross {
 					m_isPushA = true;
 				}
 			}
-
-		////Bボタンでシーン移動
-		//	if (CutlVec[0].wPressedButtons & XINPUT_GAMEPAD_B) {
-		//		PostEvent(0.0f, GetThis <ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
-		//	}
 		}
 
 		//時間を保存する
@@ -80,7 +75,7 @@ namespace basecross {
 
 		//シーン移動
 		if (m_time >= 3) {
-			AddGameObject<Fade>(L"ToGameStage");
+			AddGameObject<Fade>(L"ToSelectStage");
 		}
 	}
 
