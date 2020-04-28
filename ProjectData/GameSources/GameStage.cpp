@@ -50,7 +50,7 @@ namespace basecross {
             AddGameObject<Player>(Vec3(0, 0, 0), Vec3(1.5f, 1.5f, 1),Vec3(-4.0, -2, -3.0));
             AddGameObject<SeaCollision>(Vec3(0, 0, 0), Vec3(1, 0.5, 1), Vec3(-4, -4, -3.0));
 
-            AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(50.0f, 50.0f, 1.0f), Vec2(600.0f, 350.f), float(2.0f),L"",7,false);
+            AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(50.0f, 50.0f, 1.0f), Vec2(600.0f, 350.f), float(5.0f),L"",7,false);
 
 			auto BGM = App::GetApp()->GetXAudio2Manager();
 			m_BGM = BGM->Start(L"SampleBGM.wav", XAUDIO2_LOOP_INFINITE, 0.5f);
@@ -124,10 +124,12 @@ namespace basecross {
 		BackGroundState SkyState = { Vec3(0.0f), Vec3(-10.0f, 0.0f, 0.0f), Vec2(5.0f, 5.0f), L"Sky.png", -10.0f, 0.5f };
 		BackGroundState BGState =  { Vec3(0.0f), Vec3(-10.0f, 0.0f, 0.0f), Vec2(5.0f, 5.0f), L"Sea2.png", -10.0f, 0.5f};
 		BackGroundState SeaState = { Vec3(0.0f), Vec3(-10.0f, -0.12f, -4.0), Vec2(5.0f, 5.0f), L"Sea1.png", -10.0f, 1.5f};
+		BackGroundState CloudState = { Vec3(0.0f), Vec3(-10.0f, 3.0f, -3.0), Vec2(1.0f, 1.0f), L"cloud1.png", -10.0f, 0.5f };
 
 		AddGameObject<BGGenerator>(SkyState);
 		AddGameObject<BGGenerator>(BGState);
 		AddGameObject<BGGenerator>(SeaState);
+		AddGameObject<RandomGenerator>(CloudState, 1.0f, 4);
 
 		AddGameObject<WaveSpawner>();
 		AddGameObject<GoalGenerator>();
