@@ -29,6 +29,7 @@
 #include "WaveSpawner.h"
 #include "BGGenerator.h"
 #include "GoalGenerator.h"
+#include "RandomGenerator.h"
 
 #include "AnimationUI.h"
 #include "ImageUI.h"
