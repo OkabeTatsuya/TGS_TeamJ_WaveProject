@@ -18,25 +18,25 @@ namespace basecross {
 	}
 
 	void TitleAnimationUI::MoveUI() {
-		//移動上限を決める
+		//移動上限を決める(右に移動する）
 		if (m_isMoveContll) {
 			//スピード調整
-			m_position.y += 3.0f;
+			m_position.x += 3.0f;
 			auto ptrTransform = GetComponent<Transform>();
 			ptrTransform->SetPosition(m_position.x, m_position.y, 0.0f);
 			//移動処理
-			if (m_position.y >= m_defaultPos.y + 300.0f) {
+			if (m_position.x >= m_defaultPos.x + 980.0f) {
 				m_isMoveContll = false;
 			}
 		}
-		//下限まで動く処理
+		//下限まで動く処理（左に移動する）
 		else {
 			//スピード調整
-			m_position.y -= 3.0f;
+			m_position.x -= 3.0f;
 			auto ptrTransform = GetComponent<Transform>();
 			ptrTransform->SetPosition(m_position.x, m_position.y, 0.0f);
 			//移動処理
-			if (m_position.y <= m_defaultPos.y - 100.0f) {
+			if (m_position.x <= m_defaultPos.x - 0.0f) {
 				m_isMoveContll = true;
 			}
 		}
