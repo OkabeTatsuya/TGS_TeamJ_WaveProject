@@ -104,7 +104,7 @@ namespace basecross{
 		}
 		else if (event->m_MsgStr == L"ToSelectStage") {
 			//ステージ選択画面の設定
-
+			ResetActiveStage<SelectStage>();
 		}
 		else if (event->m_MsgStr == L"ToGameStage") {
 			//ゲームステージの設定
