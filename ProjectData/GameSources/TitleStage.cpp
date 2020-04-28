@@ -80,7 +80,7 @@ namespace basecross {
 
 		//ƒV[ƒ“ˆÚ“®
 		if (m_time >= 3) {
-			AddGameObject<Fade>(L"ToGameStage");
+			AddGameObject<Fade>(L"ToSelectStage");
 		}
 	}
 
