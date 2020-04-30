@@ -88,12 +88,17 @@ namespace basecross {
             /*Fade*/
             AddGameObject<Fade>();
 
-			/*BG(バックグラウンド)*/
-			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1300.0f, 800.0f, 1.0f), Vec2(0.0f, 0.0f), float(2.0f), L"FadeBG.png");
+			///*BG(バックグラウンド)*/
+			//AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1300.0f, 800.0f, 1.0f), Vec2(0.0f, 0.0f), float(2.0f), L"BGImage.png");
 			
-			/*ゲームクリアorゲームオーバ*/
-			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(800.0f, 150.0f, 1.0f), Vec2(0.0f, 250.0f), float(2.0f), L"Tx_GameClear.png");
-
+			if (true) {
+				/*ゲームクリアorゲームオーバー*/
+				AddGameObject<ImageUI>(Vec3(0.0f), Vec3(800.0f, 150.0f, 1.0f), Vec2(0.0f, 250.0f), float(2.0f), L"Tx_GameClear.png");
+			}
+			//else if()
+			//{
+			//	AddGameObject<ImageUI>(Vec3(0.0f), Vec3(800.0f, 150.0f, 1.0f), Vec2(0.0f, 250.0f), float(2.0f), L"Tx_GameOver.png");
+			//}
 			/*タイトルへ*/
 			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(250.0f, 100.0f, 1.0f), Vec2(-400.0f, -250.0f), float(2.0f), L"Tx_GoTitle.png");
 
@@ -103,6 +108,12 @@ namespace basecross {
 			/*	次のステージへ*/
 			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(250.0f, 100.0f, 1.0f), Vec2(400.0f, -250.0f), float(2.0f), L"Tx_GoNextStage.png");
 
+			m_Pos[0] = Vec2(-400.0f, -250.0f);//タイトルへ
+			m_Pos[1] = Vec2(0.0f, -250.0f);//ステージセレクト
+			m_Pos[2] = Vec2(400.0f, -250.0f);//次のステージへ
+
+			/*点滅*/
+			m_CursorUI = AddGameObject<CursorUI>(Vec3(0.0f), Vec3(200.0f, 100.0f, 1.0f), m_Pos[m_ResultUiCount], float(3.0f), L"BGImage.png", float(2.0));
 
 			//AddGameObject<UIBase>(Vec3(0.0f), Vec3(40.0f, 40.0f, 1.0f), Vec2(-600.0f, 350.0f), float(2.0f), L"trace.png");
 			//シーン移動                                 (ゲームステージへ)
@@ -208,7 +219,7 @@ namespace basecross {
 			m_ResultUiCount = 0;
 		}
 
-		if (m_Timer>=3)
+		if (m_Timer>=0.25)
 		{
 			if (fThumbLX >= 1.0f)//スティックが右に倒れた時
 			{
@@ -218,6 +229,10 @@ namespace basecross {
 				m_Push = true;
 
 				m_ResultUiCount += 1;//右に1つ移動
+
+				//ポジションを設定する
+				m_CursorUI->GetComponent<Transform>()->SetPosition(Vec3(m_Pos[m_ResultUiCount].x, m_Pos[m_ResultUiCount].y,1.0f));
+
 			}
 			if (fThumbLX <= -1.0f)//スティックが左に倒れた時
 			{
@@ -226,7 +241,11 @@ namespace basecross {
 				m_Timer = 0;
 				m_Push = true;
 
-				m_ResultUiCount = -1;//左に1つ移動
+				m_ResultUiCount -= 1;//左に1つ移動
+
+				//ポジションを設定する
+				m_CursorUI->GetComponent<Transform>()->SetPosition(Vec3(m_Pos[m_ResultUiCount].x, m_Pos[m_ResultUiCount].y, 1.0f));
+
 			}
 		}
 		//if (fThumbLY > 0.0f)//スティックが上に倒れた時
@@ -239,6 +258,8 @@ namespace basecross {
 		//	auto SE = App::GetApp()->GetXAudio2Manager();
 		//	SE->Start(L"se_maoudamashii_system37.wav", 0, 0.5f);
 		//}
+
+
 
 		return angle;
 	}

@@ -36,6 +36,8 @@
 #include "FlashingUI.h"
 #include"TitleAnimationUI.h"
 
+#include "CursorUI.h"
+
 #include"TitleStage.h"
 #include"ResulfStage.h"
 #include "SelectStage.h"
