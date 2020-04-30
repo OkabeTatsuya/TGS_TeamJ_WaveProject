@@ -129,8 +129,8 @@ namespace basecross {
 			//auto SE = App::GetApp()->GetXAudio2Manager();
 			//m_SE = SE->Start(L"se_maoudamashii_system37.wav", 0, 0.5f);
 			m_ResultUi[0] = L"ToTitleStage"; //リザルト画面のボタン配置
-			m_ResultUi[1] = L"ToGameStage";
-			m_ResultUi[2] = L"ToResultStage";
+			m_ResultUi[1] = L"SelectStage.cpp";
+			m_ResultUi[2] = L"ToGameStage";
 			m_ResultUi[3] = L"ToGameStage";
 
 
