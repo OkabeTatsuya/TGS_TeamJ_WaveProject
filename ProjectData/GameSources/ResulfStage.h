@@ -30,9 +30,12 @@ namespace basecross {
 
 		void m_ControllerA();
 
+		//shared_ptr<カーソルクラスの名前>
+		shared_ptr<CursorUI>m_CursorUI;
 
 		Vec2 GetMoveVector();
 
+		Vec2 m_Pos[3];
 	public:
 		//構築と破棄
 		ResultStage() :Stage() {}
