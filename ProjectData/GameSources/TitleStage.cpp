@@ -30,13 +30,17 @@ namespace basecross {
 			CreateViewLight();
 
 			//バックグラウンド
-			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1300.0f, 800.0f, 1.0f), Vec2(0.0f, 0.0f), float(2.0f), L"FadeBG.png");
+			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1300.0f, 800.0f, 1.0f), Vec2(0.0f, 0.0f), float(2.0f), L"Sky.png");
+
+			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1300.0f, 800.0f, 1.0f), Vec2(0.0f, -200.0f), float(2.0f), L"Sea3.png");
+
+			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(700.0f, 400.0f, 1.0f), Vec2(0.0f, 250.0f), float(2.0f), L"cloud2.png");
 
 			//画像
-			AddGameObject<TitleAnimationUI>(Vec3(0.0f), Vec3(300.0f, 300.0f, 1.0f), Vec2(-500.0f, -250.0f), float(2.0f), L"player.png");
+			AddGameObject<TitleAnimationUI>(Vec3(0.0f), Vec3(200.0f, 200.0f, 1.0f), Vec2(-500.0f, -150.0f), float(2.0f), L"player.png");
 
 			//タイトル画像
-			AddGameObject<UIBase>(Vec3(0.0f), Vec3(600.0f, 300.0f, 1.0f), Vec2(0.0f, 150.0f), float(2.0f), L"Red.png");
+			AddGameObject<UIBase>(Vec3(0.0f), Vec3(500.0f, 250.0f, 1.0f), Vec2(0.0f, 150.0f), float(2.0f), L"Red.png");
 
 			//点滅させてボタン押してくださいのUI
 			AddGameObject<FlashingUI>(Vec3(0.0f), Vec3(400.0f, 100.0f, 1.0f), Vec2(-0.0f, -200.0f), float(2.0f), L"Tx_PushButtons.png", 2.0f);
