@@ -19,15 +19,16 @@ namespace basecross {
 		int m_defaultObjectNum;
 		int m_spawnCount;
 
-		float m_mimPosY;
-		int m_maxPosY;
+		float m_mimNum;
+		int m_maxNum;
 
 		float m_spawnTimer;
 		float m_generatPosX;
 		bool m_isStopSpawn;
 
 	public:
-		RandomGenerator(const shared_ptr<Stage>& StagePtr, BackGroundState ObjectState, float mimPosY, int maxPosY);
+		//¶¬ŠÔŠu‚Ìƒ‰ƒ“ƒ_ƒ€¶¬
+		RandomGenerator(const shared_ptr<Stage>& StagePtr, BackGroundState ObjectState, float mimNum, int maxNum);
 
 		virtual void OnCreate();
 
