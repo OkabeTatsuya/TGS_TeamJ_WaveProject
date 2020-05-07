@@ -61,6 +61,15 @@ namespace basecross {
 		ptrTransform->SetPosition(m_position.x, m_position.y, 0.0f);
 	}
 
+	void UIBase::ResetTexture(wstring texStr) {
+		m_textureName = texStr;
+		// テクスチャの貼り付け
+		auto drawComp = GetComponent<PCTSpriteDraw>();
+		drawComp->SetSamplerState(SamplerState::LinearWrap);
+
+		//テクスチャの取得、貼り付け
+		drawComp->SetTextureResource(m_textureName);
+	};
 
 	void UIBase::OnCreate() {
 		DrawingImage();
