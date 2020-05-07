@@ -25,7 +25,7 @@ namespace basecross {
 			auto ptrTransform = GetComponent<Transform>();
 			ptrTransform->SetPosition(m_position.x, m_position.y, 0.0f);
 			//ˆÚ“®ˆ—
-			if (m_position.x >= m_defaultPos.x + 980.0f) {
+			if (m_position.x >= m_defaultPos.x + 1040.0f) {
 				m_isMoveContll = false;
 			}
 		}
@@ -36,7 +36,7 @@ namespace basecross {
 			auto ptrTransform = GetComponent<Transform>();
 			ptrTransform->SetPosition(m_position.x, m_position.y, 0.0f);
 			//ˆÚ“®ˆ—
-			if (m_position.x <= m_defaultPos.x - 0.0f) {
+			if (m_position.x <= m_defaultPos.x - 50.0f) {
 				m_isMoveContll = true;
 			}
 		}
