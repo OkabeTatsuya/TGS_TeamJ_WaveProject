@@ -31,6 +31,8 @@ namespace basecross {
 
 		vector<shared_ptr<AnimationUI>> m_startUI;
 		shared_ptr<AnimationUI> m_goalUI;
+		
+		vector<int> m_gameClearScore;
 
 		Vec3 m_textScale;
 
@@ -71,6 +73,8 @@ namespace basecross {
 
 			m_gameClearSpeed = 0.2f;
 			m_spawnFlag = 0;
+
+			m_gameClearScore = { 100,200,300,400 };
 		}
 
 		virtual ~GameStage() {}
