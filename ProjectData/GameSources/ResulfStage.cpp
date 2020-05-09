@@ -89,12 +89,15 @@ namespace basecross {
             AddGameObject<Fade>();
 
 			///*BG(バックグラウンド)*/
-			//AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1300.0f, 800.0f, 1.0f), Vec2(0.0f, 0.0f), float(2.0f), L"BGImage.png");
-			
-			if (true) {
-				/*ゲームクリアorゲームオーバー*/
-				AddGameObject<ImageUI>(Vec3(0.0f), Vec3(800.0f, 150.0f, 1.0f), Vec2(0.0f, 250.0f), float(2.0f), L"Tx_GameClear.png");
-			}
+			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1300.0f, 800.0f, 1.0f), Vec2(0.0f, 0.0f), float(2.0f), L"Sky.png");//空の画像
+
+			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1300.0f, 800.0f, 1.0f), Vec2(0.0f, -100.0f), float(2.0f), L"Sea3.png");//海の画像
+
+			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1300.0f, 1000.0f, 1.0f), Vec2(0.0f, 90.0f), float(2.0f), L"cloud1.png");//雲の画像
+
+			/*ゲームクリアorゲームオーバー*/
+			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(800.0f, 150.0f, 1.0f), Vec2(0.0f, 250.0f), float(2.0f), L"Tx_GameClear.png");
+
 			//else if()
 			//{
 			//	AddGameObject<ImageUI>(Vec3(0.0f), Vec3(800.0f, 150.0f, 1.0f), Vec2(0.0f, 250.0f), float(2.0f), L"Tx_GameOver.png");
