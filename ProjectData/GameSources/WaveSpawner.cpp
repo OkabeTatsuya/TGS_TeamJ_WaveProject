@@ -17,7 +17,7 @@ namespace basecross {
 	}
 
 	void WaveSpawner::OnCreate() {
-		LoadCSV();
+		LoadCSV(en_ObjectType::en_Wave);
 		CreateObject();
 	}
 
@@ -41,7 +41,7 @@ namespace basecross {
 			m_spawnTimer += App::GetApp()->GetElapsedTime() * gameSpeed;
 
 			//ŽŸ‚É¶¬‚·‚é”g‚ÌÀ•W‚ðŽæ‚Á‚Ä‚¢‚é
-			float spawnTime = m_createPos[m_spawnCount] - m_offScreen;
+			float spawnTime = m_createPosX[m_spawnCount] - m_offScreen;
 
 			//¡‚Ì‹——£‚ÆŽŸ‚É¶¬‚·‚éÀ•W
 			if (m_spawnTimer >= spawnTime) {
@@ -72,7 +72,7 @@ namespace basecross {
 	}
 
 	void WaveSpawner::EndCreateObject() {
-		int spawnItr = (int)m_createPos.size() - 1;
+		int spawnItr = (int)m_createPosX.size() - 1;
 		if (m_spawnCount > spawnItr) {
 			m_isStopSpawn = true;
 			Bit_SpawnFlag spawnFlag;

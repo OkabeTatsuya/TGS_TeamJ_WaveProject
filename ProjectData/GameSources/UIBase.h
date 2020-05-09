@@ -25,16 +25,13 @@ namespace basecross {
 			float layer,
 			wstring tex);
 
-		//セッター
 		//はりつけるテクスチャを指定
-		void SetTexture(wstring texStr) {
-			m_textureName = texStr;
-		};
+		void ResetTexture(wstring texStr);
 
 		//テクスチャを張り付ける
 		void DrawingImage();
 
-		//テクスチャを張り付ける
+		//トランスフォームを設定
 		void InitializeTransfrom();
 
 		virtual void OnCreate() override;

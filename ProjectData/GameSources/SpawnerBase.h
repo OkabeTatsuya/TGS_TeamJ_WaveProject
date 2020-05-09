@@ -7,6 +7,11 @@
 #include "stdafx.h"
 
 namespace basecross {
+	enum en_ObjectType {
+		en_Wave,
+		en_Item
+	};
+
 	struct SpanObjectCSVPhas {
 		wstring Wave = L"WaveCSV";
 		wstring Item = L"ItemCSV";
@@ -36,14 +41,16 @@ namespace basecross {
 		CsvFile m_gameStageCs;
 
 		vector<CsvFile> m_gameStageCsv;
-		vector<float> m_createPos;
+		vector<float> m_createPosX;
+		vector<float> m_createPosY;
 
 	public:
 		SpawnerBase(const shared_ptr<Stage>& StagePtr);
 
 		~SpawnerBase();
 
-		void LoadCSV();
+		void LoadCSV(en_ObjectType objType);
 
+		void ReadCSVLine(vector<wstring> csvLine, en_ObjectType objType);
 	};
 }

@@ -8,16 +8,15 @@
 #include "Project.h"
 
 namespace basecross {
-	RandomGenerator::RandomGenerator(const shared_ptr<Stage>& StagePtr, BackGroundState ObjectState, float mimPosY, int maxPosY) :
+	RandomGenerator::RandomGenerator(const shared_ptr<Stage>& StagePtr, BackGroundState ObjectState, float mimNum, int maxNum) :
 		SpawnerBase(StagePtr)
 	{
 		m_objState = ObjectState;
 		m_defaultObjectNum = 5;
 		m_generatPosX = 10;
 		m_spawnTimer = 0.0f;
-		m_mimPosY = mimPosY;
-		m_maxPosY = maxPosY;
-
+		m_mimNum = mimNum;
+		m_maxNum = maxNum;
 	}
 
 	void RandomGenerator::OnCreate() {
@@ -30,7 +29,7 @@ namespace basecross {
 
 	void RandomGenerator::CreateObject() {
 		for (int i = 0; i < m_defaultObjectNum; i++) {
-			m_BGObject.push_back(GetStage()->AddGameObject<MoveBG>(m_objState.Rot, m_objState.Pos, m_objState.ImageSize, m_objState.Tex, m_objState.OffScreenX, RandomSpeed(0.5f, 1.5f)));
+			m_BGObject.push_back(GetStage()->AddGameObject<MoveBG>(m_objState.Rot, m_objState.Pos, m_objState.ImageSize, m_objState.Tex, m_objState.OffScreenX, m_objState.MoveSpeed));
 		}																						
 	}
 
@@ -39,7 +38,7 @@ namespace basecross {
 
 		m_spawnTimer += App::GetApp()->GetElapsedTime() * gameSpeed * m_objState.MoveSpeed;
 
-		if (RandomNum(5.0f,10) <= m_spawnTimer) {
+		if (RandomNum(m_mimNum,m_maxNum) <= m_spawnTimer) {
 			VisibleBG();
 			m_spawnTimer = 0.0f;
 		}			
@@ -49,7 +48,7 @@ namespace basecross {
 		for (int i = 0; i < m_BGObject.size(); i++) {
 			//プーリングしたオブジェクトから動かせるものを探す
 			if (!m_BGObject[i]->GetIsMove()) {
-				m_BGObject[i]->GetComponent<Transform>()->SetPosition(RandomPos(m_mimPosY,m_maxPosY));
+				m_BGObject[i]->GetComponent<Transform>()->SetPosition(m_generatPosX, m_objState.Pos.y, m_objState.Pos.z);
 				m_BGObject[i]->SetIsMove(true);
 				m_spawnCount++;
 				break;
@@ -57,7 +56,7 @@ namespace basecross {
 
 			//動かせるものがなかったら作成する
 			if (m_BGObject.size() - 1 == i) {
-				m_BGObject.push_back(GetStage()->AddGameObject<MoveBG>(m_objState.Rot, m_objState.Pos, m_objState.ImageSize, m_objState.Tex, m_objState.OffScreenX, RandomSpeed(0.5f, 1.5f)));
+				m_BGObject.push_back(GetStage()->AddGameObject<MoveBG>(m_objState.Rot, m_objState.Pos, m_objState.ImageSize, m_objState.Tex, m_objState.OffScreenX, m_objState.MoveSpeed));
 				m_BGObject[m_BGObject.size() - 1]->SetIsMove(true);
 				m_spawnCount++;
 				break;
@@ -94,10 +93,10 @@ namespace basecross {
 	float RandomGenerator::RandomSpeed(float mimSpeed, float maxSpeed) {
 		std::random_device rando;
 		std::mt19937 mt(rando());
-		int randMaxSpeed = maxSpeed * 10;
-		int randMimSpeed = mimSpeed * 10;
+		int randMaxSpeed = (int)maxSpeed * 10;
+		int randMimSpeed = (int)mimSpeed * 10;
 
-		float num = (mt() % (randMaxSpeed - (int)randMimSpeed) + randMimSpeed) / 10;
+		float num = (float)(mt() % (randMaxSpeed - (int)randMimSpeed) + randMimSpeed) / 10;
 
 		return num;
 	}
