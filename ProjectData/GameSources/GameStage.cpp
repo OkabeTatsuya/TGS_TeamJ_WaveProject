@@ -150,6 +150,21 @@ namespace basecross {
 	void GameStage::GameClear() {
 		bool isGameEnd = GameManager::GetInstance().GetIsGameEnd();
 
+		if (isGameEnd && m_loadStageTimeCount == 0) {
+			int stageNum = GameManager::GetInstance().GetSelectStageNum();
+
+			if (m_gameClearScore[stageNum] < stageNum) {
+				GameManager::GetInstance().SetIsGameClear(true);
+				auto AudioManager = App::GetApp()->GetXAudio2Manager();
+				m_SE = AudioManager->Start(L"se_GameClear.wav", 0, 0.8f);
+			}
+			else {
+				GameManager::GetInstance().SetIsGameClear(false);
+				auto AudioManager = App::GetApp()->GetXAudio2Manager();
+				m_SE = AudioManager->Start(L"se_GameOver.wav", 0, 0.8f);
+			}
+		}
+
 		if (isGameEnd && !m_isLoadStage) {
 			auto time = App::GetApp()->GetElapsedTime();
 			m_loadStageTimeCount += time;
