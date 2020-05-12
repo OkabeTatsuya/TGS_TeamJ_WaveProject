@@ -17,16 +17,6 @@ namespace basecross{
         bool m_isFlightAction;
         //滞空アクション連続不使用フラグ
         bool m_isEnableFlightAction;
-        //待機アニメーションのコマ数
-        static const int m_waitingAnimationKeyCounts = 13;
-        //待機アニメーションのkey
-        wstring m_waitingAnimationKeys[m_waitingAnimationKeyCounts];
-        //現在の待機アニメーション表示コマ
-        int m_currentWaitingAnimationKeyCount;
-        //アニメーション１コマに対するフレーム数
-        float m_maxAnimationTime;
-        //現在のアニメーションのフレーム数
-        float m_currentAnimationTime;
         //ジャンプアクションの１回転にかかる時間
         float m_jumpActionTime;
         //ジャンプのフラグ
@@ -94,6 +84,41 @@ namespace basecross{
         shared_ptr<ScoreUIPanel> m_scoreUpUI;
         //最初のジャンプするまで減速を止める
         bool m_isFirstJump;
+        //現在のアニメーションの表示コマ
+        int m_currentAnimationKeyCount;
+        //アニメーション１コマに対するフレーム数
+        float m_maxAnimationTime;
+        //現在のアニメーションのフレーム数
+        float m_currentAnimationTime;
+        //待機アニメーションのコマ数
+        static const int m_waitingAnimationKeyCount = 11;
+        //待機アニメーション移行フラグ
+        bool m_isWaitingAnimation;
+        //踏切アニメーション移行フラグ
+        bool m_isJumpStartAnimation;
+        //踏切アニメーション完了フラグ
+        bool m_isFinishJumpStartAnimation;
+        //着地アニメーション移行フラグ
+        bool m_isJumpFinishAnimation;
+        //着地アニメーション完了フラグ
+        bool m_isFinishJumpFinishAnimation;
+        //ジャンプアクションアニメーション（Z軸）移行フラグ
+        bool m_isJumpActionZAnimation;
+        //待機アニメーションのkey
+        wstring m_waitingAnimationKeys[m_waitingAnimationKeyCount];
+        //ジャンプアクションZ軸アニメーションのコマ数
+        static const int m_jumpActionAnimationZKeyCount = 1;
+        //ジャンプアクションZ軸アニメーションのkey
+        wstring m_jumpActionAnimationZKeys[m_jumpActionAnimationZKeyCount];
+        //ジャンプスタートアニメーションコマ数
+        static const int m_jumpStartAnimationKeyCount = 8;
+        //ジャンプスタートアニメーションのkey
+        wstring m_jumpStartAnimationKeys[m_jumpStartAnimationKeyCount];
+        //ジャンプフィニッシュアニメーションコマ数
+        static const int m_jumpFinishAnimationKeyCount = 7;
+        //ジャンプフィニッシュアニメーションのkey
+        wstring m_jumpFinishAnimationKeys[m_jumpStartAnimationKeyCount];
+
     private:
         //プレイヤーの角度
         Vec3 m_rot;
@@ -136,10 +161,22 @@ namespace basecross{
         void SpeedScoreMagnification();
         //SEを鳴らす処理
         void ActiveSE(wstring se);
-        //待機アニメーション数初期化
-        void InitWaitingAnimation();
+        //アニメーション初期化
+        void InitAnimation();
         //待機アニメーション
         void WaitingAnimation();
+        //踏切アニメーション
+        void JumpStartAnimation();
+        //着地アニメーション
+        void JumpFinishAnimation();
+        //滞空アニメーション
+        void FlightAnimation();
+        //ジャンプアクションアニメーション（X軸）
+        void JumpActionXAnimation();
+        //ジャンプアクションアニメーション(Y軸)
+        void JumpActionYAnimation();
+        //ジャンプアクションアニメーション(Z軸)
+        void JumpActionZAnimation();
         //ジャンプ中の滞空アクション
         void FlightAction();
     };
