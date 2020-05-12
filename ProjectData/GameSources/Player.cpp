@@ -58,6 +58,7 @@ namespace basecross {
         m_maxAnimationTime = 0.1f;
         m_currentAnimationTime = 0.0f;
         m_isWaitingAnimation = true;
+        m_isJumpActionZAnimation = false;
         m_isFinishJumpFinishAnimation = false;
         m_isFinishJumpStartAnimation = false;
         m_isJumpFinishAnimation = false;
@@ -100,7 +101,7 @@ namespace basecross {
             m_jumpActionAnimationZKeys[i] = jumpZ + png;
         }
         for (int i = 0; i < m_jumpStartAnimationKeyCount; i++) {
-            number = to_wstring(i + 1);
+            number = to_wstring(i + 4);
             m_jumpStartAnimationKeys[i] = jumpStart + number + png;
         }
         for (int i = 0; i < m_jumpFinishAnimationKeyCount; i++) {
@@ -169,7 +170,7 @@ namespace basecross {
     }
     //踏切アニメーション
     void Player::JumpStartAnimation() {
-        float jumpStartAnimationFrameTime = 0.02f;
+        float jumpStartAnimationFrameTime = 0.03f;
         if (m_isJumpStartAnimation) {
             m_currentAnimationTime += App::GetApp()->GetElapsedTime();
             if (m_currentAnimationKeyCount >= m_jumpStartAnimationKeyCount) {
@@ -188,7 +189,7 @@ namespace basecross {
     }
     //着地アニメーション
     void Player::JumpFinishAnimation() {
-        float jumpFinishAnimationFrameTime = 0.02f;
+        float jumpFinishAnimationFrameTime = 0.05f;
         if (m_isJumpFinishAnimation) {
             m_currentAnimationTime += App::GetApp()->GetElapsedTime();
             if (m_currentAnimationKeyCount >= m_jumpFinishAnimationKeyCount) {
