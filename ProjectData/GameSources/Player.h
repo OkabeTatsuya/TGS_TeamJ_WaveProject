@@ -111,13 +111,13 @@ namespace basecross{
         //ジャンプアクションZ軸アニメーションのkey
         wstring m_jumpActionAnimationZKeys[m_jumpActionAnimationZKeyCount];
         //ジャンプスタートアニメーションコマ数
-        static const int m_jumpStartAnimationKeyCount = 8;
+        static const int m_jumpStartAnimationKeyCount = 5;
         //ジャンプスタートアニメーションのkey
         wstring m_jumpStartAnimationKeys[m_jumpStartAnimationKeyCount];
         //ジャンプフィニッシュアニメーションコマ数
         static const int m_jumpFinishAnimationKeyCount = 7;
         //ジャンプフィニッシュアニメーションのkey
-        wstring m_jumpFinishAnimationKeys[m_jumpStartAnimationKeyCount];
+        wstring m_jumpFinishAnimationKeys[m_jumpFinishAnimationKeyCount];
 
     private:
         //プレイヤーの角度
