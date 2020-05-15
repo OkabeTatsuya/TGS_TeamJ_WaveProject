@@ -24,7 +24,7 @@ namespace basecross {
 		float m_Timer = 3;//コントローラー左スティック処理
 		bool m_Push;//コントローラー左スティック処理
 
-		wstring m_ResultUi[4];
+		wstring m_ResultUi[3]; 
 
 		int m_ResultUiCount = 0;
 

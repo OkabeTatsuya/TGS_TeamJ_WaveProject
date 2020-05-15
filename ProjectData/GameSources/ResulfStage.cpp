@@ -93,37 +93,29 @@ namespace basecross {
 
 			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1300.0f, 800.0f, 1.0f), Vec2(0.0f, -100.0f), float(2.0f), L"Sea3.png");//海の画像
 
-			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1300.0f, 1000.0f, 1.0f), Vec2(0.0f, 90.0f), float(2.0f), L"cloud1.png");//雲の画像
+			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1300.0f,1000.0f, 1.0f), Vec2(0.0f, 90.0f), float(2.0f), L"cloud1.png");//雲の画像
 
+			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(700.0f, 700.0f, 1.0f), Vec2(-180.0f, -50.0f), float(2.0f), L"Junp3_34.png");//プレイヤーの画像
+			
 			/*ゲームクリアorゲームオーバー*/
-			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(800.0f, 150.0f, 1.0f), Vec2(0.0f, 250.0f), float(2.0f), L"Tx_GameClear.png");
+			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(800.0f, 150.0f, 1.0f), Vec2(  0.0f, 300.0f), float(2.0f), L"Tx_GameClear.png");
 
-			//else if()
-			//{
-			//	AddGameObject<ImageUI>(Vec3(0.0f), Vec3(800.0f, 150.0f, 1.0f), Vec2(0.0f, 250.0f), float(2.0f), L"Tx_GameOver.png");
-			//}
 			/*タイトルへ*/
-			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(250.0f, 100.0f, 1.0f), Vec2(-400.0f, -250.0f), float(2.0f), L"Tx_GoTitle.png");
+			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(250.0f, 100.0f, 1.0f), Vec2(300.0f,  50.0f), float(2.0f), L"Tx_GoTitle.png");
 
 			/*ステージセレクトへ*/
-			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(250.0f, 100.0f, 1.0f), Vec2(0.0f, -250.0f), float(2.0f), L"Tx_GoStageSelect.png");
+			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(250.0f, 100.0f, 1.0f), Vec2(300.0f,-100.0f), float(2.0f), L"Tx_GoStageSelect.png");
 
-			/*	次のステージへ*/
-			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(250.0f, 100.0f, 1.0f), Vec2(400.0f, -250.0f), float(2.0f), L"Tx_GoNextStage.png");
+			/*次のステージへ*/
+			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(250.0f, 100.0f, 1.0f), Vec2(300.0f,-250.0f), float(2.0f), L"Tx_GoNextStage.png");
 
-			m_Pos[0] = Vec2(-400.0f, -250.0f);//タイトルへ
-			m_Pos[1] = Vec2(0.0f, -250.0f);//ステージセレクト
-			m_Pos[2] = Vec2(400.0f, -250.0f);//次のステージへ
+			m_Pos[0] = Vec2(300.0f, 50.0f);//タイトルへ
+			m_Pos[1] = Vec2(300.0f, -100.0f);//ステージセレクト
+			m_Pos[2] = Vec2(300.0f, -250.0f);//次のステージへ
 
 			/*点滅*/
 			m_CursorUI = AddGameObject<CursorUI>(Vec3(0.0f), Vec3(200.0f, 100.0f, 1.0f), m_Pos[m_ResultUiCount], float(3.0f), L"BGImage.png", float(2.0));
 
-			//AddGameObject<UIBase>(Vec3(0.0f), Vec3(40.0f, 40.0f, 1.0f), Vec2(-600.0f, 350.0f), float(2.0f), L"trace.png");
-			//シーン移動                                 (ゲームステージへ)
-			//App::GetApp()->GetScene<Scene>()->LoadStage(L"ToGameStage");
-
-			//シーン移動                                 (ゲームタイトルへ)
-			//App::GetApp()->GetScene<Scene>()->LoadStage(L"ToTitleStage");
 
 			//サウンドの追加
 			auto BGM = App::GetApp()->GetXAudio2Manager();
@@ -134,7 +126,7 @@ namespace basecross {
 			m_ResultUi[0] = L"ToTitleStage"; //リザルト画面のボタン配置
 			m_ResultUi[1] = L"SelectStage.cpp";
 			m_ResultUi[2] = L"ToGameStage";
-			m_ResultUi[3] = L"ToGameStage";
+			//m_ResultUi[3] = L"ToGameStage";
 
 
 		}
@@ -213,7 +205,7 @@ namespace basecross {
 			
 		}
 
-		if (m_ResultUiCount >= 4)//リザルトボタンで四つ以上移動しないように
+		if (m_ResultUiCount >= 3)//リザルトボタンで四つ以上移動しないように
 		{
 			m_ResultUiCount = 3;
 		}
@@ -224,27 +216,27 @@ namespace basecross {
 
 		if (m_Timer>=0.25)
 		{
-			if (fThumbLX >= 1.0f)//スティックが右に倒れた時
+			if (fThumbLY <= -1.0f)//スティックが上に倒れた時
 			{
 				auto SE = App::GetApp()->GetXAudio2Manager();
 				SE->Start(L"se_maoudamashii_system37.wav", 0, 0.5f);
 				m_Timer = 0;
 				m_Push = true;
 
-				m_ResultUiCount += 1;//右に1つ移動
+				m_ResultUiCount += 1;//上に1つ移動
 
 				//ポジションを設定する
 				m_CursorUI->GetComponent<Transform>()->SetPosition(Vec3(m_Pos[m_ResultUiCount].x, m_Pos[m_ResultUiCount].y,1.0f));
 
 			}
-			if (fThumbLX <= -1.0f)//スティックが左に倒れた時
+			if (fThumbLY >= +1.0f)//スティックが下に倒れた時
 			{
 				auto SE = App::GetApp()->GetXAudio2Manager();																	
 				SE->Start(L"se_maoudamashii_system37.wav", 0, 0.5f);
 				m_Timer = 0;
 				m_Push = true;
 
-				m_ResultUiCount -= 1;//左に1つ移動
+				m_ResultUiCount -= 1;//下に1つ移動
 
 				//ポジションを設定する
 				m_CursorUI->GetComponent<Transform>()->SetPosition(Vec3(m_Pos[m_ResultUiCount].x, m_Pos[m_ResultUiCount].y, 1.0f));
@@ -261,7 +253,6 @@ namespace basecross {
 		//	auto SE = App::GetApp()->GetXAudio2Manager();
 		//	SE->Start(L"se_maoudamashii_system37.wav", 0, 0.5f);
 		//}
-
 
 
 		return angle;
