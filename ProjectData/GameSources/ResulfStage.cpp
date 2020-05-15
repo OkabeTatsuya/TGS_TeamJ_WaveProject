@@ -46,7 +46,7 @@ namespace basecross {
 	//BGMを流す処理
 	void ResultStage::GetBGM() {
 		auto BGM = App::GetApp()->GetXAudio2Manager();
-		m_BGM = BGM->Start(L"SampleBGM.wav", XAUDIO2_LOOP_INFINITE, 0.5f);
+		m_BGM = BGM->Start(L"bgm_maoudamashii_acoustic41.wav", XAUDIO2_LOOP_INFINITE, 0.5f);
 	}
 
 	//SEを流す処理
@@ -93,7 +93,7 @@ namespace basecross {
 
 			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1300.0f, 800.0f, 1.0f), Vec2(0.0f, -100.0f), float(2.0f), L"Sea3.png");//海の画像
 
-			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1300.0f,1000.0f, 1.0f), Vec2(0.0f, 90.0f), float(2.0f), L"cloud1.png");//雲の画像
+			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1300.0f, 800.0f, 1.0f), Vec2(0.0f, -100.0f), float(2.0f), L"cloud.png");//雲の画像
 
 			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(700.0f, 700.0f, 1.0f), Vec2(-180.0f, -50.0f), float(2.0f), L"Junp3_34.png");//プレイヤーの画像
 			
@@ -115,19 +115,22 @@ namespace basecross {
 
 			/*点滅*/
 			m_CursorUI = AddGameObject<CursorUI>(Vec3(0.0f), Vec3(200.0f, 100.0f, 1.0f), m_Pos[m_ResultUiCount], float(3.0f), L"BGImage.png", float(2.0));
+			
+			//スコアUIの表示
+			AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(100.0f, 100.0f, 1.0f), Vec2(300.0f, 0.f), float(2.0f), L"", 7, false);
+			GameManager::GetInstance().DrawScore();
 
 
 			//サウンドの追加
 			auto BGM = App::GetApp()->GetXAudio2Manager();
-			m_BGM = BGM->Start(L"SampleBGM.wav", XAUDIO2_LOOP_INFINITE, 0.5f);
+			m_BGM = BGM->Start(L"bgm_maoudamashii_acoustic41.wav", XAUDIO2_LOOP_INFINITE, 0.5f);
 
 			//auto SE = App::GetApp()->GetXAudio2Manager();
 			//m_SE = SE->Start(L"se_maoudamashii_system37.wav", 0, 0.5f);
 			m_ResultUi[0] = L"ToTitleStage"; //リザルト画面のボタン配置
-			m_ResultUi[1] = L"SelectStage.cpp";
+			m_ResultUi[1] = L"ToSelectStage";
 			m_ResultUi[2] = L"ToGameStage";
 			//m_ResultUi[3] = L"ToGameStage";
-
 
 		}
 		catch (...) {
@@ -164,6 +167,7 @@ namespace basecross {
 			if (m_Time >= 3)
 			{
 				AddGameObject<Fade>(m_ResultUi[m_ResultUiCount]);
+				m_Time = 0.0f;
 			}
 			GetMoveVector();
 		}
@@ -206,8 +210,9 @@ namespace basecross {
 		}
 
 		if (m_ResultUiCount >= 3)//リザルトボタンで四つ以上移動しないように
+		//if (m_ResultUiCount >= 2)//リザルトボタンで四つ以上移動しないように
 		{
-			m_ResultUiCount = 3;
+			m_ResultUiCount = 2;
 		}
 		if (m_ResultUiCount < 0)
 		{
