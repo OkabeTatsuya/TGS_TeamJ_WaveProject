@@ -14,7 +14,7 @@ namespace basecross {
 		wstring tex) :
 		MoveSpriteBase(StagePtr, rotation, scale, position)
 	{
-		m_offsetPosX = -8.5f;
+		m_offsetPosX = -8.8f;
 		m_textureName = tex;
 	}
 
@@ -22,7 +22,7 @@ namespace basecross {
 		DrawingImage(m_textureName);
 
 		auto transPtr = AddComponent<Transform>();
-		transPtr->SetPosition(m_position.x, m_position.y, -3.0f);
+		transPtr->SetPosition(m_position.x, m_position.y, -7.0f);
 		transPtr->SetRotation(m_rotation);
 		transPtr->SetScale(m_scale);
 
