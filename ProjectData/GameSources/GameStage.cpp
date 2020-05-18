@@ -12,7 +12,7 @@ namespace basecross {
 	//	ゲームステージクラス実体
 	//--------------------------------------------------------------------------------------
 	void GameStage::CreateViewLight() {
-		const Vec3 eye(0.0f, 0.0f, -10.0f);
+		const Vec3 eye(0.0f, 0.0f, -100.0f);
 		const Vec3 at(0.0f);
 		auto PtrView = CreateView<SingleView>();
 		//ビューのカメラの設定
@@ -53,7 +53,7 @@ namespace basecross {
             AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(50.0f, 50.0f, 1.0f), Vec2(600.0f, 350.f), float(5.0f),L"",7,false);
 
 			auto BGM = App::GetApp()->GetXAudio2Manager();
-			m_BGM = BGM->Start(L"SampleBGM.wav", XAUDIO2_LOOP_INFINITE, 0.5f);
+			m_BGM = BGM->Start(L"game_maoudamashii_5_town05.wav", XAUDIO2_LOOP_INFINITE, 0.0f);
 		}
 		catch (...) {
 			throw;
@@ -92,8 +92,8 @@ namespace basecross {
 
 		//張り付けるテクスチャ
 		vector<wstring> texter {
-			L"Tx_Ledy.png",
-			L"Tx_Start.png"
+			L"Lady.png",
+			L"Go.png"
 		};
 
 		for (int i = 0; i < animUIState.size(); i++) {
@@ -112,7 +112,7 @@ namespace basecross {
 
 		//張り付けるテクスチャ
 		wstring texter{
-			L"Tx_Goal.png",
+			L"Gorl.png",
 		};
 
 		m_goalUI = AddGameObject<AnimationUI>(GoalUIState, texter, m_maxLoadStageTime);
@@ -156,12 +156,12 @@ namespace basecross {
 			if (m_gameClearScore[stageNum] < stageNum) {
 				GameManager::GetInstance().SetIsGameClear(true);
 				auto AudioManager = App::GetApp()->GetXAudio2Manager();
-				m_SE = AudioManager->Start(L"se_GameClear.wav", 0, 0.8f);
+				m_SE = AudioManager->Start(L"se_GameClear.wav", 0, 0.9f);
 			}
 			else {
 				GameManager::GetInstance().SetIsGameClear(false);
 				auto AudioManager = App::GetApp()->GetXAudio2Manager();
-				m_SE = AudioManager->Start(L"se_GameOver.wav", 0, 0.8f);
+				m_SE = AudioManager->Start(L"se_GameOver.wav", 0, 0.9f);
 			}
 		}
 
