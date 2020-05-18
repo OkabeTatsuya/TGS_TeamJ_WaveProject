@@ -5,7 +5,7 @@
 
 #pragma once
 
-
+#include "EfkInterface.h"
 #include "ProjectShader.h"
 #include "ProjectBehavior.h"
 #include "Scene.h"
@@ -16,6 +16,7 @@
 #include "ScoreUI.h"
 #include "ScoreUIPanel.h"
 #include "GameManager.h"
+#include "EffectObject.h"
 #include "Player.h"
 #include "Sea.h"
 #include "SeaCollision.h"
