@@ -60,6 +60,9 @@ namespace basecross {
             colors.w = 0.0f;
             drawPtr->SetDiffuse(colors);
         }
+
+		auto SE = App::GetApp()->GetXAudio2Manager();
+		m_SE = SE->Start(L"Wave.wav", 0.0f, 0.3f);
     }
 
     void Fade::FadeIn() {
@@ -90,7 +93,9 @@ namespace basecross {
                 GetStage()->RemoveGameObject<Fade>(GetThis<Fade>());
             }
             else {
-                GetStage()->PostEvent(0.0f, GetStage()->GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), m_nextStageKey);
+				auto SE = App::GetApp()->GetXAudio2Manager();
+				 SE->Stop(m_SE);
+				GetStage()->PostEvent(0.0f, GetStage()->GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), m_nextStageKey);
             }
             
         }
