@@ -74,14 +74,19 @@ namespace basecross {
 	//ƒAƒjƒ[ƒVƒ‡ƒ“‚·‚éUI‚ðì¬
 	void GameStage::CreateAnimUI() {
 		St_AnimUI statUIState1 = {
+			//ï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½tï¿½Hï¿½[ï¿½ï¿½
 			Vec2(1000.0f,200.0f),Vec3(0.0f),m_textScale,
+			//ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìƒgï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½tï¿½Hï¿½[ï¿½ï¿½
 			Vec2(0.0f,200.0f),Vec3(0.0f),m_textScale,
-			2.0f,0.0f,0.5f,AnimType::Delete
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Aï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Jï¿½nï¿½ï¿½ï¿½ÔAï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			8.0f,0.0f,0.5f,
+			//ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½
+			AnimType::Delete
 		};
 		St_AnimUI statUIState2 = {
 			Vec2(1000.0f,-200.0f),Vec3(0.0f),m_textScale,
 			Vec2(0.0f,-200.0f),Vec3(0.0f),m_textScale,
-			2.0f,2.0f,2.5f,AnimType::Delete
+			8.0f,2.0f,2.5f,AnimType::Delete
 		};
 
 		
@@ -107,7 +112,7 @@ namespace basecross {
 		St_AnimUI GoalUIState = {
 			Vec2(1000.0f,200.0f),Vec3(0.0f),m_textScale,
 			Vec2(0.0f,200.0f),Vec3(0.0f),m_textScale,
-			2.0f,0.0f,0.5f,AnimType::Delete
+			8.0f,0.0f,0.5f,AnimType::Delete
 		};
 
 		//’£‚è•t‚¯‚éƒeƒNƒXƒ`ƒƒ
