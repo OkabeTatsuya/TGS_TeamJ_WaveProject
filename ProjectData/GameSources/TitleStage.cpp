@@ -49,10 +49,10 @@ namespace basecross {
 			AddGameObject<TitleAnimationUI>(Vec3(0.0f), Vec3(200.0f, 200.0f, 1.0f), Vec2(-500.0f, -150.0f), float(2.0f), L"player.png");
 
 			//タイトル画像
-			AddGameObject<UIBase>(Vec3(0.0f), Vec3(700.0f, 400.0f, 1.0f), Vec2(0.0f,200.0f), float(2.0f), L"TitleLogo.png");
+			AddGameObject<UIBase>(Vec3(0.0f), Vec3(1024.0f, 512.0f, 1.0f), Vec2(50.0f,200.0f), float(2.0f), L"TitleLogo.png");
 
 			//点滅させてボタン押してくださいのUI
-			AddGameObject<FlashingUI>(Vec3(0.0f), Vec3(400.0f, 100.0f, 1.0f), Vec2(-0.0f, -200.0f), float(2.0f), L"StartBattan.png", 2.0f);
+			AddGameObject<FlashingUI>(Vec3(0.0f), Vec3(400.0f, 200.0f, 1.0f), Vec2(-0.0f, -200.0f), float(2.0f), L"StartBattan.png", 2.0f);
 
 			//BGM再生と音量調整
 			auto XAPtr = App::GetApp()->GetXAudio2Manager();
