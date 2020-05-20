@@ -18,6 +18,11 @@ namespace basecross {
 		PtrCamera->SetEye(eye);
 		PtrCamera->SetAt(at);
 
+		PtrCamera->SetPers(false);//遠近法
+		PtrCamera->SetWidth(10);//画面に表示する横幅のユニット数
+		PtrCamera->SetHeight(10);//画面に表示する縦幅のユニット数
+		PtrCamera->SetFovY(0.5f);//視野角
+
 		//マルチライトの作成
 		auto PtrMultiLight = CreateLight<MultiLight>();
 
@@ -30,20 +35,24 @@ namespace basecross {
 			CreateViewLight();
 
 			//バックグラウンド
-			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1300.0f, 800.0f, 1.0f), Vec2(0.0f, 0.0f), float(2.0f), L"Sky.png");
+			BackGroundState SkyState = { Vec3(0.0f), Vec3(-10.0f, 0.0f, 0.0f), Vec2(5.0f, 5.0f), L"Sky.png", -10.0f, 0.5f };
+			BackGroundState BGState = { Vec3(0.0f), Vec3(-10.0f, 0.0f, 0.0f), Vec2(5.0f, 5.0f), L"Sea2.png", -10.0f, 0.5f };
+			BackGroundState SeaState = { Vec3(0.0f), Vec3(-10.0f, -0.12f, -2.0), Vec2(5.0f, 5.0f), L"Sea1.png", -10.0f, 1.5f };
+			BackGroundState CloudState = { Vec3(0.0f), Vec3(-10.0f, 3.0f, -1.0), Vec2(1.0f, 1.0f), L"cloud1.png", -10.0f, 0.5f };
 
-			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1300.0f, 800.0f, 1.0f), Vec2(0.0f, -200.0f), float(2.0f), L"Sea3.png");
-
-			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(700.0f, 400.0f, 1.0f), Vec2(0.0f, 250.0f), float(2.0f), L"cloud2.png");
+			AddGameObject<BGGenerator>(SkyState);
+			AddGameObject<BGGenerator>(BGState);
+			AddGameObject<BGGenerator>(SeaState);
+			AddGameObject<RandomGenerator>(CloudState, 1.0f, 4);
 
 			//画像
 			AddGameObject<TitleAnimationUI>(Vec3(0.0f), Vec3(200.0f, 200.0f, 1.0f), Vec2(-500.0f, -150.0f), float(2.0f), L"player.png");
 
 			//タイトル画像
-			AddGameObject<UIBase>(Vec3(0.0f), Vec3(500.0f, 250.0f, 1.0f), Vec2(0.0f, 150.0f), float(2.0f), L"Red.png");
+			AddGameObject<UIBase>(Vec3(0.0f), Vec3(700.0f, 400.0f, 1.0f), Vec2(0.0f,200.0f), float(2.0f), L"TitleLogo.png");
 
 			//点滅させてボタン押してくださいのUI
-			AddGameObject<FlashingUI>(Vec3(0.0f), Vec3(400.0f, 100.0f, 1.0f), Vec2(-0.0f, -200.0f), float(2.0f), L"Tx_PushButtons.png", 2.0f);
+			AddGameObject<FlashingUI>(Vec3(0.0f), Vec3(400.0f, 100.0f, 1.0f), Vec2(-0.0f, -200.0f), float(2.0f), L"StartBattan.png", 2.0f);
 
 			//BGM再生と音量調整
 			auto XAPtr = App::GetApp()->GetXAudio2Manager();
