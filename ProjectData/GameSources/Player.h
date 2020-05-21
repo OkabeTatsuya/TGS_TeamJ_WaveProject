@@ -118,7 +118,14 @@ namespace basecross{
         static const int m_jumpFinishAnimationKeyCount = 7;
         //ジャンプフィニッシュアニメーションのkey
         wstring m_jumpFinishAnimationKeys[m_jumpFinishAnimationKeyCount];
-
+        //スペシャルジャンプ回数
+        int m_specialJumpCount;
+        //現在のスペシャルジャンプの回数
+        int m_currentSpecialJumpCount;
+        //スペシャルジャンプ中フラグ
+        bool m_isSpecialJump;
+        //スペシャルジャンプ起動フラグ
+        bool m_managerniaruyatu;
     private:
         //プレイヤーの角度
         Vec3 m_rot;
@@ -179,6 +186,8 @@ namespace basecross{
         void JumpActionZAnimation();
         //ジャンプ中の滞空アクション
         void FlightAction();
+        //スペシャルジャンプ
+        void SpecialJump();
     };
 
 }
