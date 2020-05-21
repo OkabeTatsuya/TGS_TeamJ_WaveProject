@@ -38,6 +38,10 @@ namespace basecross {
 		SpecialCheck();
 	}
 
+	void GameManager::AddItemScore() {
+		m_gameScore += m_itemScore;
+		m_scoreUpUIPanel->ScoreDraw(m_itemScore);
+		SpecialCheck();
 	}
 
 	void GameManager::DrawScore() {
@@ -49,6 +53,16 @@ namespace basecross {
 			m_isSpecialTime = true;
 			m_specialCount = 0;
 		}
+	}
+
+	void GameManager::ResetGame() {
+		m_gameScore = 0;
+		m_specialCount = 0;
+		m_perfectJumpCount = 0;
+		m_goodJumpCount = 0;
+		m_isGameEnd = false;
+		m_isStopSpawner = true;
+		m_isSpecialTime = false;
 	}
 
 }
