@@ -12,14 +12,20 @@ using namespace std;
 namespace basecross {
 	void GameManager::AddJumpScore(float magnification, float comboMagnification,bool isGreat) {
         comboMagnification += 1;
+		int addScore = 0;
         if (isGreat) {
             float greatJumpMagnification = 2.0f;
-            m_gameScore += (int)(m_baseJumpScore * magnification * comboMagnification * greatJumpMagnification);
+			addScore = (int)(m_baseJumpScore * magnification * comboMagnification * greatJumpMagnification);
         }
         else
-	        m_gameScore += (int)(m_baseJumpScore * magnification * comboMagnification);
-        m_scoreUpUIPanel->ScoreDraw(m_baseJumpScore * magnification * comboMagnification);
+			addScore = (int)(m_baseJumpScore * magnification * comboMagnification);
+ 
+		m_gameScore += addScore;
+		m_scoreUpUIPanel->ScoreDraw(addScore);
         m_scoreUIPanel->ScoreDraw(m_gameScore);
+
+		m_specialCount += addScore;
+		SpecialCheck();
 	}
 
 	void GameManager::AddActionScore(float magnification, float comboMagnification) {
@@ -27,9 +33,22 @@ namespace basecross {
 		m_gameScore += (int)(m_baseActionScore * magnification * comboMagnification);
         m_scoreUpUIPanel->ScoreDraw(m_baseJumpScore * magnification * comboMagnification);
         m_scoreUIPanel->ScoreDraw(m_gameScore);
+
+		m_specialCount += (int)(m_baseActionScore * magnification * comboMagnification);
+		SpecialCheck();
+	}
+
 	}
 
 	void GameManager::DrawScore() {
 		m_scoreUIPanel->ScoreDraw(m_gameScore);
 	}
+
+	void GameManager::SpecialCheck() {
+		if (m_specialCount > m_maxSpecialCount) {
+			m_isSpecialTime = true;
+			m_specialCount = 0;
+		}
+	}
+
 }
