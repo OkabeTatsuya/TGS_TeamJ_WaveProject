@@ -63,6 +63,9 @@ namespace basecross {
         m_isFinishJumpStartAnimation = false;
         m_isJumpFinishAnimation = false;
         m_isJumpStartAnimation = false;
+        m_currentSpecialJumpCount = 0;
+        m_specialJumpCount = 3;
+        m_managerniaruyatu = true;
     }
 
     void Player::OnCreate() {
@@ -87,6 +90,8 @@ namespace basecross {
 
     void Player::InitAnimation() {
         wstring wait = L"Wait_";
+        wstring jumpX = L"JumpX_";
+        wstring jumpY = L"JumpY_";
         wstring jumpZ = L"JumpZ";
         wstring jumpStart = L"JumpStart_";
         wstring jumpFinish = L"JumpFinish_";
@@ -265,6 +270,34 @@ namespace basecross {
         }
 
     }
+    //スペシャルジャンプ
+    void Player::SpecialJump() {
+        auto controller = App::GetApp()->GetInputDevice().GetControlerVec()[0];
+        auto &gm = GameManager::GetInstance();
+        m_currentJumpGradeTime += App::GetApp()->GetElapsedTime();
+
+        if (m_jumpGradeTime * m_jumpGradeTimeJudge <= m_currentJumpGradeTime) {
+            m_currentSpecialJumpCount++;
+            if (m_currentSpecialJumpCount > m_specialJumpCount) {
+                m_isSpecialJump = false;
+                m_managerniaruyatu = false;
+                m_currentSpecialJumpCount = 0;
+            }
+            else {
+                m_isJumpStartAnimation = true;
+                m_isWaitingAnimation = false;
+                m_currentAnimationKeyCount = 0;
+                SpeedUp(m_upSpeedValue * m_jumpGradeSpeedMagnification);
+                HighJump(m_greatJumpMagnification);
+                gm.AddJumpScore(m_currentSpeedScoreMagnification, m_combo*m_comboMagnification, false);
+                m_currentJumpGradeTime = 0;
+                m_combo++;
+                m_isJumpAction = true;
+                m_isSpecialJump = true;
+            }
+        }
+
+    }
 
     //ジャンプアクションの入力判定
     void Player::JudgeJumpAction() {
@@ -300,7 +333,6 @@ namespace basecross {
             m_isLeftJumpAction = false;
             m_isRightJumpAction = false;
             m_isJumpAction = true;
-            m_isJumpActionZAnimation = true;
             m_currentAnimationKeyCount = 0;
         }
     }
@@ -327,14 +359,30 @@ namespace basecross {
 
     //ジャンプアクション処理
     void Player::JumpAction() {
-        if (m_isJumpAction) {
-            m_rot.z += XM_2PI * App::GetApp()->GetElapsedTime() / m_jumpActionTime;
-            GetComponent<Transform>()->SetRotation(m_rot);
-            if (m_rot.z >= XM_2PI) {
-                m_rot.z = 0;
-                m_isJumpAction = false;
-                m_isInvincible = false;
-                GameManager::GetInstance().AddActionScore(m_currentSpeedScoreMagnification, m_combo * m_comboMagnification);
+        if (m_isSpecialJump) {
+            if (m_isJumpAction && (m_isSpecialJump && GetComponent<RigidbodyBox>()->GetLinearVelocity().y <= 0)) {
+                m_isJumpActionZAnimation = true;
+                m_rot.z += XM_2PI * App::GetApp()->GetElapsedTime() / m_jumpActionTime;
+                GetComponent<Transform>()->SetRotation(m_rot);
+                if (m_rot.z >= XM_2PI) {
+                    m_rot.z = 0;
+                    m_isJumpAction = false;
+                    m_isInvincible = false;
+                    GameManager::GetInstance().AddActionScore(m_currentSpeedScoreMagnification, m_combo * m_comboMagnification);
+                }
+            }
+        }
+        else {
+            if (m_isJumpAction) {
+                m_isJumpActionZAnimation = true;
+                m_rot.z += XM_2PI * App::GetApp()->GetElapsedTime() / m_jumpActionTime;
+                GetComponent<Transform>()->SetRotation(m_rot);
+                if (m_rot.z >= XM_2PI) {
+                    m_rot.z = 0;
+                    m_isJumpAction = false;
+                    m_isInvincible = false;
+                    GameManager::GetInstance().AddActionScore(m_currentSpeedScoreMagnification, m_combo * m_comboMagnification);
+                }
             }
         }
     }
@@ -451,7 +499,12 @@ namespace basecross {
     void Player::OnCollisionExcute(shared_ptr<GameObject>& other) {
         if (other->FindTag(L"Wave")) {
             m_isWaveTouch = true;
-            Jump();
+            if (m_managerniaruyatu) {
+                SpecialJump();
+            }
+            else {
+                Jump();
+            }
         }
         //落下防止処理
         if (other->FindTag(L"Sea")&&!m_isJump) {
