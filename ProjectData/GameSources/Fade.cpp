@@ -14,7 +14,7 @@ namespace basecross {
         UIBase(stage, Vec3(0.0f),
             Vec3(1400, 800, 0),
             Vec2(0.0f),
-            float(5.0f),
+            float(11.0f),
             L"FadeBG.png"),
         m_nextStageKey(nextStageKey)
     {
@@ -28,7 +28,7 @@ namespace basecross {
         UIBase(stage, Vec3(0.0f),
             Vec3(1400, 800, 0),
             Vec2(0.0f),
-            float(5.0f),
+            float(11.0f),
             L"FadeBG.png") 
     {
         m_currentFadeTime = 0.0f;

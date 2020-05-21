@@ -21,13 +21,13 @@ namespace basecross {
     }
 
     void Wave::OnCreate() {
-        DrawingImage(L"SamllWave2ver.png");
+        DrawingImage(L"SamllWave.png");
         auto transPtr = AddComponent<Transform>();
         transPtr->SetPosition(m_position);
         transPtr->SetScale(m_scale);
         transPtr->SetRotation(m_rotation);
 
-        auto waveCol = GetStage()->AddGameObject<WaveCollision>(Vec3(0, 0, 0), Vec3(1, 1, 1), Vec3(m_position.x - 1, m_position.y, -3.0f));
+        auto waveCol = GetStage()->AddGameObject<WaveCollision>(Vec3(0, 0, 0), Vec3(1, 1, 1), Vec3(m_position.x - 1, m_position.y, -6.0f));
         waveCol->GetComponent<Transform>()->SetParent(GetThis<GameObject>());
         //SetTexture(L"");
     }

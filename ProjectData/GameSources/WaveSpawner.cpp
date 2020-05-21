@@ -13,7 +13,7 @@ namespace basecross {
 		m_defaultObjectNum = 10;
 		m_spawnCount = 0;
 		m_offScreen = 10.0f;
-		m_spawnPos = Vec3(6.0f, -3.2f, -4.0f);
+		m_spawnPos = Vec3(6.0f, -3.0f, -7.0f);
 	}
 
 	void WaveSpawner::OnCreate() {
@@ -37,7 +37,6 @@ namespace basecross {
 		if (!GameManager::GetInstance().GetIsStopSpawner() && !m_isStopSpawn) {
 			float gameSpeed = GameManager::GetInstance().GetGameSpeed();
 
-			//ŽžŠÔ‚É‘¬‚³‚ð‚©‚¯‚Ä‚¢‚é‚Ì‚Å‹——£‚É‚È‚é‚Í‚¸
 			m_spawnTimer += App::GetApp()->GetElapsedTime() * gameSpeed;
 
 			//ŽŸ‚É¶¬‚·‚é”g‚ÌÀ•W‚ðŽæ‚Á‚Ä‚¢‚é
@@ -77,7 +76,6 @@ namespace basecross {
 			m_isStopSpawn = true;
 			Bit_SpawnFlag spawnFlag;
 			auto gameStage = App::GetApp()->GetScene<Scene>()->GetActiveTypeStage<GameStage>();
-			gameStage->TrueSpawnFlag(spawnFlag.item);
 			gameStage->TrueSpawnFlag(spawnFlag.wave);
 		}
 	}

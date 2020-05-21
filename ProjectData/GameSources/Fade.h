@@ -16,7 +16,7 @@ namespace basecross {
         float m_currentFadeTime;
         //ƒtƒF[ƒhƒAƒEƒg‚Ì‚Ég‚¤Ÿ‚ÌƒXƒe[ƒW‚Ìkey
         wstring m_nextStageKey;
-		//ï¿½Äï¿½ï¿½ï¿½ï¿½ï¿½SE
+		//Ä¶‚·‚éSE
 		shared_ptr<SoundItem> m_SE;
 
 	public:
