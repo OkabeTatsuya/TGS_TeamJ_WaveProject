@@ -113,12 +113,17 @@ namespace basecross {
             number = to_wstring(i + 1);
             m_jumpFinishAnimationKeys[i] = jumpFinish + number + png;
         }
+        for (int i = 0; i < m_jumpActionAnimationXKeyCount; i++) {
+            number = to_wstring(i + 1);
+            m_jumpActionAnimationXKeys[i] = jumpX + number + png;
+        }
     }
 
 
     void Player::OnUpdate() {
         WaitingAnimation();
         JumpActionZAnimation();
+        JumpActionXAnimation();
         JumpStartAnimation();
         JumpFinishAnimation();
         JudgeJumpAction();
@@ -133,24 +138,33 @@ namespace basecross {
     }
 
     //滞空アニメーション
-    void Player::FlightAnimation() {        
+    void Player::JumpActionXAnimation() {    
+        if (m_isJumpActionXAnimation) {
+            m_currentAnimationTime += App::GetApp()->GetElapsedTime();
+            if (m_currentAnimationTime >= m_maxAnimationTime) {
+                DrawingImage(m_jumpActionAnimationXKeys[m_currentAnimationKeyCount]);
+                m_currentAnimationKeyCount++;
+                if (m_currentAnimationKeyCount >= m_jumpActionAnimationXKeyCount) {
+                    m_currentAnimationKeyCount = 0;
+                    m_isJumpActionXAnimation = false;
+                }
+                m_currentAnimationTime = 0;
+            }
+        }
     }
 
-    //ジャンプアクションアニメーション（X軸）
-    void Player::JumpActionXAnimation() {
-
-    }
     //ジャンプアクションアニメーション（Y軸）
     void Player::JumpActionYAnimation() {
     }
     //ジャンプアクションアニメーション（Z軸）
     void Player::JumpActionZAnimation() {
-        if (m_isJumpActionZAnimation && m_isFinishJumpStartAnimation) {
+        if (m_isJumpActionZAnimation) {
             m_currentAnimationTime += App::GetApp()->GetElapsedTime();
             if (m_currentAnimationTime >= m_maxAnimationTime) {
                 DrawingImage(m_jumpActionAnimationZKeys[m_currentAnimationKeyCount]);
                 m_currentAnimationKeyCount++;
                 if (m_currentAnimationKeyCount >= m_jumpActionAnimationZKeyCount) {
+                    m_isJumpActionZAnimation = false;
                     m_currentAnimationKeyCount = 0;
                 }
                 m_currentAnimationTime = 0;
@@ -160,7 +174,7 @@ namespace basecross {
 
     //待機アニメーション
     void Player::WaitingAnimation() {
-        if (m_isWaitingAnimation && !m_isJumpActionZAnimation && !m_isJumpStartAnimation && !m_isJumpFinishAnimation) {
+        if (m_isWaitingAnimation) {
             m_currentAnimationTime += App::GetApp()->GetElapsedTime();
             if (m_currentAnimationKeyCount >= m_waitingAnimationKeyCount) {
                 m_currentAnimationKeyCount = 0;
@@ -180,9 +194,8 @@ namespace basecross {
             m_currentAnimationTime += App::GetApp()->GetElapsedTime();
             if (m_currentAnimationKeyCount >= m_jumpStartAnimationKeyCount) {
                 m_isJumpStartAnimation = false;
-                m_isFinishJumpStartAnimation = true;
-                m_isJumpActionZAnimation = false;
-                m_currentAnimationKeyCount = m_jumpStartAnimationKeyCount;
+                DrawingImage(m_jumpStartAnimationKeys[m_currentAnimationKeyCount]);
+                m_currentAnimationKeyCount = 0;
             }
             if (m_currentAnimationTime >= jumpStartAnimationFrameTime) {
                 DrawingImage(m_jumpStartAnimationKeys[m_currentAnimationKeyCount]);
@@ -198,11 +211,13 @@ namespace basecross {
         if (m_isJumpFinishAnimation) {
             m_currentAnimationTime += App::GetApp()->GetElapsedTime();
             if (m_currentAnimationKeyCount >= m_jumpFinishAnimationKeyCount) {
-                m_isJumpFinishAnimation = false;
                 m_isFinishJumpStartAnimation = false;
                 m_isFinishJumpFinishAnimation = true;
-                m_isJumpActionZAnimation = false;
+                m_isJumpStartAnimation = false;
+                m_isJumpFinishAnimation = false;
                 m_isWaitingAnimation = true;
+                m_isJumpActionXAnimation = false;
+                m_isJumpActionZAnimation = false;
                 m_currentAnimationKeyCount = 0;
             }
             if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
@@ -285,7 +300,10 @@ namespace basecross {
             }
             else {
                 m_isJumpStartAnimation = true;
+                m_isJumpFinishAnimation = false;
                 m_isWaitingAnimation = false;
+                m_isJumpActionXAnimation = false;
+                m_isJumpActionZAnimation = false;
                 m_currentAnimationKeyCount = 0;
                 SpeedUp(m_upSpeedValue * m_jumpGradeSpeedMagnification);
                 HighJump(m_greatJumpMagnification);
@@ -340,11 +358,16 @@ namespace basecross {
     //滞空アクション処理
     void Player::FlightAction() {
         auto controller = App::GetApp()->GetInputDevice().GetControlerVec()[0];
-        if (m_isJump && controller.wPressedButtons & XINPUT_GAMEPAD_A && m_isEnableFlightAction && GetComponent<RigidbodyBox>()->GetLinearVelocity().y <=0) {
+        if (m_isJump && controller.wPressedButtons & XINPUT_GAMEPAD_LEFT_THUMB && m_isEnableFlightAction && GetComponent<RigidbodyBox>()->GetLinearVelocity().y <=0) {
             m_isFlightAction = true;
             GetComponent<RigidbodyBox>()->SetAutoGravity(false);
         }
         if (m_isFlightAction) {
+            m_isJumpStartAnimation = false;
+            m_isJumpFinishAnimation = false;
+            m_isWaitingAnimation = false;
+            m_isJumpActionXAnimation = true;
+            m_isJumpActionZAnimation = false;
             m_currentFlightTime += App::GetApp()->GetElapsedTime();
             GetComponent<RigidbodyBox>()->SetLinearVelocity(Vec3(0.0f,-0.2f,0.0f));
             if (m_currentFlightTime >= m_maxFlightTime) {
@@ -361,6 +384,10 @@ namespace basecross {
     void Player::JumpAction() {
         if (m_isSpecialJump) {
             if (m_isJumpAction && (m_isSpecialJump && GetComponent<RigidbodyBox>()->GetLinearVelocity().y <= 0)) {
+                m_isJumpStartAnimation = false;
+                m_isJumpFinishAnimation = false;
+                m_isWaitingAnimation = false;
+                m_isJumpActionXAnimation = false;
                 m_isJumpActionZAnimation = true;
                 m_rot.z += XM_2PI * App::GetApp()->GetElapsedTime() / m_jumpActionTime;
                 GetComponent<Transform>()->SetRotation(m_rot);
@@ -374,8 +401,11 @@ namespace basecross {
         }
         else {
             if (m_isJumpAction) {
-                m_isJumpActionZAnimation = true;
-                m_rot.z += XM_2PI * App::GetApp()->GetElapsedTime() / m_jumpActionTime;
+                m_isJumpStartAnimation = false;
+                m_isJumpFinishAnimation = false;
+                m_isWaitingAnimation = false;
+                m_isJumpActionXAnimation = false;
+                m_isJumpActionZAnimation = true;                m_rot.z += XM_2PI * App::GetApp()->GetElapsedTime() / m_jumpActionTime;
                 GetComponent<Transform>()->SetRotation(m_rot);
                 if (m_rot.z >= XM_2PI) {
                     m_rot.z = 0;
@@ -398,7 +428,10 @@ namespace basecross {
         }
         if (controller.wPressedButtons & XINPUT_GAMEPAD_A && !m_isJump) {
             m_isJumpStartAnimation = true;
+            m_isJumpFinishAnimation = false;
             m_isWaitingAnimation = false;
+            m_isJumpActionXAnimation = false;
+            m_isJumpActionZAnimation = false;
             m_currentAnimationKeyCount = 0;
             if (isGreatJump) {
                 SpeedUp(m_upSpeedValue * m_jumpGradeSpeedMagnification);
@@ -414,7 +447,10 @@ namespace basecross {
         }
         if (controller.wPressedButtons & XINPUT_GAMEPAD_B && !m_isJump) {
             m_isJumpStartAnimation = true;
+            m_isJumpFinishAnimation = false;
             m_isWaitingAnimation = false;
+            m_isJumpActionXAnimation = false;
+            m_isJumpActionZAnimation = false;
             m_currentAnimationKeyCount = 0;
             if (isGreatJump) {
                 SpeedUp(m_upSpeedValue * m_jumpGradeSpeedMagnification);
@@ -475,8 +511,11 @@ namespace basecross {
             m_isJump=false;
             m_isLanding = true;
             if (m_isFirstJump) {
+                m_isJumpStartAnimation = false;
                 m_isJumpFinishAnimation = true;
                 m_isWaitingAnimation = false;
+                m_isJumpActionXAnimation = false;
+                m_isJumpActionZAnimation = false;
             }
             if (m_rot.z!=0) {
                 JumpMissSpeedDown();
