@@ -48,6 +48,10 @@ namespace basecross {
 		m_scoreUIPanel->ScoreDraw(m_gameScore);
 	}
 
+	void GameManager::DrawClearScore(int stageNum) {
+		m_scoreUIPanel->ScoreDraw(m_gameClearScore[stageNum]);
+	}
+
 	void GameManager::SpecialCheck() {
 		if (m_specialCount > m_maxSpecialCount) {
 			m_isSpecialTime = true;
@@ -63,6 +67,15 @@ namespace basecross {
 		m_isGameEnd = false;
 		m_isStopSpawner = true;
 		m_isSpecialTime = false;
+	}
+
+	void GameManager::AddJumpJudgeCount(JudgeName judge) {
+		if (judge == JudgeName::en_Perfect) {
+			m_perfectJumpCount++;
+		}
+		else if (judge == JudgeName::en_Good) {
+			m_goodJumpCount++;
+		}
 	}
 
 }
