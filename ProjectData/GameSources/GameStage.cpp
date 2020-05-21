@@ -47,10 +47,11 @@ namespace basecross {
 
 			CreateGenerator();
 
-            AddGameObject<Player>(Vec3(0, 0, 0), Vec3(1.5f, 1.5f, 1),Vec3(-4.0, -2, -3.0));
-            AddGameObject<SeaCollision>(Vec3(0, 0, 0), Vec3(1, 0.5, 1), Vec3(-4, -4, -3.0));
+            m_playerObj = AddGameObject<Player>(Vec3(0, 0, 0), Vec3(1.0f, 1.0f, 1),Vec3(-4.0, -2, -6.0));
+            AddGameObject<SeaCollision>(Vec3(0, 0, 0), Vec3(1, 0.5, 1), Vec3(-4, -4.0, -6.0));
 
-            AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(50.0f, 50.0f, 1.0f), Vec2(600.0f, 350.f), float(5.0f),L"",7,false);
+            AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(55.0f, 55.0f, 1.0f), Vec2(600.0f, 350.f), float(5.0f),L"",7,false);
+			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(256.0f, 64.0f, 1.0f), Vec2(100.0f, 350.f), float(5.0f), L"Score.png");
 
 			auto BGM = App::GetApp()->GetXAudio2Manager();
 			m_BGM = BGM->Start(L"game_maoudamashii_5_town05.wav", XAUDIO2_LOOP_INFINITE, 0.0f);
@@ -75,9 +76,9 @@ namespace basecross {
 	void GameStage::CreateAnimUI() {
 		St_AnimUI statUIState1 = {
 			//ï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½tï¿½Hï¿½[ï¿½ï¿½
-			Vec2(1000.0f,200.0f),Vec3(0.0f),m_textScale,
+			Vec2(1000.0f,100.0f),Vec3(0.0f),m_textScale,
 			//ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìƒgï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½tï¿½Hï¿½[ï¿½ï¿½
-			Vec2(0.0f,200.0f),Vec3(0.0f),m_textScale,
+			Vec2(0.0f,100.0f),Vec3(0.0f),m_textScale,
 			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Aï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Jï¿½nï¿½ï¿½ï¿½ÔAï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			8.0f,0.0f,0.5f,
 			//ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½
@@ -126,17 +127,20 @@ namespace basecross {
 
 	//ƒWƒFƒlƒŒ[ƒ^[‚ğì¬
 	void GameStage::CreateGenerator() {
-		BackGroundState SkyState = { Vec3(0.0f), Vec3(-10.0f, 0.0f, 0.0f), Vec2(5.0f, 5.0f), L"Sky.png", -10.0f, 0.5f };
-		BackGroundState BGState =  { Vec3(0.0f), Vec3(-10.0f, 0.0f, 0.0f), Vec2(5.0f, 5.0f), L"Sea2.png", -10.0f, 0.5f};
-		BackGroundState SeaState = { Vec3(0.0f), Vec3(-10.0f, -0.12f, -4.0), Vec2(5.0f, 5.0f), L"Sea1.png", -10.0f, 1.5f};
-		BackGroundState CloudState = { Vec3(0.0f), Vec3(-10.0f, 3.0f, -3.0), Vec2(1.0f, 1.0f), L"cloud1.png", -10.0f, 0.5f };
+		BackGroundState SkyState = { Vec3(0.0f), Vec3(-10.0f, 0.0f, 0.0f), Vec2(5.0f, 5.0f), L"Sky.png", -10.0f, 0.3f };
+		BackGroundState SeaBGState =  { Vec3(0.0f), Vec3(-10.0f, 0.0f, -3.0f), Vec2(5.0f, 5.0f), L"Ocean.png", -10.0f, 0.3f};
+		BackGroundState SeaState = { Vec3(0.0f), Vec3(-10.0f, -0.12f, -8.0), Vec2(5.0f, 5.0f), L"Sea.png", -10.0f, 1.1f };
+		BackGroundState CloudState = { Vec3(0.0f), Vec3(-10.0f, 0.0f, -1.0), Vec2(5.0f, 5.0f), L"cloud.png", -10.0f, 0.05f };
+		BackGroundState IslandState = { Vec3(0.0f), Vec3(-10.0f, -0.3f, -2.0), Vec2(1.5f, 1.5f), L"Island.png", -10.0f, 0.2f };
 
 		AddGameObject<BGGenerator>(SkyState);
-		AddGameObject<BGGenerator>(BGState);
+		AddGameObject<BGGenerator>(SeaBGState);
 		AddGameObject<BGGenerator>(SeaState);
-		AddGameObject<RandomGenerator>(CloudState, 1.0f, 4);
+		AddGameObject<BGGenerator>(CloudState);
+		AddGameObject<RandomGenerator>(IslandState, 10.0f, 15);
 
 		AddGameObject<WaveSpawner>();
+		AddGameObject<ItemGenerator>();
 		AddGameObject<GoalGenerator>();
 	}
 
