@@ -30,11 +30,12 @@ namespace basecross {
 
     void ScoreUIPanel::OnCreate() {
         for (int i = 0; i < m_count; i++) {
-            auto scoreUI = GetStage()->AddGameObject<ScoreUI>(Vec3(m_rotation), Vec3(m_scale), Vec2(m_position.x - i * m_scale.x, m_position.y), float(m_layer), L"number.png");
+            auto scoreUI = GetStage()->AddGameObject<ScoreUI>(Vec3(m_rotation), Vec3(m_scale), Vec2(m_position.x - i * m_scale.x, m_position.y), float(m_layer), L"Number.png");
             scoreUI->GetComponent<Transform>()->SetParent(GetThis<GameObject>());
             m_scoreUIs.push_back(scoreUI);
-            if (m_isScorePlusUI){}
-                m_scoreUIs[i]->GetComponent<PCTSpriteDraw>()->SetDrawActive(false);
+            if (m_isScorePlusUI){
+				m_scoreUIs[i]->GetComponent<PCTSpriteDraw>()->SetDrawActive(false);
+			}
         }
         GameManager::GetInstance().SetScoreUIPanel(GetThis<ScoreUIPanel>());
     }
