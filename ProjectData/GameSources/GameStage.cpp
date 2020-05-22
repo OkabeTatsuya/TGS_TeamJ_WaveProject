@@ -62,8 +62,12 @@ namespace basecross {
 	}
 
 	void GameStage::OnUpdate() {
+		m_efkInterface->OnUpdate();
 		FrastTimeCount();
 		GameClear();
+		auto BGM = App::GetApp()->GetXAudio2Manager();
+		BGM->MyFadeIn(m_BGM, 0.5f, 2.0f);
+		SpecialJumpController();
 	}
 
 	void GameStage::OnDestroy() {
@@ -106,6 +110,8 @@ namespace basecross {
 			m_startUI.push_back(AddGameObject<AnimationUI>(animUIState[i], texter[i], m_maxStartTime));
 			m_startUI[i]->SetIsStartAnim(true);
 		}
+
+		AddGameObject<SpecialJumpUI>(Vec3(0.0f), Vec3(1400, 800, 0), Vec2(0.0f), float(4.0f), L"SpecialJumpBG.png");
 	}
 
 	//ゴールした時のアニメーションUIを作成
