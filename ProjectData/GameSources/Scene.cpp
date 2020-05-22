@@ -97,6 +97,7 @@ namespace basecross{
 		if (event->m_MsgStr == L"ToCopywriterStage") {
 			//最初のアクティブステージの設定
 
+			ResetActiveStage<CopywriterStage>();
 		}
 		else if (event->m_MsgStr == L"ToTitleStage") {
 			//タイトルステージの設定
