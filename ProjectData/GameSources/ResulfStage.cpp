@@ -9,7 +9,7 @@
 namespace basecross {
 
 	//--------------------------------------------------------------------------------------
-	//	ゲームステージクラス実体
+	//	リザルトステージクラス実体
 	//--------------------------------------------------------------------------------------
 	void ResultStage::CreateViewLight() {//リザルト画面
 		const Vec3 eye(0.0f, 0.0f, -5.0f);
@@ -68,9 +68,6 @@ namespace basecross {
 				auto SE = App::GetApp()->GetXAudio2Manager();
 				m_SE = SE->Start(L"se_maoudamashii_system37.wav", 0, 0.5f);
 
-				//シーン移動                               (ゲームステージへ)
-				//App::GetApp()->GetScene<Scene>()->LoadStage(L"ToGameStage");
-
 			}
 		}
 	}
@@ -79,14 +76,9 @@ namespace basecross {
 		try {
 			//ビューとライトの作成
 			CreateViewLight();
-			//					 ローテーション,スケール,ポジション
-			//AddGameObject<Enemy>(Vec3(0.0f), Vec3(10.0f), Vec3(0.0f));
 
-			//画像を表示するUI
-			//引数　Vec3(Rot),Vec3(Sca),Vec2(Pos.xy),float(Layer),wstring(ImageName)
-
-            /*Fade*/
-            AddGameObject<Fade>();
+			/*Fade*/
+			AddGameObject<Fade>();
 
 			///*BG(バックグラウンド)*/
 			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1300.0f, 800.0f, 1.0f), Vec2(0.0f, 0.0f), float(2.0f), L"Sky.png");//空の画像
@@ -96,18 +88,22 @@ namespace basecross {
 			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1300.0f, 800.0f, 1.0f), Vec2(0.0f, -100.0f), float(2.0f), L"cloud.png");//雲の画像
 
 			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(700.0f, 700.0f, 1.0f), Vec2(-180.0f, -50.0f), float(2.0f), L"Junp3_34.png");//プレイヤーの画像
-			
+
 			/*ゲームクリアorゲームオーバー*/
-			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(800.0f, 150.0f, 1.0f), Vec2(  0.0f, 300.0f), float(2.0f), L"Tx_GameClear.png");
+			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(800.0f, 150.0f, 1.0f), Vec2(0.0f, 300.0f), float(2.0f), L"Tx_GameClear.png");
 
 			/*タイトルへ*/
-			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(250.0f, 100.0f, 1.0f), Vec2(300.0f,  50.0f), float(2.0f), L"Tx_GoTitle.png");
+			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(250.0f, 100.0f, 1.0f), Vec2(300.0f, 50.0f), float(2.0f), L"Title.png");
 
 			/*ステージセレクトへ*/
-			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(250.0f, 100.0f, 1.0f), Vec2(300.0f,-100.0f), float(2.0f), L"Tx_GoStageSelect.png");
+			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(250.0f, 100.0f, 1.0f), Vec2(300.0f, -100.0f), float(2.0f), L"StageSelect.png");
 
 			/*次のステージへ*/
-			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(250.0f, 100.0f, 1.0f), Vec2(300.0f,-250.0f), float(2.0f), L"Tx_GoNextStage.png");
+			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(250.0f, 100.0f, 1.0f), Vec2(300.0f,-250.0f), float(2.0f), L"NextStage.png");
+
+			//スコアUIの表示
+			AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(250.0f, 100.0f, 1.0f), Vec2(300.0f, -250.f), float(2.0f), L"Score.png", 7, false);
+			GameManager::GetInstance().DrawScore();
 
 			m_Pos[0] = Vec2(300.0f, 50.0f);//タイトルへ
 			m_Pos[1] = Vec2(300.0f, -100.0f);//ステージセレクト
@@ -115,10 +111,6 @@ namespace basecross {
 
 			/*点滅*/
 			m_CursorUI = AddGameObject<CursorUI>(Vec3(0.0f), Vec3(200.0f, 100.0f, 1.0f), m_Pos[m_ResultUiCount], float(3.0f), L"BGImage.png", float(2.0));
-			
-			//スコアUIの表示
-			AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(100.0f, 100.0f, 1.0f), Vec2(300.0f, 0.f), float(2.0f), L"", 7, false);
-			GameManager::GetInstance().DrawScore();
 
 
 			//サウンドの追加
@@ -164,7 +156,7 @@ namespace basecross {
 				m_Time += App::GetApp()->GetElapsedTime();
 			}
 
-			if (m_Time >= 3)
+			if (m_Time >= 3)//3秒後にシーン遷移
 			{
 				AddGameObject<Fade>(m_ResultUi[m_ResultUiCount]);
 				m_Time = 0.0f;
@@ -203,23 +195,21 @@ namespace basecross {
 		}
 
 
-
 		if (m_Push) {
 			m_Timer += App::GetApp()->GetElapsedTime();
-			
+
 		}
 
-		if (m_ResultUiCount >= 3)//リザルトボタンで四つ以上移動しないように
-		//if (m_ResultUiCount >= 2)//リザルトボタンで四つ以上移動しないように
+		if (m_ResultUiCount >= 3)//リザルトボタンで3つ以上移動しないように
 		{
-			m_ResultUiCount = 2;
+			m_ResultUiCount = 3;
 		}
 		if (m_ResultUiCount < 0)
 		{
-			m_ResultUiCount = 0;
+			m_ResultUiCount = 3;
 		}
 
-		if (m_Timer>=0.25)
+		if (m_Timer >= 0.25)
 		{
 			if (fThumbLY <= -1.0f)//スティックが上に倒れた時
 			{
@@ -231,12 +221,12 @@ namespace basecross {
 				m_ResultUiCount += 1;//上に1つ移動
 
 				//ポジションを設定する
-				m_CursorUI->GetComponent<Transform>()->SetPosition(Vec3(m_Pos[m_ResultUiCount].x, m_Pos[m_ResultUiCount].y,1.0f));
+				m_CursorUI->GetComponent<Transform>()->SetPosition(Vec3(m_Pos[m_ResultUiCount].x, m_Pos[m_ResultUiCount].y, 1.0f));
 
 			}
 			if (fThumbLY >= +1.0f)//スティックが下に倒れた時
 			{
-				auto SE = App::GetApp()->GetXAudio2Manager();																	
+				auto SE = App::GetApp()->GetXAudio2Manager();
 				SE->Start(L"se_maoudamashii_system37.wav", 0, 0.5f);
 				m_Timer = 0;
 				m_Push = true;
@@ -248,17 +238,6 @@ namespace basecross {
 
 			}
 		}
-		//if (fThumbLY > 0.0f)//スティックが上に倒れた時
-		//{
-		//	auto SE = App::GetApp()->GetXAudio2Manager();
-		//	SE->Start(L"se_maoudamashii_system37.wav", 0, 0.5f);
-		//}
-		//if (fThumbLY < -0.0f)//スティックが下に倒れた時
-		//{
-		//	auto SE = App::GetApp()->GetXAudio2Manager();
-		//	SE->Start(L"se_maoudamashii_system37.wav", 0, 0.5f);
-		//}
-
 
 		return angle;
 	}
