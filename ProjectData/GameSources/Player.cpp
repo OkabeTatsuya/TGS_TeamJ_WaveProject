@@ -65,7 +65,6 @@ namespace basecross {
         m_isJumpStartAnimation = false;
         m_currentSpecialJumpCount = 0;
         m_specialJumpCount = 3;
-        m_managerniaruyatu = true;
     }
 
     void Player::OnCreate() {
@@ -80,12 +79,18 @@ namespace basecross {
         PsBoxParam param(transPtr->GetWorldMatrix(), 1.0f, false, PsMotionType::MotionTypeActive);
         AddComponent<RigidbodyBox>(param);/*->SetDrawActive(true);*/
 
-        AddComponent<CollisionObb>()->SetMakedSize(Vec3(1.0f));
+        AddComponent<CollisionObb>()->SetMakedSize(Vec3(1.0f,1.1f,1.0f));
 
-        m_scoreUpUI = GetStage()->AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(30.0f, 20.0f, 1.0f), Vec2(0.0f), float(2.0f), L"", 4, true);
+        m_scoreUpUI = GetStage()->AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(30.0f, 20.0f, 1.0f), Vec2(0.0f), float(7.0f), L"", 4, true);
         GameManager::GetInstance().SetScoreUpUIPanel(m_scoreUpUI);
 
 		AddTag(L"Player");
+
+		m_effectObj = GetStage()->AddGameObject<EffectObject>();
+		m_effectObj->GetComponent<Transform>()->SetPosition(Vec3(0.0f));
+
+		m_judgJumpUI = GetStage()->AddGameObject<JudgJumpUI>(Vec3(0.0f), Vec3(256.0f, 128.0f, 1.0f), Vec2(0.0f), float(7.0f), L"Perfect.png");
+
     }
 
     void Player::InitAnimation() {
@@ -131,6 +136,10 @@ namespace basecross {
         Invincible();
         SpeedScoreMagnification();
         m_scoreUpUI->AdjustPosition(GetComponent<Transform>()->GetPosition());
+		m_judgJumpUI->SetingPos(GetComponent<Transform>()->GetPosition());
+		FollowEffect();
+		JumpAcionEffect(EN_EffectName::en_GoodEffect, L"se_maoudamashii_onepoint16.wav", m_currentAnimationTime);
+
     }
 
     void Player::OnUpdate2() {
@@ -295,7 +304,7 @@ namespace basecross {
             m_currentSpecialJumpCount++;
             if (m_currentSpecialJumpCount > m_specialJumpCount) {
                 m_isSpecialJump = false;
-                m_managerniaruyatu = false;
+                gm.SetIsSpecialTime(false);
                 m_currentSpecialJumpCount = 0;
             }
             else {
@@ -311,7 +320,7 @@ namespace basecross {
                 m_currentJumpGradeTime = 0;
                 m_combo++;
                 m_isJumpAction = true;
-                m_isSpecialJump = true;
+				m_isSpecialJump = true;
             }
         }
 
@@ -375,7 +384,6 @@ namespace basecross {
                 m_isEnableFlightAction = false;
                 m_currentFlightTime = 0.0f;
                 GetComponent<RigidbodyBox>()->SetAutoGravity(true);
-
             }
         }
     }
@@ -391,12 +399,12 @@ namespace basecross {
                 m_isJumpActionZAnimation = true;
                 m_rot.z += XM_2PI * App::GetApp()->GetElapsedTime() / m_jumpActionTime;
                 GetComponent<Transform>()->SetRotation(m_rot);
-                if (m_rot.z >= XM_2PI) {
+				if (m_rot.z >= XM_2PI) {
                     m_rot.z = 0;
                     m_isJumpAction = false;
                     m_isInvincible = false;
                     GameManager::GetInstance().AddActionScore(m_currentSpeedScoreMagnification, m_combo * m_comboMagnification);
-                }
+				}
             }
         }
         else {
@@ -436,11 +444,19 @@ namespace basecross {
             if (isGreatJump) {
                 SpeedUp(m_upSpeedValue * m_jumpGradeSpeedMagnification);
                 HighJump(m_greatJumpMagnification);
-            }
+				JumpEffect(EN_EffectName::en_GoodEffect, L"se_maoudamashii_onepoint16.wav");
+				
+				Vec3 pos = GetComponent<Transform>()->GetPosition();
+				m_judgJumpUI->VisibleUI(L"Perfect.png", pos);
+			}
             else {
                 SpeedUp(m_upSpeedValue);
                 HighJump(1.0f);
-            }
+				JumpEffect(EN_EffectName::en_GoodEffect, L"se_maoudamashii_onepoint17.wav");
+
+				Vec3 pos = GetComponent<Transform>()->GetPosition();
+				m_judgJumpUI->VisibleUI(L"Good.png", pos);
+			}
             gm.AddJumpScore(m_currentSpeedScoreMagnification, m_combo*m_comboMagnification,false);
             m_currentJumpGradeTime = 0;
             m_combo++;
@@ -455,11 +471,19 @@ namespace basecross {
             if (isGreatJump) {
                 SpeedUp(m_upSpeedValue * m_jumpGradeSpeedMagnification);
                 LowJump(m_greatJumpMagnification);
-            }
+				JumpEffect(EN_EffectName::en_GoodEffect, L"se_maoudamashii_onepoint16.wav");
+ 		
+				Vec3 pos = GetComponent<Transform>()->GetPosition();
+				m_judgJumpUI->VisibleUI(L"Perfect.png", pos);
+			}
             else {
                 SpeedUp(m_upSpeedValue);
                 LowJump(1.0f);
-            }
+				JumpEffect(EN_EffectName::en_GoodEffect, L"se_maoudamashii_onepoint17.wav");
+
+				Vec3 pos = GetComponent<Transform>()->GetPosition();
+				m_judgJumpUI->VisibleUI(L"Good.png", pos);
+			}
             m_currentJumpGradeTime = 0;
             gm.AddJumpScore(m_currentSpeedScoreMagnification, m_combo * m_comboMagnification,isGreatJump);
             m_combo++;
@@ -472,7 +496,6 @@ namespace basecross {
         m_isJump = true;
         GetComponent<RigidbodyBox>()->SetAutoGravity(true);
         GetComponent<RigidbodyBox>()->SetLinearVelocity(Vec3(0, m_highJumpMoveY * jumpMag, 0));
-        ActiveSE(L"se_maoudamashii_system37.wav");
     }
 
     //ロージャンプ
@@ -480,7 +503,6 @@ namespace basecross {
         m_isJump = true;
         GetComponent<RigidbodyBox>()->SetAutoGravity(true);
         GetComponent<RigidbodyBox>()->SetLinearVelocity(Vec3(0, m_lowJumpMoveY * jumpMag, 0));
-        ActiveSE(L"se_maoudamashii_system37.wav");
     }
 
     //無敵
@@ -499,9 +521,43 @@ namespace basecross {
 
     //効果音
     void Player::ActiveSE(wstring se) {
-        auto XAPtr = App::GetApp()->GetXAudio2Manager();
-        auto SE = XAPtr->Start(se, 0, 0.5f);
+		float pitch = m_combo == 0.0f ? 1.0f : m_combo / 10.0f + 1.0f;
+        auto XAPtr = App::GetApp()->GetXAudio2Manager();	
+        auto SE = XAPtr->MyStart(se, 0, 0.5f, pitch);
     }
+
+	//エフェクトの再生
+	void Player::JumpEffect(EN_EffectName effectName, wstring seName) {
+		auto pos = GetComponent<Transform>()->GetPosition();
+		m_effectObj->PlayEffect(EN_EffectName::en_GoodEffect, EffectType::en_Jump, Vec3(pos.x, pos.y, -10.0f));
+		ActiveSE(seName);
+	}
+
+	void Player::JumpAcionEffect(EN_EffectName effectName, wstring seName, int animTime) {
+		bool JumpAcionFlag = (m_isFlightAction || m_isJumpAction);
+
+		if (JumpAcionFlag && m_currentAnimationKeyCount == 0) {
+			JumpEffect(effectName, seName);
+		}
+	};
+
+	void Player::SetUpSpecialJumpFlag() {
+		bool isSpecialTime = GameManager::GetInstance().GetIsSpecialTime();
+		if (isSpecialTime) {
+			GameManager::GetInstance().SetIsSpecialJump(true);
+		}
+	}
+
+	void Player::FollowEffect() {
+		if (m_effectObj) {
+			auto pos = GetComponent<Transform>()->GetPosition();
+			auto efkPlay = m_effectObj->GetEfkPlay(EffectType::en_Jump);
+			if (efkPlay != NULL) {
+				efkPlay->SetPosition(Vec3(pos.x, pos.y, -10.0f));
+				m_effectObj->SetEfkPlay(efkPlay, EffectType::en_Jump);
+			}
+		}
+	};
 
     //コリジョンの最初に当たった瞬間１回のみの処理
     void Player::OnCollisionEnter(shared_ptr<GameObject>& other) {
@@ -538,7 +594,8 @@ namespace basecross {
     void Player::OnCollisionExcute(shared_ptr<GameObject>& other) {
         if (other->FindTag(L"Wave")) {
             m_isWaveTouch = true;
-            if (m_managerniaruyatu) {
+			auto &gm = GameManager::GetInstance();
+            if (gm.GetIsSpecialTime()) {
                 SpecialJump();
             }
             else {

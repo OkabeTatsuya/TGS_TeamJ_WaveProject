@@ -130,8 +130,10 @@ namespace basecross{
         int m_currentSpecialJumpCount;
         //スペシャルジャンプ中フラグ
         bool m_isSpecialJump;
-        //スペシャルジャンプ起動フラグ
-        bool m_managerniaruyatu;
+
+		shared_ptr<EffectObject> m_effectObj;
+		shared_ptr<JudgJumpUI> m_judgJumpUI;
+
     private:
         //プレイヤーの角度
         Vec3 m_rot;
@@ -172,8 +174,6 @@ namespace basecross{
         void Invincible();
         //スピード依存のスコア倍率計算処理
         void SpeedScoreMagnification();
-        //SEを鳴らす処理
-        void ActiveSE(wstring se);
         //アニメーション初期化
         void InitAnimation();
         //待機アニメーション
@@ -192,6 +192,17 @@ namespace basecross{
         void FlightAction();
         //スペシャルジャンプ
         void SpecialJump();
+
+		//SEを鳴らす処理
+		void ActiveSE(wstring se);
+		//ジャンプのエフェクトとSEを再生
+		void JumpEffect(EN_EffectName effectName, wstring seName);
+		//ジャンプアクションのエフェクトとSEを再生
+		void JumpAcionEffect(EN_EffectName effectName, wstring seName, int animTime);
+		//スペシャルジャンプフラグを立てる
+		void SetUpSpecialJumpFlag();
+		//エフェクトを追従させる
+		void FollowEffect();
     };
 
 }
