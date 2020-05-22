@@ -48,10 +48,10 @@ namespace basecross {
 			m_stickDelta = 0.5f;
 			m_stickTime = 0.0f;
 			m_stageImageName = { 
-				L"cloud2.png",
-				L"Gaol_Pattern2.png",
-				L"Seagull.png",
-				L"Island.png"};
+				L"ResultBG.png",
+				L"ResultBG.png",
+				L"ResultBG.png",
+				L"ResultBG.png"};
 		}
 		virtual ~SelectStage() {}
 		//‰Šú‰»
@@ -81,6 +81,8 @@ namespace basecross {
 		void StickL();
 
 		void ChengeStegeNum();
+
+		void CreateSaveData();
 
 		//BGM‚ğÄ¶‚³‚¹‚éŠÖ”
 		void PlayBGM(wstring soundName, float vol);
