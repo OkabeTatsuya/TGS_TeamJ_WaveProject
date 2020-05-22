@@ -5,6 +5,10 @@
 
 #include "stdafx.h"
 #include "Project.h"
+#include <iostream>
+#include <fstream>
+#include <iterator>
+#include <utility>
 
 namespace basecross {
 
@@ -36,15 +40,20 @@ namespace basecross {
 			CreateViewLight();
             SetPhysicsActive(true);
 
-			GameManager::GetInstance().SetIsGameEnd(false);		
-			GameManager::GetInstance().SetIsStopSpawner(true);
-			GameManager::GetInstance().ReSetGameScore();
+			//ƒGƒtƒFƒNƒg‚ğì¬
+			m_efkInterface = ObjectFactory::Create<EfkInterface>();
+			CreateEfkEffect();
+
+			//’l‚Ì‰Šú‰»
+			GameManager::GetInstance().ResetGame();
 
             AddGameObject<Fade>();
 
+			//UIì¬
 			CreateAnimUI();
 			CreateGoalUI();
 
+			//ƒIƒuƒWƒFƒNƒg¶¬
 			CreateGenerator();
 
             m_playerObj = AddGameObject<Player>(Vec3(0, 0, 0), Vec3(1.0f, 1.0f, 1),Vec3(-4.0, -2, -6.0));
@@ -76,16 +85,22 @@ namespace basecross {
 		BGM->Stop(m_BGM);
 	}
 
+	void GameStage::OnDraw() {
+		auto& camera = GetView()->GetTargetCamera();
+		m_efkInterface->SetViewProj(camera->GetViewMatrix(), camera->GetProjMatrix());
+		m_efkInterface->OnDraw();
+	}
+
 	//ƒAƒjƒ[ƒVƒ‡ƒ“‚·‚éUI‚ğì¬
 	void GameStage::CreateAnimUI() {
 		St_AnimUI statUIState1 = {
-			//ï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½tï¿½Hï¿½[ï¿½ï¿½
+			//‰Šúƒgƒ‰ƒ“ƒXƒtƒH[ƒ€
 			Vec2(1000.0f,100.0f),Vec3(0.0f),m_textScale,
-			//ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìƒgï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½tï¿½Hï¿½[ï¿½ï¿½
+			//ƒAƒjƒ[ƒVƒ‡ƒ“Œã‚Ìƒgƒ‰ƒ“ƒXƒtƒH[ƒ€
 			Vec2(0.0f,100.0f),Vec3(0.0f),m_textScale,
-			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Aï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Jï¿½nï¿½ï¿½ï¿½ÔAï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			//¶‚©‚ç@ƒŒƒCƒ„[AƒAƒjƒ[ƒVƒ‡ƒ“ŠJnŠÔAI—¹ŠÔ
 			8.0f,0.0f,0.5f,
-			//ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½
+			//ƒAƒjƒ[ƒVƒ‡ƒ“I—¹Œã‚Ìˆ—
 			AnimType::Delete
 		};
 		St_AnimUI statUIState2 = {
@@ -93,7 +108,6 @@ namespace basecross {
 			Vec2(0.0f,-200.0f),Vec3(0.0f),m_textScale,
 			8.0f,2.0f,2.5f,AnimType::Delete
 		};
-
 		
 		vector<St_AnimUI> animUIState{
 			statUIState1,
@@ -150,6 +164,16 @@ namespace basecross {
 		AddGameObject<GoalGenerator>();
 	}
 
+	void GameStage::CreateEfkEffect() {
+		wstring dataDir;
+		App::GetApp()->GetDataDirectory(dataDir);
+
+		for (int i = 0; i < m_effectNames.EffectName.size(); i++) {
+			wstring effectStr = dataDir + L"Effect\\" + m_effectNames.EffectName[i];
+			m_efkEffect.push_back(ObjectFactory::Create<EfkEffect>(m_efkInterface, effectStr));
+		}
+	}
+
 	//‰‚ß‚Ìd’¼ŠÔ
 	void GameStage::FrastTimeCount() {
 		if (m_startTimeCount < m_maxStartTime) {
@@ -186,6 +210,7 @@ namespace basecross {
 			auto time = App::GetApp()->GetElapsedTime();
 			m_loadStageTimeCount += time;
 			m_goalUI->SetIsStartAnim(true);
+			
 		}
 
 		if (m_loadStageTimeCount > m_maxLoadStageTime) {
@@ -205,49 +230,58 @@ namespace basecross {
 		}
 	}
 
+	void GameStage::SpecialJumpController() {
+		//ƒWƒƒƒ“ƒvƒtƒ‰ƒO‚ª—§‚Á‚Ä‚¢‚½‚çƒXƒs[ƒh‚ğ‰º‚°‚é
+		auto specialJumpFlag = GameManager::GetInstance().GetIsSpecialJump();
+		if (specialJumpFlag) {
+			GameManager::GetInstance().SetGameSpeed(m_SpecialJumpSpeed);
+
+			float maxCount = 0.2f;
+			float delta = App::GetApp()->GetElapsedTime();
+			m_specialJumpTimer += delta;
+			if (m_specialJumpTimer > maxCount) {
+				m_specialJumpTimer = 0.0f;
+				GameManager::GetInstance().SetGameSpeed(m_saveGameSpeed);
+				GameManager::GetInstance().SetIsSpecialTime(false);
+				GameManager::GetInstance().SetIsSpecialJump(false);
+			}
+		}
+		else {
+			m_saveGameSpeed = GameManager::GetInstance().GetGameSpeed();
+		}
+
+	}
+
 	//ƒŠƒUƒ‹ƒgƒXƒe[ƒW‚ÉˆÚ“®
 	void GameStage::LoadResultStage() {
-		if (m_isLoadStage) {
+		if (!m_isLoadStage) {
             AddGameObject<Fade>(L"ToResulfStage");
 		}
 	}
 
 	//ƒQ[ƒ€‚ÌƒZ[ƒu
 	int GameStage::SaveGameData() {
-		int saveNum = GameManager::GetInstance().GetGameScore();
-		int num = 1;
-		int save = 9999999;
-		ofstream fout;
 
-		FILE* fp;
+		vector<int> saveScore = GameManager::GetInstance().GetSaveScore();
+		int stageNum = GameManager::GetInstance().GetSelectStageNum();
+		int score = GameManager::GetInstance().GetGameScore();
 
-		wstring mediaDir;
-		App::GetApp()->GetDataDirectory(mediaDir);
 
-		char saveFileName[] = "../media/GameData/SaveData/file.otb";
-		//ŠJ‚¯‚È‚©‚Á‚½‚ÍV‹Kì¬
-		fopen_s(&fp, saveFileName, "wb");
-
-		for (int i = 0; i < 2; i++) {
-
-			//ƒoƒCƒiƒŠ‚Ì‘‚«o‚µ
-			fwrite(&saveNum, sizeof(saveNum), 1, fp);
+		if (saveScore[stageNum] < score) {
+			saveScore[stageNum] = score;
+			GameManager::GetInstance().SetSaveScore(saveScore);
 		}
-
-		num = num * 4;
-		//ˆê•”‚¾‚¯‘‚«o‚µ‚µ‚½‚¢ê‡‚Ég‚¤
-		fseek(fp, num , SEEK_SET);
-		fwrite(&save, sizeof(save), 1, fp);
-		
-		fclose(fp);
-
 		return 0;
 	}
 
 	//ƒoƒCƒiƒŠƒf[ƒ^‚Ìƒ[ƒh
 	int GameStage::ReadGameData() {
-		char outfile[] = "file.otb";
-		int saveNum = 0;
+		wstring mediaDir;
+		App::GetApp()->GetDataDirectory(mediaDir);	
+
+		wstring outfile = mediaDir + L"GameData/SaveData/file.otb";
+		vector<int> saveNum;
+
 		ifstream fin(outfile, ios::in | ios::binary);
 
 		//“Ç‚İ‚ß‚È‚©‚Á‚½1‚ğ•Ô‚·
@@ -256,14 +290,19 @@ namespace basecross {
 			return 1;
 		}
 
+		int num = 0;
 		//ƒoƒCƒiƒŠƒf[ƒ^‚Ì’†g‚·‚×‚Ä‚ğŠm”F‚·‚é
 		while (!fin.eof()) {
 			//“Ç‚İ‚İ‚½‚¢ƒf[ƒ^‚ÌˆÊ’u‚ğw’è‚·‚éê‡‚Ég‚¤
-			//int readBinaryItr = 0;
-			//fin.seekg(readBinaryItr * sizeof(int));
+			int readBinaryItr = 4;
+			fin.seekg(readBinaryItr * sizeof(int));
+
+			saveNum.push_back(0);
 
 			//ƒoƒCƒiƒŠƒf[ƒ^‚ğ“Ç‚İ‚Ş
-			fin.read((char *)&saveNum, sizeof(int));
+			fin.read((char *) &saveNum[num], sizeof(int));
+
+			num++;
 		}
 		fin.close();
 		return 0;
