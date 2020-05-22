@@ -48,10 +48,10 @@ namespace basecross {
 			m_stickDelta = 0.5f;
 			m_stickTime = 0.0f;
 			m_stageImageName = { 
-				L"ResultBG.png",
-				L"ResultBG.png",
-				L"ResultBG.png",
-				L"ResultBG.png"};
+				L"Image1.png",
+				L"Image2.png",
+				L"Image3.png",
+				L"Image4.png"};
 		}
 		virtual ~SelectStage() {}
 		//èâä˙âª
