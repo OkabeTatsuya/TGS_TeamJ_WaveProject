@@ -49,6 +49,7 @@ namespace basecross {
 	void CopywriterStage::CreateUI() {
 		AddGameObject<Fade>();
 		m_fadeInUI = AddGameObject<Fade>(L"ToTitleStage");
+		//OnUpdateを止める
 		m_fadeInUI->SetUpdateActive(false);
 
 		//バックグラウンド
@@ -64,6 +65,7 @@ namespace basecross {
 			}
 		}
 		else {
+			//OnUpdateを動かす
 			m_fadeInUI->SetUpdateActive(true);
 		}
 	}

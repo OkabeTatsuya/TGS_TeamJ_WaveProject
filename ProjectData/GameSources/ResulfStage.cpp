@@ -90,27 +90,27 @@ namespace basecross {
 			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(700.0f, 700.0f, 1.0f), Vec2(-180.0f, -50.0f), float(2.0f), L"Junp3_34.png");//プレイヤーの画像
 
 			/*ゲームクリアorゲームオーバー*/
-			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(800.0f, 150.0f, 1.0f), Vec2(0.0f, 300.0f), float(2.0f), L"Tx_GameClear.png");
+			//AddGameObject<ImageUI>(Vec3(0.0f), Vec3(800.0f, 150.0f, 1.0f), Vec2(0.0f, 300.0f), float(2.0f), L"Tx_GameClear.png");
 
 			/*タイトルへ*/
-			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(250.0f, 100.0f, 1.0f), Vec2(300.0f, 50.0f), float(2.0f), L"Title.png");
+			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(350.0f, 200.0f, 1.0f), Vec2(-450.0f, -300.0f), float(2.0f), L"Title.png");
 
 			/*ステージセレクトへ*/
-			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(250.0f, 100.0f, 1.0f), Vec2(300.0f, -100.0f), float(2.0f), L"StageSelect.png");
+			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(350.0f, 200.0f, 1.0f), Vec2(-50.0f, -300.0f), float(2.0f), L"StageSelect.png");
 
 			/*次のステージへ*/
-			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(250.0f, 100.0f, 1.0f), Vec2(300.0f,-250.0f), float(2.0f), L"NextStage.png");
+			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(350.0f, 200.0f, 1.0f), Vec2(400.0f,-300.0f), float(2.0f), L"NextStage.png");
 
 			//スコアUIの表示
-			AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(250.0f, 100.0f, 1.0f), Vec2(300.0f, -250.f), float(2.0f), L"Score.png", 7, false);
-			GameManager::GetInstance().DrawScore();
+			//AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(50.0f, 25.0f, 1.0f), Vec2(300.0f, -250.f), float(2.0f), L"Score.png", 7, false);
+			//GameManager::GetInstance().DrawScore();
 
-			m_Pos[0] = Vec2(300.0f, 50.0f);//タイトルへ
-			m_Pos[1] = Vec2(300.0f, -100.0f);//ステージセレクト
-			m_Pos[2] = Vec2(300.0f, -250.0f);//次のステージへ
+			m_Pos[0] = Vec2(-450.0f, -300.0f);//タイトルへ
+			m_Pos[1] = Vec2(-50.0f, -300.0f);//ステージセレクト
+			m_Pos[2] = Vec2( 400.0f, -300.0f);//次のステージへ
 
 			/*点滅*/
-			m_CursorUI = AddGameObject<CursorUI>(Vec3(0.0f), Vec3(200.0f, 100.0f, 1.0f), m_Pos[m_ResultUiCount], float(3.0f), L"BGImage.png", float(2.0));
+			m_CursorUI = AddGameObject<CursorUI>(Vec3(0.0f), Vec3(200.0f, 100.0f, 1.0f), m_Pos[m_ResultUiCount], float(3.0f), L"FadeBG.png", float(2.0));
 
 
 			//サウンドの追加
@@ -156,7 +156,7 @@ namespace basecross {
 				m_Time += App::GetApp()->GetElapsedTime();
 			}
 
-			if (m_Time >= 3)//3秒後にシーン遷移
+			if (m_Time >= 0.1)//0.1秒後にシーン遷移
 			{
 				AddGameObject<Fade>(m_ResultUi[m_ResultUiCount]);
 				m_Time = 0.0f;
@@ -211,31 +211,30 @@ namespace basecross {
 
 		if (m_Timer >= 0.25)
 		{
-			if (fThumbLY <= -1.0f)//スティックが上に倒れた時
+			if (fThumbLX <= -1.0f)//スティックが左に倒れた時
 			{
 				auto SE = App::GetApp()->GetXAudio2Manager();
 				SE->Start(L"se_maoudamashii_system37.wav", 0, 0.5f);
 				m_Timer = 0;
 				m_Push = true;
 
-				m_ResultUiCount += 1;//上に1つ移動
+				m_ResultUiCount -= 1;//左に1つ移動
 
 				//ポジションを設定する
 				m_CursorUI->GetComponent<Transform>()->SetPosition(Vec3(m_Pos[m_ResultUiCount].x, m_Pos[m_ResultUiCount].y, 1.0f));
 
 			}
-			if (fThumbLY >= +1.0f)//スティックが下に倒れた時
+			if (fThumbLX >= +1.0f)//スティックが右に倒れた時
 			{
 				auto SE = App::GetApp()->GetXAudio2Manager();
 				SE->Start(L"se_maoudamashii_system37.wav", 0, 0.5f);
 				m_Timer = 0;
 				m_Push = true;
 
-				m_ResultUiCount -= 1;//下に1つ移動
+				m_ResultUiCount += 1;//右に1つ移動
 
 				//ポジションを設定する
 				m_CursorUI->GetComponent<Transform>()->SetPosition(Vec3(m_Pos[m_ResultUiCount].x, m_Pos[m_ResultUiCount].y, 1.0f));
-
 			}
 		}
 
