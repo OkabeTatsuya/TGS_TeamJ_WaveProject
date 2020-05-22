@@ -15,6 +15,8 @@
 #include "Character.h"
 #include "ScoreUI.h"
 #include "ScoreUIPanel.h"
+#include "SpecialJumpUI.h"
+#include "JudgJumpUI.h"
 #include "GameManager.h"
 #include "EffectObject.h"
 #include "Player.h"
@@ -25,12 +27,14 @@
 #include "WaveCollision.h"
 #include "MoveBG.h"
 #include "GoalObject.h"
+#include "ScoreUpItem.h"
 
 #include "SpawnerBase.h"
 #include "WaveSpawner.h"
 #include "BGGenerator.h"
 #include "GoalGenerator.h"
 #include "RandomGenerator.h"
+#include "ItemGenerator.h"
 
 #include "AnimationUI.h"
 #include "ImageUI.h"
@@ -39,6 +43,7 @@
 
 #include "CursorUI.h"
 
+#include "CopywriterStage.h"
 #include"TitleStage.h"
 #include"ResulfStage.h"
 #include "SelectStage.h"
