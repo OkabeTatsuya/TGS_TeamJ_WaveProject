@@ -39,12 +39,14 @@ namespace basecross {
 
             AddGameObject<Fade>();
 	
-			LoadBinaryData();
-
 			CreateBinaryData();
 			//ƒTƒEƒ“ƒh‚Ì’Ç‰Á
 			//PlayBGM(L"SampleBGM.wav", 0.5f);
 
+			//LoadBinaryData();
+
+			//ï¿½Tï¿½Eï¿½ï¿½ï¿½hï¿½Ì’Ç‰ï¿½
+			PlayBGM(L"bgm_maoudamashii_acoustic13.wav", 0.5f);
 		}
 		catch (...) {
 

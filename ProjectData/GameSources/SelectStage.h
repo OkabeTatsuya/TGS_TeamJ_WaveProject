@@ -22,6 +22,7 @@ namespace basecross {
 		bool m_isChengeStage;
 
 		int m_stageNum;
+		int m_loadCount;
 
 		float m_stickDelta;
 		float m_stickTime;
@@ -42,11 +43,15 @@ namespace basecross {
 		SelectStage() :Stage() {
 			m_stageName = L"ToGameStage";
 			m_stageNum = 0;
+			m_loadCount = 0;
 
 			m_stickDelta = 0.5f;
 			m_stickTime = 0.0f;
-			m_stageImageName = { L"cloud2.png",
-				L"Gaol_Pattern2.png", L"Seagull.png", L"Island.png"};
+			m_stageImageName = { 
+				L"cloud2.png",
+				L"Gaol_Pattern2.png",
+				L"Seagull.png",
+				L"Island.png"};
 		}
 		virtual ~SelectStage() {}
 		//èâä˙âª
@@ -70,6 +75,8 @@ namespace basecross {
 		void CreateUI();
 
 		void PushA();
+
+		void PushB();
 
 		void StickL();
 
