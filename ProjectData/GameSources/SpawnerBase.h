@@ -27,10 +27,10 @@ namespace basecross {
 		};
 
 		vector<wstring> itemStr{
-			L"Stage1Item",
-			L"Stage2Item"
-			L"Stage3Item"
-			L"Stage4Item"
+			L"ItemData1",
+			L"ItemData2",
+			L"ItemData3",
+			L"ItemData4",
 		};
 
 	};
