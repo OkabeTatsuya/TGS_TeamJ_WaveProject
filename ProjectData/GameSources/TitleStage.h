@@ -8,12 +8,13 @@ namespace basecross {
 		void PushHandle(const shared_ptr<T>& Obj) {
 			auto cutlVec = App::GetApp()->GetInputDevice().GetControlerVec();
 			if (cntlVec[0].bconnected) {
+
 			}
 		}
 	};
 
 	//--------------------------------------------------------------------------------------
-	//	ゲームステージクラス
+	//	タイトルステージクラス
 	//--------------------------------------------------------------------------------------
 
 	class TitleStage : public Stage {
