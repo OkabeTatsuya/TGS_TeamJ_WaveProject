@@ -4,7 +4,7 @@
 namespace basecross {
 
 	//--------------------------------------------------------------------------------------
-	//	ゲームステージクラス実体
+	//	タイトルステージクラス実体
 	//--------------------------------------------------------------------------------------
 
 	void TitleStage::CreateViewLight() {
@@ -69,7 +69,7 @@ namespace basecross {
 	void TitleStage::OnUpdate(){
 		auto CutlVec = App::GetApp()->GetInputDevice().GetControlerVec();
 		if (CutlVec[0].bConnected) {
-			//Aボタンを押して、3秒経ったらシーン移動
+			//Aボタンを押したらシーン移動
 			if (CutlVec[0].wPressedButtons & XINPUT_GAMEPAD_A) {
 				if (!m_isPushA) {
 					//SE再生と音量調整
@@ -86,7 +86,7 @@ namespace basecross {
 			m_time += App::GetApp()->GetElapsedTime();
 		}
 
-		//シーン移動
+		//Aボタンを押して、3秒経ったらシーン移動
 		if (m_time >= 3) {
 			AddGameObject<Fade>(L"ToSelectStage");
 		}

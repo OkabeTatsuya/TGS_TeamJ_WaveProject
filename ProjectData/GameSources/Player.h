@@ -104,8 +104,14 @@ namespace basecross{
         bool m_isFinishJumpFinishAnimation;
         //ジャンプアクションアニメーション（Z軸）移行フラグ
         bool m_isJumpActionZAnimation;
+        //ジャンプアクションアニメーション（X軸）移行フラグ
+        bool m_isJumpActionXAnimation;
         //待機アニメーションのkey
         wstring m_waitingAnimationKeys[m_waitingAnimationKeyCount];
+        //ジャンプアクションX軸アニメーションのコマ数
+        static const int m_jumpActionAnimationXKeyCount = 8;
+        //ジャンプアクションX軸アニメーションのkey
+        wstring m_jumpActionAnimationXKeys[m_jumpActionAnimationXKeyCount];
         //ジャンプアクションZ軸アニメーションのコマ数
         static const int m_jumpActionAnimationZKeyCount = 1;
         //ジャンプアクションZ軸アニメーションのkey
@@ -177,8 +183,6 @@ namespace basecross{
         //着地アニメーション
         void JumpFinishAnimation();
         //滞空アニメーション
-        void FlightAnimation();
-        //ジャンプアクションアニメーション（X軸）
         void JumpActionXAnimation();
         //ジャンプアクションアニメーション(Y軸)
         void JumpActionYAnimation();
