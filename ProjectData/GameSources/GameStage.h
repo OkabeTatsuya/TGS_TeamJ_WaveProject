@@ -15,6 +15,19 @@ namespace basecross {
 		const unsigned int item = (1 << 1);
 	};
 
+	struct EffectNames 
+	{
+		vector<wstring> EffectName{
+			L"Good2.efk",
+			L"MoveOn.efk"
+		};
+	};
+
+	enum EN_EffectName {
+		en_GoodEffect,
+		en_PerfectEffect,
+		en_MoveEffect
+	};
 
 	//--------------------------------------------------------------------------------------
 	//	ゲームステージクラス
@@ -24,20 +37,37 @@ namespace basecross {
 		void CreateViewLight();
 
 		Bit_SpawnFlag m_spawnBitFlag;
+		EffectNames m_effectNames;
 
 		//BGMの再生
 		shared_ptr<SoundItem> m_BGM;
 		shared_ptr<SoundItem> m_SE;
 
+		//アニメーションUI
 		vector<shared_ptr<AnimationUI>> m_startUI;
 		shared_ptr<AnimationUI> m_goalUI;
 		
+		//エフェクトインターフェイス
+		shared_ptr<EfkInterface> m_efkInterface;
+		vector<shared_ptr<EfkEffect>> m_efkEffect;
+
+		vector<shared_ptr<EfkPlay>> m_efkPlay;
+
+		shared_ptr<GameObject> m_playerObj;
+
 		vector<int> m_gameClearScore;
 
-		Vec3 m_textScale;
+		Vec3 m_textScale;	
 
 		//ゲームを停止させるフラグ
 		bool m_isPause;
+
+		//スペシャルジャンプ時のゲームスピード減少処理で使用
+		float m_saveGameSpeed;
+		float m_SpecialJumpSpeed;
+		float m_specialJumpTimer;
+		int m_specialJumpCount;
+		int m_maxSpecialJumpCount;
 
 		//ゲームを始める前の硬直時間
 		float m_startTimeCount;
@@ -58,7 +88,7 @@ namespace basecross {
 		//構築と破棄
 		GameStage() :Stage()
 		{
-			m_textScale = Vec3(400.0f, 200.0f, 1.0f);
+			m_textScale = Vec3(512.0f, 256.0f, 1.0f);
 
 			m_isPause = false;
 			m_startTimeCount = 0.0f;
@@ -68,6 +98,10 @@ namespace basecross {
 			m_startTimeCount = 0.0f;
 			m_maxStartTime = 3.0f;
 
+			m_SpecialJumpSpeed = 1.0f;
+			m_specialJumpTimer = 0.0f;
+			m_specialJumpCount = 0;
+			m_maxSpecialJumpCount = 3;
 
 			m_maxLoadStageTime = 3.0f;
 
@@ -86,24 +120,48 @@ namespace basecross {
 		//消除時
 		virtual void OnDestroy()override;
 
-		//ゲッター、セッター
+		//エフェクト、テキスト描画
+		virtual void OnDraw()override;
 
+		//ゲッター、セッター
+		shared_ptr<EfkInterface> GetEfkInterface()const { return m_efkInterface; }
+
+		vector<shared_ptr<EfkEffect>> GetEfkEffect()const { return m_efkEffect; }
+
+		vector<shared_ptr<EfkPlay>> GetEfkPlay()const { return m_efkPlay; }
+
+		void SetEfkPlay(vector<shared_ptr<EfkPlay>> set, int efkNum) { m_efkPlay = set; }
+
+		//アニメーションUIを作成
 		void CreateAnimUI();
 
+		//ゴール時のUIを作成
 		void CreateGoalUI();
 
+		//オブジェクトを生成するジェネレーターを作成
 		void CreateGenerator();
 
+		//エフェクトを作成
+		void CreateEfkEffect();
+
+		//リザルトステージに移動
 		void LoadResultStage();
 
+		//ゲームデータを保存
 		int SaveGameData();
 
+		//ゲームデータの読み込み
 		int ReadGameData();
 
+		//最初のゲーム停止時のカウント
 		void FrastTimeCount();
 
+		//ゲームクリア時の処理
 		void GameClear();
 		
+		//スペシャルジャンプに入った時
+		void SpecialJumpController();
+
 		//ビットフラグを上げる
 		void TrueSpawnFlag(unsigned int bit_flag);
 

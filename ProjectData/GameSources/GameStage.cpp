@@ -157,18 +157,20 @@ namespace basecross {
 	}
 
 	void GameStage::GameClear() {
-		bool isGameEnd = GameManager::GetInstance().GetIsGameEnd();
+		auto &gameManager = GameManager::GetInstance();
+		bool isGameEnd = gameManager.GetIsGameEnd();
 
 		if (isGameEnd && m_loadStageTimeCount == 0) {
-			int stageNum = GameManager::GetInstance().GetSelectStageNum();
+			int stageNum = gameManager.GetSelectStageNum();
+			int gameScore = gameManager.GetGameScore();
 
-			if (m_gameClearScore[stageNum] < stageNum) {
-				GameManager::GetInstance().SetIsGameClear(true);
+			if (gameManager.GetGameClearScore(stageNum) < gameScore) {
+				gameManager.SetIsGameClear(true);
 				auto AudioManager = App::GetApp()->GetXAudio2Manager();
 				m_SE = AudioManager->Start(L"se_GameClear.wav", 0, 0.9f);
 			}
 			else {
-				GameManager::GetInstance().SetIsGameClear(false);
+				gameManager.SetIsGameClear(false);
 				auto AudioManager = App::GetApp()->GetXAudio2Manager();
 				m_SE = AudioManager->Start(L"se_GameOver.wav", 0, 0.9f);
 			}
@@ -181,9 +183,19 @@ namespace basecross {
 		}
 
 		if (m_loadStageTimeCount > m_maxLoadStageTime) {
-			//SaveGameData();
-			m_isLoadStage = true;
+			int gameScore = GameManager::GetInstance().GetGameScore();
+
+			auto maxStageNum = gameManager.GetSaveScore().size();
+			auto unlockStageNum = gameManager.GetClearStageNum() + 1;
+
+			if (gameManager.GetIsGameClear() && unlockStageNum < maxStageNum) {
+				gameManager.SetClearStageNum(unlockStageNum);
+			}
+
+			SaveGameData();
 			LoadResultStage();
+			m_isLoadStage = true;
+			m_loadStageTimeCount = 0;
 		}
 	}
 
