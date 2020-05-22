@@ -66,6 +66,7 @@ namespace basecross {
         m_currentSpecialJumpCount = 0;
         m_specialJumpCount = 3;
         m_managerniaruyatu = true;
+        m_specialJumpActionMaxCount = 2;
     }
 
     void Player::OnCreate() {
@@ -117,16 +118,22 @@ namespace basecross {
             number = to_wstring(i + 1);
             m_jumpActionAnimationXKeys[i] = jumpX + number + png;
         }
+        for (int i = 0; i < m_jumpActionAnimationYKeyCount; i++) {
+            number = to_wstring(i + 1);
+            m_jumpActionAnimationYKeys[i] = jumpY + number + png;
+        }
     }
 
 
     void Player::OnUpdate() {
         WaitingAnimation();
-        JumpActionZAnimation();
         JumpActionXAnimation();
+        JumpActionYAnimation();
+        JumpActionZAnimation();
         JumpStartAnimation();
         JumpFinishAnimation();
         JudgeJumpAction();
+        SpecialJumpAction();
         FlightAction();
         Invincible();
         SpeedScoreMagnification();
@@ -147,6 +154,9 @@ namespace basecross {
                 if (m_currentAnimationKeyCount >= m_jumpActionAnimationXKeyCount) {
                     m_currentAnimationKeyCount = 0;
                     m_isJumpActionXAnimation = false;
+                    if (m_isSpecialJumpAction) {
+                        m_currentSpecialJumpActionCount++;
+                    }
                 }
                 m_currentAnimationTime = 0;
             }
@@ -155,6 +165,22 @@ namespace basecross {
 
     //ジャンプアクションアニメーション（Y軸）
     void Player::JumpActionYAnimation() {
+        if (m_isJumpActionYAnimation) {
+            m_currentAnimationTime += App::GetApp()->GetElapsedTime();
+            if (m_currentAnimationTime >= m_maxAnimationTime) {
+                DrawingImage(m_jumpActionAnimationYKeys[m_currentAnimationKeyCount]);
+                m_currentAnimationKeyCount++;
+                if (m_currentAnimationKeyCount >= m_jumpActionAnimationYKeyCount) {
+                    m_isJumpActionYAnimation = false;
+                    m_currentAnimationKeyCount = 0;
+                    if (m_isSpecialJumpAction) {
+                        m_currentSpecialJumpActionCount++;
+                    }
+                }
+                m_currentAnimationTime = 0;
+            }
+        }
+
     }
     //ジャンプアクションアニメーション（Z軸）
     void Player::JumpActionZAnimation() {
@@ -217,14 +243,15 @@ namespace basecross {
                 m_isJumpFinishAnimation = false;
                 m_isWaitingAnimation = true;
                 m_isJumpActionXAnimation = false;
+                m_isJumpActionYAnimation = false;
                 m_isJumpActionZAnimation = false;
                 m_currentAnimationKeyCount = 0;
             }
-            if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
-                DrawingImage(m_jumpFinishAnimationKeys[m_currentAnimationKeyCount]);
-                m_currentAnimationKeyCount++;
-                m_currentAnimationTime = 0;
-            }
+if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
+    DrawingImage(m_jumpFinishAnimationKeys[m_currentAnimationKeyCount]);
+    m_currentAnimationKeyCount++;
+    m_currentAnimationTime = 0;
+}
         }
     }
     //スピード依存のスコア倍率計算処理
@@ -294,7 +321,6 @@ namespace basecross {
         if (m_jumpGradeTime * m_jumpGradeTimeJudge <= m_currentJumpGradeTime) {
             m_currentSpecialJumpCount++;
             if (m_currentSpecialJumpCount > m_specialJumpCount) {
-                m_isSpecialJump = false;
                 m_managerniaruyatu = false;
                 m_currentSpecialJumpCount = 0;
             }
@@ -303,6 +329,7 @@ namespace basecross {
                 m_isJumpFinishAnimation = false;
                 m_isWaitingAnimation = false;
                 m_isJumpActionXAnimation = false;
+                m_isJumpActionYAnimation = false;
                 m_isJumpActionZAnimation = false;
                 m_currentAnimationKeyCount = 0;
                 SpeedUp(m_upSpeedValue * m_jumpGradeSpeedMagnification);
@@ -310,11 +337,29 @@ namespace basecross {
                 gm.AddJumpScore(m_currentSpeedScoreMagnification, m_combo*m_comboMagnification, false);
                 m_currentJumpGradeTime = 0;
                 m_combo++;
-                m_isJumpAction = true;
-                m_isSpecialJump = true;
+                m_isSpecialJumpAction = true;
             }
         }
 
+    }
+
+    //スペシャルジャンプアクション
+    void Player::SpecialJumpAction() {
+        if (m_isSpecialJumpAction&&m_currentSpecialJumpActionCount<m_specialJumpActionMaxCount) {
+            switch (0) {
+            case 0:
+                m_isJumpAction = true;
+                break;
+            case 1:
+                m_isFlightAction = true;
+                break;
+            case 2:
+                m_isJumpActionYAnimation = true;
+                break;
+            default:
+                break;
+            }
+        }
     }
 
     //ジャンプアクションの入力判定
@@ -344,7 +389,6 @@ namespace basecross {
             m_isRightJumpAction = false;
             m_currentJumpActionTime = 0;
         }
-
         if (m_isTopJumpAction && m_isBottomJumpAction && m_isLeftJumpAction && m_isRightJumpAction && !m_isJumpAction) {
             m_isTopJumpAction = false;
             m_isBottomJumpAction = false;
@@ -352,6 +396,16 @@ namespace basecross {
             m_isRightJumpAction = false;
             m_isJumpAction = true;
             m_currentAnimationKeyCount = 0;
+        }
+        if (m_isLeftJumpAction&&m_isRightJumpAction && !m_isTopJumpAction && !m_isBottomJumpAction) {
+            m_isLeftJumpAction = false;
+            m_isRightJumpAction = false;
+            m_isJumpStartAnimation = false;
+            m_isJumpFinishAnimation = false;
+            m_isWaitingAnimation = false;
+            m_isJumpActionXAnimation = false;
+            m_isJumpActionYAnimation = true;
+            m_isJumpActionZAnimation = false;
         }
     }
 
@@ -367,6 +421,7 @@ namespace basecross {
             m_isJumpFinishAnimation = false;
             m_isWaitingAnimation = false;
             m_isJumpActionXAnimation = true;
+            m_isJumpActionYAnimation = false;
             m_isJumpActionZAnimation = false;
             m_currentFlightTime += App::GetApp()->GetElapsedTime();
             GetComponent<RigidbodyBox>()->SetLinearVelocity(Vec3(0.0f,-0.2f,0.0f));
@@ -375,19 +430,19 @@ namespace basecross {
                 m_isEnableFlightAction = false;
                 m_currentFlightTime = 0.0f;
                 GetComponent<RigidbodyBox>()->SetAutoGravity(true);
-
             }
         }
     }
 
     //ジャンプアクション処理
     void Player::JumpAction() {
-        if (m_isSpecialJump) {
-            if (m_isJumpAction && (m_isSpecialJump && GetComponent<RigidbodyBox>()->GetLinearVelocity().y <= 0)) {
+        if (m_isSpecialJumpAction) {
+            if (m_isJumpAction && GetComponent<RigidbodyBox>()->GetLinearVelocity().y <= 0) {
                 m_isJumpStartAnimation = false;
                 m_isJumpFinishAnimation = false;
                 m_isWaitingAnimation = false;
                 m_isJumpActionXAnimation = false;
+                m_isJumpActionYAnimation = false;
                 m_isJumpActionZAnimation = true;
                 m_rot.z += XM_2PI * App::GetApp()->GetElapsedTime() / m_jumpActionTime;
                 GetComponent<Transform>()->SetRotation(m_rot);
@@ -396,6 +451,7 @@ namespace basecross {
                     m_isJumpAction = false;
                     m_isInvincible = false;
                     GameManager::GetInstance().AddActionScore(m_currentSpeedScoreMagnification, m_combo * m_comboMagnification);
+                    m_currentSpecialJumpActionCount++;
                 }
             }
         }
@@ -405,7 +461,9 @@ namespace basecross {
                 m_isJumpFinishAnimation = false;
                 m_isWaitingAnimation = false;
                 m_isJumpActionXAnimation = false;
-                m_isJumpActionZAnimation = true;                m_rot.z += XM_2PI * App::GetApp()->GetElapsedTime() / m_jumpActionTime;
+                m_isJumpActionYAnimation = false;
+                m_isJumpActionZAnimation = true;   
+                m_rot.z += XM_2PI * App::GetApp()->GetElapsedTime() / m_jumpActionTime;
                 GetComponent<Transform>()->SetRotation(m_rot);
                 if (m_rot.z >= XM_2PI) {
                     m_rot.z = 0;
@@ -431,6 +489,7 @@ namespace basecross {
             m_isJumpFinishAnimation = false;
             m_isWaitingAnimation = false;
             m_isJumpActionXAnimation = false;
+            m_isJumpActionYAnimation = false;
             m_isJumpActionZAnimation = false;
             m_currentAnimationKeyCount = 0;
             if (isGreatJump) {
@@ -450,6 +509,7 @@ namespace basecross {
             m_isJumpFinishAnimation = false;
             m_isWaitingAnimation = false;
             m_isJumpActionXAnimation = false;
+            m_isJumpActionYAnimation = false;
             m_isJumpActionZAnimation = false;
             m_currentAnimationKeyCount = 0;
             if (isGreatJump) {
@@ -506,6 +566,10 @@ namespace basecross {
     //コリジョンの最初に当たった瞬間１回のみの処理
     void Player::OnCollisionEnter(shared_ptr<GameObject>& other) {
         if (other->FindTag(L"Sea")) {
+            if (m_isSpecialJumpAction) {
+                m_isSpecialJumpAction = false;
+                m_currentSpecialJumpActionCount = 0;
+            }
             m_currentAnimationKeyCount = 0;
             m_isEnableFlightAction = true;
             m_isJump=false;
@@ -515,6 +579,7 @@ namespace basecross {
                 m_isJumpFinishAnimation = true;
                 m_isWaitingAnimation = false;
                 m_isJumpActionXAnimation = false;
+                m_isJumpActionYAnimation = false;
                 m_isJumpActionZAnimation = false;
             }
             if (m_rot.z!=0) {

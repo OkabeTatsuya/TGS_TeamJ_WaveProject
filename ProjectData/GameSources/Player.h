@@ -102,16 +102,22 @@ namespace basecross{
         bool m_isJumpFinishAnimation;
         //着地アニメーション完了フラグ
         bool m_isFinishJumpFinishAnimation;
-        //ジャンプアクションアニメーション（Z軸）移行フラグ
-        bool m_isJumpActionZAnimation;
         //ジャンプアクションアニメーション（X軸）移行フラグ
         bool m_isJumpActionXAnimation;
+        //ジャンプアクションアニメーション（Y軸）移行フラグ
+        bool m_isJumpActionYAnimation;
+        //ジャンプアクションアニメーション（Z軸）移行フラグ
+        bool m_isJumpActionZAnimation;
         //待機アニメーションのkey
         wstring m_waitingAnimationKeys[m_waitingAnimationKeyCount];
         //ジャンプアクションX軸アニメーションのコマ数
         static const int m_jumpActionAnimationXKeyCount = 8;
         //ジャンプアクションX軸アニメーションのkey
         wstring m_jumpActionAnimationXKeys[m_jumpActionAnimationXKeyCount];
+        //ジャンプアクションY軸アニメーションのコマ数
+        static const int m_jumpActionAnimationYKeyCount = 5;
+        //ジャンプアクションY軸アニメーションのkey
+        wstring m_jumpActionAnimationYKeys[m_jumpActionAnimationYKeyCount];
         //ジャンプアクションZ軸アニメーションのコマ数
         static const int m_jumpActionAnimationZKeyCount = 1;
         //ジャンプアクションZ軸アニメーションのkey
@@ -128,10 +134,16 @@ namespace basecross{
         int m_specialJumpCount;
         //現在のスペシャルジャンプの回数
         int m_currentSpecialJumpCount;
-        //スペシャルジャンプ中フラグ
-        bool m_isSpecialJump;
         //スペシャルジャンプ起動フラグ
         bool m_managerniaruyatu;
+        //スペシャルジャンプアクションフラグ
+        bool m_isSpecialJumpAction;
+        //スペシャルジャンプアクション回数
+        int m_specialJumpActionMaxCount;
+        //現在のスペシャルジャンプアクション回数
+        int m_currentSpecialJumpActionCount;
+        //前フレームのスペシャルジャンプの回数
+        int m_beforeSpecialJumpActionCount;
     private:
         //プレイヤーの角度
         Vec3 m_rot;
@@ -158,6 +170,8 @@ namespace basecross{
         void LowJump(float jumpMag);
         //ジャンプアクション
         void JumpAction();
+        //ジャンプアクションY
+        void JumpActionY();
         //ジャンプアクションの入力判定
         void JudgeJumpAction();
         //スピードの上限下限処理
@@ -192,6 +206,8 @@ namespace basecross{
         void FlightAction();
         //スペシャルジャンプ
         void SpecialJump();
+        //スペシャルジャンプアクション
+        void SpecialJumpAction();
     };
 
 }
