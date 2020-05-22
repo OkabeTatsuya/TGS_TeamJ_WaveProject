@@ -74,7 +74,7 @@ namespace basecross {
 				if (!m_isPushA) {
 					//SE再生と音量調整
 					auto XAPtr = App::GetApp()->GetXAudio2Manager();
-					m_SE = XAPtr->Start(L"se_maoudamashii_system37.wav", 0, 0.5f);
+					m_SE = XAPtr->Start(L"se_maoudamashii_system37.wav", 0, 0.3f);
 					//Aボタンを押したときの処理
 					m_isPushA = true;
 				}
@@ -86,8 +86,8 @@ namespace basecross {
 			m_time += App::GetApp()->GetElapsedTime();
 		}
 
-		//Aボタンを押して、3秒経ったらシーン移動
-		if (m_time >= 3) {
+		//Aボタンを押して、2秒経ったらシーン移動
+		if (m_time >= 2) {
 			AddGameObject<Fade>(L"ToSelectStage");
 		}
 	}
