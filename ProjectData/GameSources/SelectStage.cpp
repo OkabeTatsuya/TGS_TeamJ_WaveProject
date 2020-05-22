@@ -223,16 +223,17 @@ namespace basecross {
 
 
 	void SelectStage::CreateUI() {
-		AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1300.0f, 800.0f, 1.0f), Vec2(0.0f, 0.0f), float(1.0f), L"FadeBG.png");
+		//ÔøΩwÔøΩi
+		AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1300.0f, 800.0f, 1.0f), Vec2(0.0f, 0.0f), float(1.0f), L"ResultBG.png");
+		//AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1300.0f, 800.0f, 1.0f), Vec2(0.0f, 0.0f), float(2.0f), L"FadeBG.png");
 
-		AddGameObject<ImageUI>(Vec3(0.0f), Vec3(256.0f, 64.0f, 1.0f), Vec2(0.0f, -300.0f), float(2.0f), L"Tx_Stage1.png");
+		AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(60.0f, 60.0f, 1.0f), Vec2(300.0f, -300.0f), float(5.0f), L"", 7, false);
+		GameManager::GetInstance().DrawClearScore(m_stageNum);
 
-		AddGameObject<ImageUI>(Vec3(0.0f), Vec3(128.0f, 128.0f, 1.0f), Vec2(550.0f, 0.0f), float(2.0f), L"RightArrow.png");
-		AddGameObject<ImageUI>(Vec3(0.0f), Vec3(128.0f, 128.0f, 1.0f), Vec2(-550.0f, 0.0f), float(2.0f), L"LeftArrow.png");
+		AddGameObject<FlashingUI>(Vec3(0.0f), Vec3(128.0f, 128.0f, 1.0f), Vec2(550.0f, -50.0f), float(4.0f), L"RightArrow.png", 3.0f);
+		AddGameObject<FlashingUI>(Vec3(0.0f), Vec3(128.0f, 128.0f, 1.0f), Vec2(-550.0f, -50.0f), float(4.0f), L"LeftArrow.png", 3.0f);
 
-		AddGameObject<ImageUI>(Vec3(0.0f), Vec3(512.0f, 128.0f, 1.0f), Vec2(0.0f, 300.0f), float(2.0f), L"TxStageSelect.png");
-
-
+		AddGameObject<ImageUI>(Vec3(0.0f), Vec3(512.0f, 256.0f, 1.0f), Vec2(0.0f, 300.0f), float(4.0f), L"StageSelect.png");
 		
 		//ÉXÉeÅ[ÉWÇÃÉCÉÅÅ[ÉWâÊëúÇéÊìæ
 		m_stageImageUI = AddGameObject<ImageUI>(Vec3(0.0f), Vec3(300.0f, 300.0f, 1.0f), Vec2(0.0f, 0.0f), float(2.0f), m_stageImageName[m_stageNum]);
