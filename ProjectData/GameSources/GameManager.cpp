@@ -16,10 +16,13 @@ namespace basecross {
         if (isGreat) {
             float greatJumpMagnification = 2.0f;
 			addScore = (int)(m_baseJumpScore * magnification * comboMagnification * greatJumpMagnification);
-        }
-        else
+			AddJumpJudgeCount(JudgeName::en_Perfect);
+		}
+		else {
 			addScore = (int)(m_baseJumpScore * magnification * comboMagnification);
- 
+			AddJumpJudgeCount(JudgeName::en_Good);
+		}
+
 		m_gameScore += addScore;
 		m_scoreUpUIPanel->ScoreDraw(addScore);
         m_scoreUIPanel->ScoreDraw(m_gameScore);
@@ -28,13 +31,31 @@ namespace basecross {
 		SpecialCheck();
 	}
 
-	void GameManager::AddActionScore(float magnification, float comboMagnification) {
+	void GameManager::AddActionScore(float magnification, float comboMagnification, JumpActionType jumpActionType) {
         comboMagnification += 1;
-		m_gameScore += (int)(m_baseActionScore * magnification * comboMagnification);
-        m_scoreUpUIPanel->ScoreDraw(m_baseJumpScore * magnification * comboMagnification);
+
+		int addScore = (int)(m_baseActionScore[0] * magnification * comboMagnification);
+
+		switch (jumpActionType)
+		{
+		case JumpActionType::en_ActionX:
+			addScore = (int)(m_baseActionScore[0] * magnification * comboMagnification);
+			break;
+		case JumpActionType::en_ActionY:
+			addScore = (int)(m_baseActionScore[1] * magnification * comboMagnification);
+			break;
+		case JumpActionType::en_ActionZ:
+			addScore = (int)(m_baseActionScore[2] * magnification * comboMagnification);
+			break;
+		default:
+			break;
+		}
+
+		m_gameScore += addScore;
+        m_scoreUpUIPanel->ScoreDraw(addScore);
         m_scoreUIPanel->ScoreDraw(m_gameScore);
 
-		m_specialCount += (int)(m_baseActionScore * magnification * comboMagnification);
+		m_specialCount += addScore;
 		SpecialCheck();
 	}
 
@@ -50,6 +71,28 @@ namespace basecross {
 
 	void GameManager::DrawClearScore(int stageNum) {
 		m_scoreUIPanel->ScoreDraw(m_gameClearScore[stageNum]);
+	}
+
+	void GameManager::DrawJudgeCount(JudgeName judge) {
+		switch (judge)
+		{
+		case basecross::en_Perfect:
+			m_scoreUIPanel->ScoreDraw(m_perfectJumpCount);
+			break;
+		case basecross::en_Good:
+			m_scoreUIPanel->ScoreDraw(m_goodJumpCount);
+			break;
+		default:
+			break;
+		}
+	}
+
+	void GameManager::DrawStageNum() {
+		m_scoreUIPanel->ScoreDraw(m_selectStageNum + 1);
+	}
+
+	void GameManager::DrawNum(int num) {
+		m_scoreUIPanel->ScoreDraw(num);
 	}
 
 	void GameManager::SpecialCheck() {

@@ -19,6 +19,12 @@ namespace basecross {
 		en_Good
 	};
 
+	enum JumpActionType {
+		en_ActionX,
+		en_ActionY,
+		en_ActionZ
+	};
+
 	class GameManager final {
 	private:
 		GameManager() {
@@ -26,13 +32,16 @@ namespace basecross {
 			m_gameClearScore = { 6000,7000,9000,10000 };
 
 			m_baseJumpScore = 100;
-			m_baseActionScore = 200;
+			m_baseActionScore = { 100, 150, 250 };
 			m_itemScore = 100;
 
 			m_selectStageNum = 0;
 			m_clearStageNum = 0;
 
-			m_maxSpecialCount = 1000;
+			m_perfectJumpCount = 0;
+			m_goodJumpCount = 0;
+
+			m_maxSpecialCount = 2000;
 
 			m_isFirstStop = true;
 			m_isStopSpawner = false;
@@ -55,7 +64,7 @@ namespace basecross {
 
 		//スコア加算の基準になる
 		int m_baseJumpScore;
-		int m_baseActionScore;
+		vector<int> m_baseActionScore;
 		int m_itemScore;
 
 		float m_gameSpeed;
@@ -130,7 +139,7 @@ namespace basecross {
 
 		//ジャンプアクションのスコア加算処理
 		///magnification 倍率、　combo 続けてアクションした回数
-		void AddActionScore(float magnification, float comboMagnification);
+		void AddActionScore(float magnification, float comboMagnification, JumpActionType jumpActionType);
 
 		void AddItemScore();
 
@@ -139,6 +148,12 @@ namespace basecross {
 
 		//目標スコアを写す
 		void DrawClearScore(int stageNum);
+
+		void DrawJudgeCount(JudgeName judge);
+
+		void DrawStageNum();
+
+		void DrawNum(int num);
 
 		//スペシャルジャンプ状態になったか確かめる
 		void SpecialCheck();
