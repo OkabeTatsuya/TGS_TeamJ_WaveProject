@@ -59,7 +59,7 @@ namespace basecross {
             m_playerObj = AddGameObject<Player>(Vec3(0, 0, 0), Vec3(1.0f, 1.0f, 1),Vec3(-4.0, -2, -6.0));
             AddGameObject<SeaCollision>(Vec3(0, 0, 0), Vec3(1, 0.5, 1), Vec3(-4, -4.0, -6.0));
 
-            AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(55.0f, 55.0f, 1.0f), Vec2(600.0f, 350.f), float(5.0f),L"",7,false);
+            AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(55.0f, 55.0f, 1.0f), Vec2(600.0f, 350.f), float(5.0f),L"Number.png",7,false);
 			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(256.0f, 64.0f, 1.0f), Vec2(100.0f, 350.f), float(5.0f), L"Score.png");
 
 			auto BGM = App::GetApp()->GetXAudio2Manager();
@@ -77,6 +77,7 @@ namespace basecross {
 		auto BGM = App::GetApp()->GetXAudio2Manager();
 		BGM->MyFadeIn(m_BGM, 0.5f, 2.0f);
 		SpecialJumpController();
+		Hundler();
 	}
 
 	void GameStage::OnDestroy() {
@@ -171,6 +172,20 @@ namespace basecross {
 		for (int i = 0; i < m_effectNames.EffectName.size(); i++) {
 			wstring effectStr = dataDir + L"Effect\\" + m_effectNames.EffectName[i];
 			m_efkEffect.push_back(ObjectFactory::Create<EfkEffect>(m_efkInterface, effectStr));
+		}
+	}
+
+	void GameStage::Hundler() {
+		//コントローラーの取得
+		auto cntVec = App::GetApp()->GetInputDevice().GetControlerVec();
+		if (cntVec[0].bConnected)
+		{
+			m_isReset = cntVec[0].wPressedButtons & XINPUT_GAMEPAD_LEFT_THUMB &&
+				cntVec[0].wPressedButtons & XINPUT_GAMEPAD_RIGHT_THUMB;
+			if (m_isReset)
+			{
+				PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToTitleStage");
+			}
 		}
 	}
 

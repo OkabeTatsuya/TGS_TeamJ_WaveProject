@@ -83,6 +83,7 @@ namespace basecross {
 
 		//スポナーの生成終了フラグ
 		unsigned int m_spawnFlag;
+		bool m_isReset;
 
 	public:
 		//構築と破棄
@@ -143,6 +144,8 @@ namespace basecross {
 
 		//エフェクトを作成
 		void CreateEfkEffect();
+
+		void Hundler();
 
 		//リザルトステージに移動
 		void LoadResultStage();
