@@ -81,36 +81,62 @@ namespace basecross {
 			AddGameObject<Fade>();
 
 			///*BG(バックグラウンド)*/
-			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1300.0f, 800.0f, 1.0f), Vec2(0.0f, 0.0f), float(2.0f), L"Sky.png");//空の画像
+			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1300.0f, 800.0f, 1.0f), Vec2(0.0f, 0.0f), float(2.0f), L"ResultBG.png");//空の画像
 
-			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1300.0f, 800.0f, 1.0f), Vec2(0.0f, -100.0f), float(2.0f), L"Sea3.png");//海の画像
-
-			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1300.0f, 800.0f, 1.0f), Vec2(0.0f, -100.0f), float(2.0f), L"cloud.png");//雲の画像
-
-			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(700.0f, 700.0f, 1.0f), Vec2(-180.0f, -50.0f), float(2.0f), L"Junp3_34.png");//プレイヤーの画像
-
+			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(700.0f, 700.0f, 1.0f), Vec2(-200.0f, -50.0f), float(2.0f), L"Junp3_34.png");//プレイヤーの画像
+			
 			/*ゲームクリアorゲームオーバー*/
 			//AddGameObject<ImageUI>(Vec3(0.0f), Vec3(800.0f, 150.0f, 1.0f), Vec2(0.0f, 300.0f), float(2.0f), L"Tx_GameClear.png");
 
+			Vec3 buttonSize = Vec3(512.0f, 256.0f, 1.0f);
 			/*タイトルへ*/
-			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(350.0f, 200.0f, 1.0f), Vec2(-450.0f, -300.0f), float(2.0f), L"Title.png");
+			AddGameObject<ImageUI>(Vec3(0.0f), buttonSize, Vec2(-450.0f, -300.0f), float(2.0f), L"TitleButton.png");
 
 			/*ステージセレクトへ*/
-			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(350.0f, 200.0f, 1.0f), Vec2(-50.0f, -300.0f), float(2.0f), L"StageSelect.png");
+			AddGameObject<ImageUI>(Vec3(0.0f), buttonSize, Vec2(-50.0f, -300.0f), float(2.0f), L"SelectButton.png");
 
 			/*次のステージへ*/
-			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(350.0f, 200.0f, 1.0f), Vec2(400.0f,-300.0f), float(2.0f), L"NextStage.png");
+			AddGameObject<ImageUI>(Vec3(0.0f), buttonSize, Vec2(400.0f, -300.0f), float(2.0f), L"NextStageButton.png");
 
-			//スコアUIの表示
-			//AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(50.0f, 25.0f, 1.0f), Vec2(300.0f, -250.f), float(2.0f), L"Score.png", 7, false);
-			//GameManager::GetInstance().DrawScore();
+			/*ステージ番号の表示*/
+			AddGameObject<ImageUI>(Vec3(0.0f), buttonSize, Vec2(-450.0f, 350.0f), float(2.0f), L"StageUI.png");
+
+			AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(40.0f, 40.0f, 1.0f), Vec2(-400.0f, 350.0f), float(2.0f), L"BlackNumbers.png", 1, false);
+			GameManager::GetInstance().DrawStageNum();
+
+			Vec2 resultsTabelPos = Vec2(350.0f, 0.0f);
+			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(512.0f, 512.0f, 1.0f), resultsTabelPos, float(2.0f), L"ResultsTable.png");
+
+			float scoreSize = 40.0f;
+			vector<Vec2> resultsTabe = {
+				resultsTabelPos + Vec2(200.0f, 110.0f),
+				resultsTabelPos + Vec2(200.0f, 35.0f),
+				resultsTabelPos + Vec2(120.0f, -40.0f),
+				resultsTabelPos + Vec2(120.0f, -120.0f)
+			};
+
+			//スコアの表示
+			AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(50.0f, 50.0f, 1.0f), resultsTabe[0], float(2.0f), L"PinkNumbers.png", 7, false);
+			GameManager::GetInstance().DrawScore();
+
+			//クリアスコアの表示
+			AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(scoreSize, scoreSize, 1.0f), resultsTabe[1], float(2.0f), L"GrayNumbers.png", 7, false);
+			GameManager::GetInstance().DrawClearScore(GameManager::GetInstance().GetSelectStageNum());
+
+			//Perfectの回数を表示
+			AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(scoreSize, scoreSize, 1.0f), resultsTabe[2], float(2.0f), L"BlackNumbers.png", 2, false);
+			GameManager::GetInstance().DrawJudgeCount(JudgeName::en_Perfect);
+
+			//Goodの回数を表示
+			AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(scoreSize, scoreSize, 1.0f), resultsTabe[3], float(2.0f), L"BlackNumbers.png", 2, false);
+			GameManager::GetInstance().DrawJudgeCount(JudgeName::en_Good);
 
 			m_Pos[0] = Vec2(-450.0f, -300.0f);//タイトルへ
 			m_Pos[1] = Vec2(-50.0f, -300.0f);//ステージセレクト
-			m_Pos[2] = Vec2( 400.0f, -300.0f);//次のステージへ
+			m_Pos[2] = Vec2(400.0f, -300.0f);//次のステージへ
 
 			/*点滅*/
-			m_CursorUI = AddGameObject<CursorUI>(Vec3(0.0f), Vec3(200.0f, 100.0f, 1.0f), m_Pos[m_ResultUiCount], float(3.0f), L"FadeBG.png", float(2.0));
+			m_CursorUI = AddGameObject<CursorUI>(Vec3(0.0f), Vec3(400.0f, 80.0f, 1.0f), m_Pos[m_ResultUiCount], float(3.0f), L"FadeBG.png", float(2.0));
 
 
 			//サウンドの追加
@@ -200,15 +226,6 @@ namespace basecross {
 
 		}
 
-		if (m_ResultUiCount >= 3)//リザルトボタンで3つ以上移動しないように
-		{
-			m_ResultUiCount = 3;
-		}
-		if (m_ResultUiCount < 0)
-		{
-			m_ResultUiCount = 3;
-		}
-
 		if (m_Timer >= 0.25)
 		{
 			if (fThumbLX <= -1.0f)//スティックが左に倒れた時
@@ -219,10 +236,6 @@ namespace basecross {
 				m_Push = true;
 
 				m_ResultUiCount -= 1;//左に1つ移動
-
-				//ポジションを設定する
-				m_CursorUI->GetComponent<Transform>()->SetPosition(Vec3(m_Pos[m_ResultUiCount].x, m_Pos[m_ResultUiCount].y, 1.0f));
-
 			}
 			if (fThumbLX >= +1.0f)//スティックが右に倒れた時
 			{
@@ -232,11 +245,20 @@ namespace basecross {
 				m_Push = true;
 
 				m_ResultUiCount += 1;//右に1つ移動
-
-				//ポジションを設定する
-				m_CursorUI->GetComponent<Transform>()->SetPosition(Vec3(m_Pos[m_ResultUiCount].x, m_Pos[m_ResultUiCount].y, 1.0f));
 			}
 		}
+
+		if (m_ResultUiCount > 2)//リザルトボタンで3つ以上移動しないように
+		{
+			m_ResultUiCount = 2;
+		}
+		if (m_ResultUiCount < 0)
+		{
+			m_ResultUiCount = 0;
+		}
+
+		//ポジションを設定する
+		m_CursorUI->GetComponent<Transform>()->SetPosition(Vec3(m_Pos[m_ResultUiCount].x, m_Pos[m_ResultUiCount].y, 1.0f));
 
 		return angle;
 	}
