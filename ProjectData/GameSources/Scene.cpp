@@ -82,7 +82,7 @@ namespace basecross{
 			SetClearColor(Col);
 			//自分自身にイベントを送る
 			//これにより各ステージやオブジェクトがCreate時にシーンにアクセスできる
-			PostEvent(0.0f, GetThis<ObjectInterface>(), GetThis<Scene>(), L"ToTitleStage");
+			PostEvent(0.0f, GetThis<ObjectInterface>(), GetThis<Scene>(), L"ToCopywriterStage");
 		}
 		catch (...) {
 			throw;
@@ -96,7 +96,6 @@ namespace basecross{
 	void Scene::OnEvent(const shared_ptr<Event>& event) {
 		if (event->m_MsgStr == L"ToCopywriterStage") {
 			//最初のアクティブステージの設定
-
 			ResetActiveStage<CopywriterStage>();
 		}
 		else if (event->m_MsgStr == L"ToTitleStage") {
