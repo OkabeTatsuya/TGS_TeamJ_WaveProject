@@ -419,6 +419,7 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
             m_isJumpActionXAnimation = false;
             m_isJumpActionYAnimation = true;
             m_isJumpActionZAnimation = false;
+			GameManager::GetInstance().AddActionScore(m_currentSpeedScoreMagnification, m_combo * m_comboMagnification, JumpActionType::en_ActionY);
         }
     }
 
@@ -442,6 +443,7 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
                 m_isFlightAction = false;
                 m_isEnableFlightAction = false;
                 m_currentFlightTime = 0.0f;
+				GameManager::GetInstance().AddActionScore(m_currentSpeedScoreMagnification, m_combo * m_comboMagnification, JumpActionType::en_ActionX);
                 GetComponent<RigidbodyBox>()->SetAutoGravity(true);
             }
         }
@@ -463,7 +465,7 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
                     m_rot.z = 0;
                     m_isJumpAction = false;
                     m_isInvincible = false;
-                    GameManager::GetInstance().AddActionScore(m_currentSpeedScoreMagnification, m_combo * m_comboMagnification);
+                    GameManager::GetInstance().AddActionScore(m_currentSpeedScoreMagnification, m_combo * m_comboMagnification, JumpActionType::en_ActionZ);
 				}
                     m_currentSpecialJumpActionCount++;
                 }
@@ -482,7 +484,7 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
                     m_rot.z = 0;
                     m_isJumpAction = false;
                     m_isInvincible = false;
-                    GameManager::GetInstance().AddActionScore(m_currentSpeedScoreMagnification, m_combo * m_comboMagnification);
+                    GameManager::GetInstance().AddActionScore(m_currentSpeedScoreMagnification, m_combo * m_comboMagnification, JumpActionType::en_ActionZ);
                 }
             }
         }
@@ -509,7 +511,8 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
                 SpeedUp(m_upSpeedValue * m_jumpGradeSpeedMagnification);
                 HighJump(m_greatJumpMagnification);
 				JumpEffect(EN_EffectName::en_GoodEffect, L"se_maoudamashii_onepoint16.wav");
-				
+				gm.AddJumpScore(m_currentSpeedScoreMagnification, m_combo*m_comboMagnification, true);
+
 				Vec3 pos = GetComponent<Transform>()->GetPosition();
 				m_judgJumpUI->VisibleUI(L"Perfect.png", pos);
 			}
@@ -517,11 +520,11 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
                 SpeedUp(m_upSpeedValue);
                 HighJump(1.0f);
 				JumpEffect(EN_EffectName::en_GoodEffect, L"se_maoudamashii_onepoint17.wav");
+				gm.AddJumpScore(m_currentSpeedScoreMagnification, m_combo*m_comboMagnification, false);
 
 				Vec3 pos = GetComponent<Transform>()->GetPosition();
 				m_judgJumpUI->VisibleUI(L"Good.png", pos);
 			}
-            gm.AddJumpScore(m_currentSpeedScoreMagnification, m_combo*m_comboMagnification,false);
             m_currentJumpGradeTime = 0;
             m_combo++;
         }
