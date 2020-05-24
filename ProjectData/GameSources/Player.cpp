@@ -82,7 +82,7 @@ namespace basecross {
 
         AddComponent<CollisionObb>()->SetMakedSize(Vec3(1.0f,1.1f,1.0f));
 
-        m_scoreUpUI = GetStage()->AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(30.0f, 20.0f, 1.0f), Vec2(0.0f), float(7.0f), L"", 4, true);
+        m_scoreUpUI = GetStage()->AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(30.0f, 20.0f, 1.0f), Vec2(0.0f), float(7.0f), L"Number.png", 4, true);
         GameManager::GetInstance().SetScoreUpUIPanel(m_scoreUpUI);
 
 		AddTag(L"Player");
@@ -351,6 +351,7 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
                 m_isJumpAction = true;
 				m_isSpecialJump = true;
                 m_isSpecialJumpAction = true;
+				gm.SetIsSpecialTime(true);
             }
         }
 
@@ -602,9 +603,9 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
 	}
 
 	void Player::JumpAcionEffect(EN_EffectName effectName, wstring seName, int animTime) {
-		bool JumpAcionFlag = (m_isFlightAction || m_isJumpAction);
-
-		if (JumpAcionFlag && m_currentAnimationKeyCount == 0) {
+		bool JumpAcionFlag = (m_isJumpActionXAnimation || m_isJumpActionYAnimation || m_isJumpActionZAnimation);
+		
+			if (JumpAcionFlag && m_currentAnimationKeyCount == 0) {
 			JumpEffect(effectName, seName);
 		}
 	};
