@@ -11,10 +11,11 @@ namespace basecross {
     Player::Player(const shared_ptr<Stage>& stage,
         Vec3& rotation,
         Vec3& scale,
-        Vec3& position) :
+        Vec3& position,
+		int&  layer) :
 
         ObjectBase(stage,
-            rotation, scale, position
+            rotation, scale, position, layer
         )
     {
         m_isFirstJump = false;
