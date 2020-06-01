@@ -56,8 +56,9 @@ namespace basecross {
 			//オブジェクト生成
 			CreateGenerator();
 
-            m_playerObj = AddGameObject<Player>(Vec3(0, 0, 0), Vec3(1.0f, 1.0f, 1),Vec3(-4.0, -2, -6.0));
-            AddGameObject<SeaCollision>(Vec3(0, 0, 0), Vec3(1, 0.5, 1), Vec3(-4, -4.0, -6.0));
+			m_playerObj = AddGameObject<Player>(Vec3(0, 0, 0), Vec3(1.0f, 1.0f, 1), Vec3(-4.0, -2, -7.0), 7);
+			m_playerIconTrans = m_playerIconUI->GetComponent<Transform>();
+			AddGameObject<SeaCollision>(Vec3(0, 0, 0), Vec3(1, 0.5, 1), Vec3(-4, -4.0, -7.0));
 
             AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(55.0f, 55.0f, 1.0f), Vec2(600.0f, 350.f), float(5.0f),L"Number.png",7,false);
 			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(256.0f, 64.0f, 1.0f), Vec2(100.0f, 350.f), float(5.0f), L"Score.png");
@@ -148,11 +149,11 @@ namespace basecross {
 
 	//ジェネレーターを作成
 	void GameStage::CreateGenerator() {
-		BackGroundState SkyState = { Vec3(0.0f), Vec3(-10.0f, 0.0f, 0.0f), Vec2(5.0f, 5.0f), L"Sky.png", -10.0f, 0.3f };
-		BackGroundState SeaBGState =  { Vec3(0.0f), Vec3(-10.0f, 0.0f, -3.0f), Vec2(5.0f, 5.0f), L"Ocean.png", -10.0f, 0.3f};
-		BackGroundState SeaState = { Vec3(0.0f), Vec3(-10.0f, -0.12f, -8.0), Vec2(5.0f, 5.0f), L"Sea.png", -10.0f, 1.1f };
-		BackGroundState CloudState = { Vec3(0.0f), Vec3(-10.0f, 0.0f, -1.0), Vec2(5.0f, 5.0f), L"cloud.png", -10.0f, 0.05f };
-		BackGroundState IslandState = { Vec3(0.0f), Vec3(-10.0f, -0.3f, -2.0), Vec2(1.5f, 1.5f), L"Island.png", -10.0f, 0.2f };
+		BackGroundState SkyState =		{ Vec3(0.0f), Vec3(-10.0f,  0.0f,  0.0f),	Vec2(5.0f, 5.0f), 0,L"Sky.png", -10.0f, 0.3f };
+		BackGroundState SeaBGState =	{ Vec3(0.0f), Vec3(-10.0f,  0.0f, -3.0f),	Vec2(5.0f, 5.0f), 3,L"Ocean.png", -10.0f, 0.3f};
+		BackGroundState SeaState =		{ Vec3(0.0f), Vec3(-10.0f, -0.12f, -8.0),	Vec2(5.0f, 5.0f), 8,L"Sea.png", -10.0f, 1.1f };
+		BackGroundState CloudState =	{ Vec3(0.0f), Vec3(-10.0f,  0.0f, -1.0),	Vec2(5.0f, 5.0f), 1,L"cloud.png", -10.0f, 0.05f };
+		BackGroundState IslandState =	{ Vec3(0.0f), Vec3(-10.0f, -0.3f, -2.0),	Vec2(1.5f, 1.5f), 2,L"Island.png", -10.0f, 0.2f };
 
 		AddGameObject<BGGenerator>(SkyState);
 		AddGameObject<BGGenerator>(SeaBGState);
