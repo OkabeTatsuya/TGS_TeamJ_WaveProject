@@ -27,7 +27,6 @@ namespace basecross {
 		m_scoreUpUIPanel->ScoreDraw(addScore);
         m_scoreUIPanel->ScoreDraw(m_gameScore);
 
-		m_specialCount += addScore;
 		SpecialCheck();
 	}
 
@@ -55,13 +54,14 @@ namespace basecross {
         m_scoreUpUIPanel->ScoreDraw(addScore);
         m_scoreUIPanel->ScoreDraw(m_gameScore);
 
-		m_specialCount += addScore;
-		SpecialCheck();
+		//SpecialCheck();
 	}
 
 	void GameManager::AddItemScore() {
 		m_gameScore += m_itemScore;
 		m_scoreUpUIPanel->ScoreDraw(m_itemScore);
+		m_itemCount++;
+		m_specialCount++;
 		SpecialCheck();
 	}
 
@@ -96,7 +96,7 @@ namespace basecross {
 	}
 
 	void GameManager::SpecialCheck() {
-		if (m_specialCount > m_maxSpecialCount) {
+		if (m_specialCount >= m_maxSpecialCount) {
 			m_isSpecialTime = true;
 			m_specialCount = 0;
 		}

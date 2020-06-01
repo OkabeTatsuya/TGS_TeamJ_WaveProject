@@ -41,7 +41,7 @@ namespace basecross {
 			m_perfectJumpCount = 0;
 			m_goodJumpCount = 0;
 
-			m_maxSpecialCount = 2000;
+			m_maxSpecialCount = 10;
 
 			m_isFirstStop = true;
 			m_isStopSpawner = false;
@@ -66,6 +66,7 @@ namespace basecross {
 		int m_baseJumpScore;
 		vector<int> m_baseActionScore;
 		int m_itemScore;
+		int m_maxItemNum;
 
 		float m_gameSpeed;
 
@@ -106,6 +107,8 @@ namespace basecross {
 		//ゲッター
 		int GetGameScore()const { return m_gameScore; }
 		int GetGameClearScore(int itr)const { return m_gameClearScore[itr]; }
+		int GetSpecialCount()const { return m_specialCount; }
+		int GetMaxSpecialCount()const { return m_maxSpecialCount; }
 		float GetGameSpeed()const { return m_gameSpeed; }
 		bool GetIsStopSpawner()const { return m_isStopSpawner; }
 		bool GetIsGameEnd()const { return m_isGameEnd; }
@@ -118,6 +121,7 @@ namespace basecross {
 		int GetPerfectJumpCount()const { return m_perfectJumpCount; }
 		int GetGoodJumpCount()const { return m_goodJumpCount; }
 		int GetItemCount()const { return m_itemCount; }
+		int GetMaxItemNum()const { return m_maxItemNum; }
 
 		//セッター
 		void SetIsGameEnd(bool set) { m_isGameEnd = set; }
@@ -132,6 +136,7 @@ namespace basecross {
 		void SetIsSpecialJump(bool set) { m_isSpecialJump = set; }
 		void SetIsSpecialTime(bool set) { m_isSpecialTime = set; }
 		void SetItemCount(int set) {  m_itemCount = set; }
+		void SetMaxItemNum(int set) {  m_maxItemNum = set; }
 
 		//ジャンプのスコア加算処理
 		///magnification 倍率、　combo 続けてジャンプした回数
