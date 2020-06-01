@@ -10,10 +10,18 @@ namespace basecross {
 	WaveSpawner::WaveSpawner(const shared_ptr<Stage>& StagePtr) : 
 		SpawnerBase(StagePtr)
 	{
-		m_defaultObjectNum = 10;
+		m_defaultObjectNum = { 3, 5, 2 };
 		m_spawnCount = 0;
-		m_offScreen = 10.0f;
-		m_spawnPos = Vec3(6.0f, -3.0f, -7.0f);
+		m_offScreen = 12.0f;
+
+		m_waveState.Pos = { Vec3(6.0f, -3.0f, -7.0f),Vec3(6.0f, -2.5f, -7.0f),Vec3(6.0f, -2.1f, -7.0f) };
+		m_waveState.Rot = Vec3(0.0f);
+		m_waveState.Sca = { Vec3(1.0f) , Vec3(1.8f),Vec3(1.8f),Vec3(1.0f), Vec3(1.0f) };
+		m_waveState.Layer = 6;
+		m_waveState.Tex = { L"SamllWave.png",L"MediumWave.png",L"BigWave.png" };
+
+		m_createBigWaveTimer = 0.0f;
+		m_maxWaitingTime = 2.0f;
 	}
 
 	void WaveSpawner::OnCreate() {
@@ -22,14 +30,18 @@ namespace basecross {
 	}
 
 	void WaveSpawner::OnUpdate() {
+		CreateBigWave();
 		SpawnObject();
 	}
 
 	//プールするオブジェクトの作成
 	void WaveSpawner::CreateObject() {
-		for (int i = 0; i < m_defaultObjectNum; i++) {
-			Vec3 firstPos = Vec3(-6.0f, m_spawnPos.y, m_spawnPos.z);
-			m_waveObject.push_back(GetStage()->AddGameObject<Wave>(Vec3(0.0f), Vec3(1.0f), firstPos));
+		for (int i = 0; i < 3; i++) {
+			m_waveObject.push_back(vector<shared_ptr<Wave>>());
+			for (int j = 0; j < m_defaultObjectNum[i]; j++) {
+				Vec3 firstPos = Vec3(-6.0f, m_waveState.Pos[i].y, m_waveState.Pos[i].z);
+				m_waveObject[i].push_back(GetStage()->AddGameObject<Wave>(m_waveState.Rot, m_waveState.Sca[i], firstPos, m_waveState.Layer,m_waveState.Tex[i]));
+			}
 		}
 	}
 
@@ -44,29 +56,59 @@ namespace basecross {
 
 			//今の距離と次に生成する座標
 			if (m_spawnTimer >= spawnTime) {
-				VisibleObject();
+				int waveTypeNum = m_waveTypeNum[m_spawnCount];
+				VisibleObject(waveTypeNum);
 			}
 			EndCreateObject();
 		}
 	}
 
-	void WaveSpawner::VisibleObject() {
-		for (int i = 0; i < m_waveObject.size(); i++) {
+	void WaveSpawner::VisibleObject(int waveTypeNum) {
+		for (int i = 0; i < m_waveObject[waveTypeNum].size(); i++) {
 			//プーリングしたオブジェクトから動かせるものを探す
-			if (!m_waveObject[i]->GetIsMove()) {
-				m_waveObject[i]->GetComponent<Transform>()->SetPosition(m_spawnPos);
-				m_waveObject[i]->SetIsMove(true);
-				m_spawnCount++;
+			if (!m_waveObject[waveTypeNum][i]->GetIsMove()) {
+				m_waveObject[waveTypeNum][i]->GetComponent<Transform>()->SetPosition(m_waveState.Pos[waveTypeNum]);
+				m_waveObject[waveTypeNum][i]->SetIsMove(true);
+				if (waveTypeNum != WaveType::en_waveL) {
+					m_spawnCount++;
+				}
 				break;
 			}
 
 			//動かせるものがなかったら作成する
 			if (m_waveObject.size() - 1 == i) {
-				m_waveObject.push_back(GetStage()->AddGameObject<Wave>(Vec3(0.0f), Vec3(1.0f), m_spawnPos));
-				m_waveObject[m_waveObject.size() - 1]->SetIsMove(true);
+				m_waveObject[waveTypeNum].push_back(GetStage()->AddGameObject<Wave>(m_waveState.Rot, m_waveState.Sca[waveTypeNum], m_waveState.Pos[waveTypeNum], m_waveState.Layer, m_waveState.Tex[waveTypeNum]));
+				m_waveObject[waveTypeNum][m_waveObject.size() - 1]->SetIsMove(true);
 				m_spawnCount++;
 				break;
 			}
+		}
+	}
+
+	void WaveSpawner::CreateBigWave() {
+		auto &gameManager = GameManager::GetInstance();
+
+		if (gameManager.GetIsSpecialTime()) {
+			gameManager.SetIsStopSpawner(true);
+			m_isStopSpawn = true;
+			if (!m_isCreateBigWave && m_createBigWaveTimer > m_maxWaitingTime) {
+				VisibleObject((int)WaveType::en_waveL);
+				m_isCreateBigWave = true;
+			}
+			else {
+				m_createBigWaveTimer += App::GetApp()->GetElapsedTime();
+			}
+		}
+		else if (m_isCreateBigWave)
+		{
+			gameManager.SetIsStopSpawner(false);
+			m_createBigWaveTimer = 0.0f;
+			m_isStopSpawn = false;
+			m_isCreateBigWave = false;
+		}
+
+		if (m_isCreateBigWave && !m_waveObject[WaveType::en_waveL][0]->GetIsMove()) {
+			gameManager.SetIsSpecialTime(false);
 		}
 	}
 

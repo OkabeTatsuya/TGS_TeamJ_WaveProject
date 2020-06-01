@@ -49,8 +49,11 @@ namespace basecross {
 	void SpawnerBase::ReadCSVLine(vector<wstring> csvLine, en_ObjectType objType) {
 		if (objType == en_ObjectType::en_Wave) {
 			for (size_t j = 0; j < csvLine.size(); j++) {
-				float num = stof(csvLine[j]);
+				int waveTypeNum = stof(csvLine[j]);
+				float num = stof(csvLine[j + 1]);
+				m_waveTypeNum.push_back(waveTypeNum);
 				m_createPosX.push_back(num);
+				j++;
 			}
 		}
 		else if (objType == en_ObjectType::en_Item) {

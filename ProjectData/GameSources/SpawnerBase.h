@@ -43,6 +43,7 @@ namespace basecross {
 		vector<CsvFile> m_gameStageCsv;
 		vector<float> m_createPosX;
 		vector<float> m_createPosY;
+		vector<int> m_waveTypeNum;
 
 	public:
 		SpawnerBase(const shared_ptr<Stage>& StagePtr);
