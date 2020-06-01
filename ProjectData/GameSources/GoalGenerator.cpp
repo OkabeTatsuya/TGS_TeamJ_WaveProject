@@ -10,8 +10,8 @@ namespace basecross {
 	GoalGenerator::GoalGenerator(const shared_ptr<Stage>& StagePtr) :
 		SpawnerBase(StagePtr)
 	{
-		m_objState1 = { Vec3(0.0f), Vec3(5.0f, 5.0f, 1.0f), Vec3(-10.0f,-0.5f,-9.0f), L"Goal12ver.png" };
-		m_objState2 = { Vec3(0.0f), Vec3(5.0f, 5.0f, 1.0f), Vec3(-10.0f,-0.5f,-5.0f), L"Goal2ver.png" };
+		m_objState1 = { Vec3(0.0f), Vec3(5.0f, 5.0f, 3.0f), Vec3(-10.0f,-0.5f,-9.0f), 9, L"Goal12ver.png" };
+		m_objState2 = { Vec3(0.0f), Vec3(5.0f, 5.0f, 3.0f), Vec3(-10.0f,-0.5f,-5.0f), 5, L"Goal2ver.png" };
 		m_goalObjState = { m_objState1,m_objState2 };
 		m_offsetPos = 8.5f;
 
@@ -28,8 +28,8 @@ namespace basecross {
 	}
 
 	void GoalGenerator::CreateObject() {
-		m_goalObject.push_back(GetStage()->AddGameObject<GoalObject>(m_objState1.Rot, m_objState1.Scr, m_objState1.Pos, m_objState1.Tex));
-		m_goalObject.push_back(GetStage()->AddGameObject<GoalObject>(m_objState2.Rot, m_objState2.Scr, m_objState2.Pos, m_objState2.Tex));
+		m_goalObject.push_back(GetStage()->AddGameObject<GoalObject>(m_objState1.Rot, m_objState1.Scr, m_objState1.Pos, m_objState1.Layer, m_objState1.Tex));
+		m_goalObject.push_back(GetStage()->AddGameObject<GoalObject>(m_objState2.Rot, m_objState2.Scr, m_objState2.Pos, m_objState2.Layer, m_objState2.Tex));
 	}
 
 	void GoalGenerator::GeneratGoal() {

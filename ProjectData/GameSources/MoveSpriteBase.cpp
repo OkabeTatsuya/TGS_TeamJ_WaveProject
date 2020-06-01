@@ -10,10 +10,11 @@ namespace basecross {
     MoveSpriteBase::MoveSpriteBase(const shared_ptr<Stage>& stage,
         Vec3& rotation,
         Vec3& scale,
-        Vec3& position) :
+        Vec3& position,
+		int&  layer) :
 
         ObjectBase(stage,
-            rotation, scale, position
+            rotation, scale, position,layer
         )
     {
 		m_objSpeed = 1.0f;

@@ -13,11 +13,15 @@ namespace basecross {
         bool m_isMove;
         //画面外判定のｘ座標
         float m_offScreenX;
+		//張り付けるテクスチャ
+		wstring m_textureName;
     public:
         Wave(const shared_ptr<Stage>& stage,
             Vec3& rotation,
             Vec3& scale,
-            Vec3& position);
+            Vec3& position,
+			int&  layer,
+			wstring tex);
 
         virtual void OnUpdate() override;
         virtual void OnCreate() override;

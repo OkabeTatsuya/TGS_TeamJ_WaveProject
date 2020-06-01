@@ -11,11 +11,12 @@ namespace basecross {
 		Vec3& rotation,
 		Vec3& position,
 		Vec2& image,
+		int&  layer,
 		wstring tex,
 		float offScreenX,
 		float moveSpeed) :
 		MoveSpriteBase(stage,
-			rotation, Vec3(1.0f), position),
+			rotation, Vec3(1.0f), position, layer),
 		m_texture(tex),
 		m_offScreenX(offScreenX),
 		m_imageSize(image)

@@ -10,10 +10,12 @@ namespace basecross {
 	ScoreUpItem::ScoreUpItem(const shared_ptr<Stage>& stage,
 		Vec3& rotation,
 		Vec3& position,
-		Vec2 texSize) :
+		Vec2 texSize,
+		int&  layer
+	) :
 
 		MoveSpriteBase(stage,
-			rotation, Vec3(0.3f), position
+			rotation, Vec3(0.3f,0.3f,1.0f), position, layer
 		)
 	{
 		m_isMove = true;
@@ -22,7 +24,7 @@ namespace basecross {
 	}
 
 	void ScoreUpItem::OnCreate() {
-		DrawingImage(L"ScoreUP2.png", m_texSize);
+		DrawingImage(L"Coin.png", m_texSize);
 		auto transPtr = AddComponent<Transform>();
 		transPtr->SetPosition(m_position);
 		transPtr->SetScale(m_scale);
@@ -38,18 +40,20 @@ namespace basecross {
 		OffScreen();
 	}
 
+	void ScoreUpItem::OnDestroy() {
+
+	}
+
 	void ScoreUpItem::OnCollisionEnter(shared_ptr<GameObject>& other) {
 		if (other->FindTag(L"Player")) {
 			auto &gameManager = GameManager::GetInstance();
 			gameManager.AddItemScore();
-			int itemCount = gameManager.GetItemCount();
-			itemCount++;
-			gameManager.SetItemCount(itemCount);
 
 			auto collision = GetComponent<CollisionObb>();
 			collision->SetUpdateActive(false);
 			auto drawPtr = GetComponent<PCTStaticDraw>();
 			drawPtr->SetDrawActive(false);
+			PlaySE();
 		}
 	}
 
@@ -87,6 +91,12 @@ namespace basecross {
 			drawPtr->SetDrawActive(true);
 		}
 	}
+
+	void ScoreUpItem::PlaySE() {
+		auto audioManager = App::GetApp()->GetXAudio2Manager();
+		m_SE = audioManager->Start(L"decision28.wav",0, 0.6f);
+	};
+
 
 }
 //end basecross

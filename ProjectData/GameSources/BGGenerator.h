@@ -11,6 +11,7 @@ namespace basecross {
 		Vec3 Rot;
 		Vec3 Scr;
 		Vec3 Pos;
+		int Layer;
 		wstring Tex;
 		float OffScreenX;
 	};
@@ -19,6 +20,7 @@ namespace basecross {
 		Vec3 Rot;
 		Vec3 Pos;
 		Vec2 ImageSize;
+		int Layer;
 		wstring Tex;
 		float OffScreenX;
 		float MoveSpeed;

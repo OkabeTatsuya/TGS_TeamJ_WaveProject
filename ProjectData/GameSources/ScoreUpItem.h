@@ -17,14 +17,20 @@ namespace basecross {
 		float m_offScreenX;
 
 		Vec2 m_texSize;
+
+		shared_ptr<SoundItem> m_SE;
+
 	public:
 		ScoreUpItem(const shared_ptr<Stage>& stage,
 			Vec3& rotation,
 			Vec3& position,
-			Vec2 texSize);
+			Vec2 texSize,
+			int&  layer
+			);
 
 		virtual void OnUpdate() override;
 		virtual void OnCreate() override;
+		virtual void OnDestroy() override;
 		virtual void OnCollisionEnter(shared_ptr<GameObject>& other) override;
 
 		//à⁄ìÆèàóù
@@ -37,6 +43,8 @@ namespace basecross {
 		void OffScreen();
 
 		void VisibleItem();
+
+		void PlaySE();
 	};
 }
 //end basecross

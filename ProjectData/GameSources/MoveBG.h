@@ -22,6 +22,7 @@ namespace basecross {
 			Vec3& rotation,
 			Vec3& position,
 			Vec2& image,
+			int&  layer,
 			wstring tex,
 			float offScreenX,
 			float moveSpeed);

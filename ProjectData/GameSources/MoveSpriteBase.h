@@ -15,7 +15,8 @@ namespace basecross {
         MoveSpriteBase(const shared_ptr<Stage>& stage,
             Vec3& rotation,
             Vec3& scale,
-            Vec3& position);
+            Vec3& position,
+			int&  layer);
 
         void Movement(shared_ptr<Transform> transPtr);
 

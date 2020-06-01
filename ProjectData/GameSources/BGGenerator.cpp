@@ -26,10 +26,10 @@ namespace basecross {
 	void BGGenerator::CreateObject() {
 		for (int i = 0; i < m_defaultObjectNum; i++) {
 			//m_moveObject.push_back(m_moveObjectTile[0]);
-			m_BGObject.push_back(GetStage()->AddGameObject<MoveBG>(m_objState.Rot, m_objState.Pos, m_objState.ImageSize, m_objState.Tex, m_objState.OffScreenX, m_objState.MoveSpeed));
+			m_BGObject.push_back(GetStage()->AddGameObject<MoveBG>(m_objState.Rot, m_objState.Pos, m_objState.ImageSize, m_objState.Layer, m_objState.Tex, m_objState.OffScreenX, m_objState.MoveSpeed));
 		}																						
-		m_BGObject.push_back(GetStage()->AddGameObject<MoveBG>(m_objState.Rot, Vec3(00.0f, m_objState.Pos.y, m_objState.Pos.z), m_objState.ImageSize, m_objState.Tex, m_objState.OffScreenX, m_objState.MoveSpeed));
-		m_BGObject.push_back(GetStage()->AddGameObject<MoveBG>(m_objState.Rot, Vec3(10.0f, m_objState.Pos.y, m_objState.Pos.z), m_objState.ImageSize, m_objState.Tex, m_objState.OffScreenX, m_objState.MoveSpeed));
+		m_BGObject.push_back(GetStage()->AddGameObject<MoveBG>(m_objState.Rot, Vec3(00.0f, m_objState.Pos.y, m_objState.Pos.z), m_objState.ImageSize, m_objState.Layer, m_objState.Tex, m_objState.OffScreenX, m_objState.MoveSpeed));
+		m_BGObject.push_back(GetStage()->AddGameObject<MoveBG>(m_objState.Rot, Vec3(10.0f, m_objState.Pos.y, m_objState.Pos.z), m_objState.ImageSize, m_objState.Layer, m_objState.Tex, m_objState.OffScreenX, m_objState.MoveSpeed));
 	}
 
 
@@ -56,7 +56,7 @@ namespace basecross {
 
 			//“®‚©‚¹‚é‚à‚Ì‚ª‚È‚©‚Á‚½‚çì¬‚·‚é
 			if (m_BGObject.size() - 1 == i) {
-				m_BGObject.push_back(GetStage()->AddGameObject<MoveBG>(m_objState.Rot, m_objState.Pos, m_objState.ImageSize, m_objState.Tex, m_objState.OffScreenX, m_objState.MoveSpeed));
+				m_BGObject.push_back(GetStage()->AddGameObject<MoveBG>(m_objState.Rot, m_objState.Pos, m_objState.ImageSize, m_objState.Layer, m_objState.Tex, m_objState.OffScreenX, m_objState.MoveSpeed));
 				m_BGObject[m_BGObject.size() - 1]->SetIsMove(true);
 				m_spawnCount++;
 				break;

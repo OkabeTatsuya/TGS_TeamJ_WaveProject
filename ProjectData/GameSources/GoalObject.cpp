@@ -11,8 +11,9 @@ namespace basecross {
 		Vec3& rotation,
 		Vec3& scale,
 		Vec3& position,
+		int&  layer,
 		wstring tex) :
-		MoveSpriteBase(StagePtr, rotation, scale, position)
+		MoveSpriteBase(StagePtr, rotation, scale, position, layer)
 	{
 		m_offsetPosX = -8.8f;
 		m_textureName = tex;

@@ -10,14 +10,30 @@ namespace basecross {
 	ObjectBase::ObjectBase(const shared_ptr<Stage>& stage,
 		Vec3& rotation,
 		Vec3& scale,
-		Vec3& position) :
+		Vec3& position,
+		int& layer) :
 	GameObject(stage),
+		m_rotation(rotation),
+		m_scale(scale),
+		m_position(position),
+		m_layer(layer)
+	{
+		//エラーが起きないよう初期化
+		m_textureName = L"ScoreUP1.png";
+	}
+
+	ObjectBase::ObjectBase(const shared_ptr<Stage>& stage,
+		Vec3& rotation,
+		Vec3& scale,
+		Vec3& position) :
+		GameObject(stage),
 		m_rotation(rotation),
 		m_scale(scale),
 		m_position(position)
 	{
 		//エラーが起きないよう初期化
-		m_textureName = L"trace.png";
+		m_textureName = L"ScoreUP1.png";
+		m_layer = 1;
 	}
 
 	void ObjectBase::DrawingImage(wstring texStr) {
@@ -27,10 +43,10 @@ namespace basecross {
 
 		m_vertices =
 		{
-			{Vec3(-0.5f,+0.5f,0.0f),color,Vec2(0		,0)},
-			{Vec3(+0.5f,+0.5f,0.0f),color,Vec2(tipSize.x,0)},
-			{Vec3(-0.5f,-0.5f,0.0f),color,Vec2(0		,tipSize.y)},
-			{Vec3(+0.5f,-0.5f,0.0f),color,Vec2(tipSize.x,tipSize.y)},
+			{Vec3(-1.0f,+1.0f,0.0f),color,Vec2(0		,0)},
+			{Vec3(+1.0f,+1.0f,0.0f),color,Vec2(tipSize.x,0)},
+			{Vec3(-1.0f,-1.0f,0.0f),color,Vec2(0		,tipSize.y)},
+			{Vec3(+1.0f,-1.0f,0.0f),color,Vec2(tipSize.x,tipSize.y)},
 		};
 
 		vector<uint16_t> indices =
@@ -51,8 +67,7 @@ namespace basecross {
 		drawComp->SetTextureResource(m_textureName);
 		this->SetAlphaActive(true);
 
-		float Layer = m_position.z * (-1.0f);
-		SetDrawLayer((int)Layer);
+		SetDrawLayer(m_layer);
 	}
 
 	//画像サイズを変えられる描画処理
@@ -88,8 +103,40 @@ namespace basecross {
 		drawComp->SetTextureResource(m_textureName);
 		this->SetAlphaActive(true);
 
-		float Layer = m_position.z * (-1.0f);
-		SetDrawLayer((int)Layer);
+		SetDrawLayer(m_layer);
+
+	}
+
+	void ObjectBase::CreateDrawString() {
+		//文字列をつける
+		auto ptrString = AddComponent<StringSprite>();
+		ptrString->SetText(L"");
+		ptrString->SetTextRect(Rect2D<float>(16.0f, 16.0f, 640.0f, 480.0f));
+	}
+
+	//文字列の表示
+	void ObjectBase::DrawStrings() {
+
+		//文字列表示
+		wstring strMess(L"バイナリデータ\n");
+		//オブジェクト数
+		auto ObjCount = GetStage()->GetGameObjectVec().size();
+		wstring  strObjCount(L"");
+		auto bodyCount = GameManager::GetInstance().GetSaveScore();
+
+		for (int i = 0; i < bodyCount.size(); i++) {
+			strObjCount += L"ステージ";
+			strObjCount += 
+				Util::FloatToWStr((float)i, 1, Util::FloatModify::Fixed) + L"："
+				+ Util::FloatToWStr((float)bodyCount[i], 1, Util::FloatModify::Fixed) + L",\t";
+			strObjCount += L"\n";
+		}
+
+
+		wstring str = strMess + strObjCount;
+		//文字列をつける
+		auto ptrString = GetComponent<StringSprite>();
+		ptrString->SetText(str);
 	}
 
 }

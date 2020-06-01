@@ -10,16 +10,17 @@ namespace basecross {
 	ItemGenerator::ItemGenerator(const shared_ptr<Stage>& StagePtr) : 
 		SpawnerBase(StagePtr)
 	{
-		m_defaultObjectNum = 10;
+		m_defaultObjectNum = 5;
 		m_spawnCount = 0;
 		m_offScreen = 10.0f;
-		m_spawnPos = Vec3(6.0f, -3.2f, -6.0f);
+		m_spawnPos = Vec3(6.0f, -3.2f, -7.0f);
 		m_texSize = Vec2(1.0f);
 	}
 
 	void ItemGenerator::OnCreate() {
 		LoadCSV(en_ObjectType::en_Item);
 		CreateObject();
+		GameManager::GetInstance().SetMaxItemNum(m_createPosX.size() - 1);
 	}
 
 	void ItemGenerator::OnUpdate() {
@@ -30,7 +31,7 @@ namespace basecross {
 	void ItemGenerator::CreateObject() {
 		for (int i = 0; i < m_defaultObjectNum; i++) {
 			Vec3 firstPos = Vec3(-6.0f, m_spawnPos.y, m_spawnPos.z);
-			m_itemObject.push_back(GetStage()->AddGameObject<ScoreUpItem>(Vec3(0.0f) , firstPos, m_texSize));
+			m_itemObject.push_back(GetStage()->AddGameObject<ScoreUpItem>(Vec3(0.0f) , firstPos, m_texSize, 6));
 		}
 	}
 
@@ -64,7 +65,7 @@ namespace basecross {
 
 			//“®‚©‚¹‚é‚à‚Ì‚ª‚È‚©‚Á‚½‚çì¬‚·‚é
 			if (m_itemObject.size() - 1 == i) {
-				m_itemObject.push_back(GetStage()->AddGameObject<ScoreUpItem>(Vec3(0.0f), Vec3(6.0f, m_createPosY[m_spawnCount], -6.0f), m_texSize));
+				m_itemObject.push_back(GetStage()->AddGameObject<ScoreUpItem>(Vec3(0.0f), Vec3(6.0f, m_createPosY[m_spawnCount], -6.0f), m_texSize, 6));
 				m_itemObject[m_itemObject.size() - 1]->SetIsMove(true);
 				m_spawnCount++;
 				break;
