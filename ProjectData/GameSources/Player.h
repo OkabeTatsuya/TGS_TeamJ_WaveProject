@@ -76,6 +76,8 @@ namespace basecross{
         float m_currentInvincibleTime;
         //ジャンプミスまたは着地ミスしたときの無敵判定
         bool m_isInvincible;
+        //無敵アニメーションの点滅サイクル秒数
+        float m_invincibleFlashSpeed;
         //連続で波に乗っている回数
         int m_combo;
         //１コンボで増える倍率
@@ -176,8 +178,6 @@ namespace basecross{
         void LowJump(float jumpMag);
         //ジャンプアクション
         void JumpAction();
-        //ジャンプアクションY
-        void JumpActionY();
         //ジャンプアクションの入力判定
         void JudgeJumpAction();
         //スピードの上限下限処理
@@ -206,6 +206,8 @@ namespace basecross{
         void JumpActionYAnimation();
         //ジャンプアクションアニメーション(Z軸)
         void JumpActionZAnimation();
+        //無敵アニメーション
+        void InvincibleAnimation();
         //ジャンプ中の滞空アクション
         void FlightAction();
         //スペシャルジャンプ
@@ -224,6 +226,7 @@ namespace basecross{
 
         //スペシャルジャンプアクション
         void SpecialJumpAction();
+
     };
 
 }
