@@ -38,11 +38,11 @@ namespace basecross {
 			GameManager::GetInstance().ResetGame();
 
 			//バックグラウンド
-			BackGroundState SkyState = { Vec3(0.0f), Vec3(-10.0f, 0.0f, 0.0f), Vec2(5.0f, 5.0f), L"Sky.png", -10.0f, 0.3f };
-			BackGroundState SeaBGState = { Vec3(0.0f), Vec3(-10.0f, 0.0f, -3.0f), Vec2(5.0f, 5.0f), L"Ocean.png", -10.0f, 0.3f };
-			BackGroundState SeaState = { Vec3(0.0f), Vec3(-10.0f, -0.12f, -5.0), Vec2(5.0f, 5.0f), L"Sea.png", -10.0f, 1.1f };
-			BackGroundState CloudState = { Vec3(0.0f), Vec3(-10.0f, 0.0f, -1.0), Vec2(5.0f, 5.0f), L"cloud.png", -10.0f, 0.05f };
-			BackGroundState IslandState = { Vec3(0.0f), Vec3(-10.0f, -0.3f, -2.0), Vec2(1.5f, 1.5f), L"Island.png", -10.0f, 0.2f };
+			BackGroundState SkyState = { Vec3(0.0f), Vec3(-10.0f,  0.0f,  0.0f),	Vec2(5.0f, 5.0f), 0,L"Sky.png", -10.0f, 0.3f };
+			BackGroundState SeaBGState = { Vec3(0.0f), Vec3(-10.0f,  0.0f, -3.0f),	Vec2(5.0f, 5.0f), 3,L"Ocean.png", -10.0f, 0.3f };
+			BackGroundState SeaState = { Vec3(0.0f), Vec3(-10.0f, -0.12f, -8.0),	Vec2(5.0f, 5.0f), 5,L"Sea.png", -10.0f, 1.1f };
+			BackGroundState CloudState = { Vec3(0.0f), Vec3(-10.0f,  0.0f, -1.0),	Vec2(5.0f, 5.0f), 1,L"cloud.png", -10.0f, 0.05f };
+			BackGroundState IslandState = { Vec3(0.0f), Vec3(-10.0f, -0.3f, -2.0),	Vec2(1.5f, 1.5f), 2,L"Island.png", -10.0f, 0.2f };
 
 			AddGameObject<BGGenerator>(SkyState);
 			AddGameObject<BGGenerator>(SeaBGState);
