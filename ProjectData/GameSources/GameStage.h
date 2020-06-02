@@ -6,7 +6,17 @@
 #pragma once
 #include "stdafx.h"
 #include "UIBase.h"
+#include "ObjectBase.h"
+#include "SpawnerBase.h"
+#include "MoveSpriteBase.h"
+
 #include "AnimationUI.h"
+#include "ScoreUI.h"
+#include "ScoreUIPanel.h"
+#include "Wave.h"
+#include "WaveSpawner.h"
+#include "ImageUI.h"
+#include "CutInUI.h"
 
 namespace basecross {
 	struct Bit_SpawnFlag
