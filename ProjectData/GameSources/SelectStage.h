@@ -32,11 +32,13 @@ namespace basecross {
 
 		wstring m_stageName;
 		vector<wstring> m_stageImageName;
+		vector<wstring> m_stageNumImageName;
 
 		shared_ptr<SoundItem> m_SE;
 		shared_ptr<SoundItem> m_BGM;
 
 		shared_ptr<ImageUI> m_stageImageUI;
+		shared_ptr<ImageUI> m_stageNumUI;
 
 	public:
 		//\’z‚Æ”jŠü
@@ -52,6 +54,13 @@ namespace basecross {
 				L"Image2.png",
 				L"Image3.png",
 				L"Image4.png"};
+
+			m_stageNumImageName = {
+				L"Stage1.png",
+				L"Stage2.png",
+				L"Stage3.png",
+				L"Stage4.png"
+			};
 		}
 		virtual ~SelectStage() {}
 		//‰Šú‰»

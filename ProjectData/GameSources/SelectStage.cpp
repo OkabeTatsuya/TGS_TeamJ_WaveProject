@@ -154,6 +154,7 @@ namespace basecross {
 
 			//画像の差し替え
 			m_stageImageUI->ChangeImage(m_stageImageName[m_stageNum]);
+			m_stageNumUI->ChangeImage(m_stageNumImageName[m_stageNum]);
 			GameManager::GetInstance().DrawClearScore(m_stageNum);
 			PlaySE(L"se_maoudamashii_system37.wav", 0.5f);
 		}
@@ -177,20 +178,21 @@ namespace basecross {
 
 	void SelectStage::CreateUI() {
 		//背景
-		AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1300.0f, 800.0f, 1.0f), Vec2(0.0f, 0.0f), float(1.0f), L"ResultBG.png");
-		AddGameObject<ImageUI>(Vec3(0.0f), Vec3(700.0f, 90.0f, 1.0f), Vec2(0.0f, -300.0f), float(2.0f), L"FadeBG.png"); 
+		AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1300.0f, 800.0f, 1.0f), Vec2(0.0f, 0.0f), float(1.0f), L"SelectBG.png");
+		AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1280.0f, 800.0f, 1.0f), Vec2(0.0f, -300.0f), float(2.0f), L"ScoreBG.png"); 
 
-		AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(60.0f, 60.0f, 1.0f), Vec2(320.0f, -300.0f), float(5.0f), L"GrayNumbers.png", 7, false);
+		AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(80.0f, 80.0f, 1.0f), Vec2(200.0f, -300.0f), float(5.0f), L"Number.png", 7, false);
 		GameManager::GetInstance().DrawClearScore(m_stageNum);
 
-		AddGameObject<FlashingUI>(Vec3(0.0f), Vec3(128.0f, 128.0f, 1.0f), Vec2(550.0f, -50.0f), float(4.0f), L"RightArrow.png", 3.0f);
-		AddGameObject<FlashingUI>(Vec3(0.0f), Vec3(128.0f, 128.0f, 1.0f), Vec2(-550.0f, -50.0f), float(4.0f), L"LeftArrow.png", 3.0f);
+		AddGameObject<FlashingUI>(Vec3(0.0f), Vec3(128.0f, 128.0f, 1.0f), Vec2(550.0f, -00.0f), float(4.0f), L"RightArrow.png", 3.0f);
+		AddGameObject<FlashingUI>(Vec3(0.0f), Vec3(128.0f, 128.0f, 1.0f), Vec2(-550.0f, -00.0f), float(4.0f), L"LeftArrow.png", 3.0f);
 
-		AddGameObject<ImageUI>(Vec3(0.0f), Vec3(512.0f, 256.0f, 1.0f), Vec2(0.0f, 300.0f), float(4.0f), L"StageSelect.png");
-		AddGameObject<ImageUI>(Vec3(0.0f), Vec3(512.0f, 256.0f, 1.0f), Vec2(-220.0f, -300.0f), float(4.0f), L"ClearScoreUI.png");
+		//AddGameObject<ImageUI>(Vec3(0.0f), Vec3(512.0f, 256.0f, 1.0f), Vec2(0.0f, 300.0f), float(4.0f), L"StageSelect.png");
+		//AddGameObject<ImageUI>(Vec3(0.0f), Vec3(512.0f, 256.0f, 1.0f), Vec2(-220.0f, -300.0f), float(4.0f), L"ClearScoreUI.png");
 
 		//ステージのイメージ画像を取得
-		m_stageImageUI = AddGameObject<ImageUI>(Vec3(0.0f), Vec3(650.0f, 400.0f, 1.0f), Vec2(0.0f, -50.0f), float(4.0f), m_stageImageName[m_stageNum]);
+		m_stageImageUI = AddGameObject<ImageUI>(Vec3(0.0f), Vec3(650.0f, 400.0f, 1.0f), Vec2(0.0f, -00.0f), float(4.0f), m_stageImageName[m_stageNum]);
+		m_stageNumUI = AddGameObject<ImageUI>(Vec3(0.0f), Vec3(512.0f, 256.0f, 1.0f), Vec2(0.0f, 250.0f), float(4.0f), m_stageNumImageName[m_stageNum]);
 	}
 
 
