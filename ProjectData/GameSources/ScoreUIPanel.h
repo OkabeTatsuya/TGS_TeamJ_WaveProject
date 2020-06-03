@@ -21,6 +21,8 @@ namespace basecross {
         float m_currentScorePlusDrawTime;
         //スコアプラスUI表示フラグ
         bool m_isScorePlusUIActive;
+		//次の数字間の空白を調整するための倍率
+		float m_addPosMagnification;
     public:
         ScoreUIPanel(const shared_ptr<Stage>& stage,
             Vec3& rotation,
