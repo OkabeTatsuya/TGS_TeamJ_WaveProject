@@ -96,8 +96,14 @@ namespace basecross {
 				auto SE = App::GetApp()->GetXAudio2Manager();
 				 SE->Stop(m_SE);
 				GetStage()->PostEvent(0.0f, GetStage()->GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), m_nextStageKey);
-            }
-            
+            }           
         }
     }
+
+	void Fade::OnDestroy() {
+		if (m_isFadeOut) {
+			auto audioManager = App::GetApp()->GetXAudio2Manager();
+			audioManager->Stop(m_SE);
+		}
+	}
 }
