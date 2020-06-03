@@ -61,8 +61,10 @@ namespace basecross {
 			m_playerIconTrans = m_playerIconUI->GetComponent<Transform>();
 			AddGameObject<SeaCollision>(Vec3(0, 0, 0), Vec3(1, 0.5, 1), Vec3(-4, -4.0, -7.0));
 
-            AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(55.0f, 55.0f, 1.0f), Vec2(600.0f, 350.f), float(5.0f),L"Number.png",7,false);
-			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(256.0f, 64.0f, 1.0f), Vec2(100.0f, 350.f), float(5.0f), L"Score.png");
+			//ï¿½Xï¿½Rï¿½AUI
+			m_scoreCountUI = AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(50.0f, 50.0f, 1.0f), Vec2(350.0f, 350.f), float(5.0f), L"Number.png", 7, false);
+			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(200.0f, 50.0f, 1.0f), Vec2(30.0f, 350.f), float(5.0f), L"Score2.png");
+ 
 
 			m_fadeInUI = AddGameObject<Fade>(L"ToResulfStage");
 			m_fadeInUI->SetUpdateActive(false);
@@ -146,8 +148,8 @@ namespace basecross {
 	//ƒS[ƒ‹‚µ‚½‚ÌƒAƒjƒ[ƒVƒ‡ƒ“UI‚ğì¬
 	void GameStage::CreateGoalUI() {
 		St_AnimUI GoalUIState = {
-			Vec2(1000.0f,200.0f),Vec3(0.0f),m_textScale,
-			Vec2(0.0f,200.0f),Vec3(0.0f),m_textScale,
+			Vec2(1000.0f,50.0f),Vec3(0.0f),m_textScale,
+			Vec2(0.0f,50.0f),Vec3(0.0f),m_textScale,
 			8.0f,0.0f,0.5f,AnimType::Delete
 		};
 

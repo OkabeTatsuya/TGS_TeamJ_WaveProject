@@ -86,9 +86,24 @@ namespace basecross {
 		vector<shared_ptr<EfkPlay>> m_efkPlay;
 
 		shared_ptr<GameObject> m_playerObj;
+		shared_ptr<UIBase> m_fadeInUI;
+
+		//プレイヤーアイコン
+		shared_ptr<UIBase> m_playerIconUI;
+		shared_ptr<Transform> m_playerIconTrans;
+
+		shared_ptr<ScoreUIPanel> m_itemCountUI;
+		shared_ptr<ScoreUIPanel> m_scoreCountUI;
+
+		shared_ptr<WaveSpawner> m_waveSpawner;
+
+		shared_ptr<CutInUI> m_cutInUI;
+
 
 		vector<int> m_gameClearScore;
-
+		
+		Vec2 m_baseMapUIPos;
+		vector<Vec2> m_mapUIPos;
 		Vec3 m_textScale;	
 
 		//ゲームを停止させるフラグ
@@ -170,6 +185,9 @@ namespace basecross {
 
 		void SetEfkPlay(vector<shared_ptr<EfkPlay>> set, int efkNum) { m_efkPlay = set; }
 
+		//ゲームUIを作成
+		void CreateGameUI();
+
 		//アニメーションUIを作成
 		void CreateAnimUI();
 
@@ -181,6 +199,8 @@ namespace basecross {
 
 		//エフェクトを作成
 		void CreateEfkEffect();
+		//スコアUIの描画する数字を入れ替える
+		void UpdateScoreUI();
 
 		void Hundler();
 
@@ -201,6 +221,12 @@ namespace basecross {
 		
 		//スペシャルジャンプに入った時
 		void SpecialJumpController();
+
+		//マップのアイコンを動かす
+		void MovePlayerIcon();
+
+		//SEを再生する
+		void PlaySE(EN_SoundTypeSE soundType, EN_SE seName, float vol);
 
 		//ビットフラグを上げる
 		void TrueSpawnFlag(unsigned int bit_flag);
