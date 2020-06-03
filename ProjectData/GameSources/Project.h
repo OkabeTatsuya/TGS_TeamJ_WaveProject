@@ -40,6 +40,7 @@
 #include "ImageUI.h"
 #include "FlashingUI.h"
 #include"TitleAnimationUI.h"
+#include "CutInUI.h"
 
 #include "CursorUI.h"
 
