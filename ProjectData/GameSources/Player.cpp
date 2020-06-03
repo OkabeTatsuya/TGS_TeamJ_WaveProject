@@ -32,7 +32,7 @@ namespace basecross {
         m_jumpGradeSpeedMagnification = 1.5;
         m_jumpGradeScoreMagnification = 2.0f;
         m_jumpGradeTime = 0.0f;
-        m_jumpGradeTimeJudge = 0.9f;
+        m_jumpGradeTimeJudge = 0.8f;
         m_isTopJumpAction = false;
         m_isBottomJumpAction = false;
         m_isLeftJumpAction = false;
@@ -80,9 +80,10 @@ namespace basecross {
         transPtr->SetRotation(m_rotation);
 
         PsBoxParam param(transPtr->GetWorldMatrix(), 1.0f, false, PsMotionType::MotionTypeActive);
-        AddComponent<RigidbodyBox>(param);/*->SetDrawActive(true);*/
+        AddComponent<RigidbodyBox>(param)->SetDrawActive(true);
 
-        AddComponent<CollisionObb>()->SetMakedSize(Vec3(1.0f,1.1f,1.0f));
+        auto colPtr = AddComponent<CollisionObb>();
+        colPtr->SetMakedSize(Vec3(1.0f, 1.0f, 1.0f));
 
         m_scoreUpUI = GetStage()->AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(30.0f, 20.0f, 1.0f), Vec2(0.0f), float(7.0f), L"Number.png", 4, true);
         GameManager::GetInstance().SetScoreUpUIPanel(m_scoreUpUI);
@@ -145,6 +146,7 @@ namespace basecross {
         FlightAction();
         Invincible();
         SpeedScoreMagnification();
+        GravityControl();
         m_scoreUpUI->AdjustPosition(GetComponent<Transform>()->GetPosition());
 		m_judgJumpUI->SetingPos(GetComponent<Transform>()->GetPosition());
 		FollowEffect();
@@ -299,6 +301,19 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
 
         }
     }
+
+    //重力制御
+    void Player::GravityControl()
+    {
+        if (GameManager::GetInstance().GetIsSpecialTime() && GetComponent<RigidbodyBox>()->GetLinearVelocity().y<=0 && !m_isTouchSea){
+            GetComponent<RigidbodyBox>()->SetAutoGravity(false);
+            auto gravity = GetComponent<RigidbodyBox>()->GetLinearVelocity();
+            gravity.y -= 3.0 * App::GetApp()->GetElapsedTime();
+            GetComponent<RigidbodyBox>()->SetLinearVelocity(gravity);
+
+        }
+    }
+
     //スピード依存のスコア倍率計算処理
     void Player::SpeedScoreMagnification() {
         auto diff = m_maxSpeed - m_minSpeed;
@@ -364,7 +379,7 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
         auto controller = App::GetApp()->GetInputDevice().GetControlerVec()[0];
         auto &gm = GameManager::GetInstance();
         m_currentJumpGradeTime += App::GetApp()->GetElapsedTime();
-        if (m_jumpGradeTime * m_jumpGradeTimeJudge <= m_currentJumpGradeTime) {
+        if (m_jumpGradeTime <= m_currentJumpGradeTime) {
             isGreatJump = true;
         }
         if (controller.wPressedButtons & XINPUT_GAMEPAD_A && !m_isJump) {
@@ -582,13 +597,15 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
         auto controller = App::GetApp()->GetInputDevice().GetControlerVec()[0];
         auto &gm = GameManager::GetInstance();
         m_currentJumpGradeTime += App::GetApp()->GetElapsedTime();
-        if (m_jumpGradeTime * m_jumpGradeTimeJudge <= m_currentJumpGradeTime) {
+        if (m_jumpGradeTime <= m_currentJumpGradeTime) {
             isGreatJump = true;
         }
         if (gm.GetIsSpecialTime() && controller.wPressedButtons & XINPUT_GAMEPAD_A && !m_isJump) {
+            m_isTouchSea = false;
             SpecialJump();
         }
         else if (controller.wPressedButtons & XINPUT_GAMEPAD_A && !m_isJump) {
+            m_isTouchSea = false;
             m_isJumpStartAnimation = true;
             m_isJumpFinishAnimation = false;
             m_isWaitingAnimation = false;
@@ -743,12 +760,13 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
         }
         if (other->FindTag(L"Wave")) {
             m_isFirstJump = true;
-            float collisionSize = 2.0f;
-            auto currentSpeed = GameManager::GetInstance().GetGameSpeed();
-            auto a = collisionSize / currentSpeed * m_groundWaveDownSpeedValue;
-            auto c = currentSpeed - a;
-            auto d = (c + currentSpeed) / 2;
-            m_jumpGradeTime = collisionSize / d*m_jumpGradeTimeJudge;
+            float playerColSize = 1.0f;
+            float inSpeed = GameManager::GetInstance().GetGameSpeed();
+            float stayTime = playerColSize / inSpeed;
+            float outSpeed = inSpeed + m_groundWaveDownSpeedValue * stayTime;
+            float averageSpeed = (inSpeed + outSpeed) / 2;
+            stayTime = playerColSize / averageSpeed;
+            m_jumpGradeTime = stayTime * m_jumpGradeTimeJudge;
         }
     }
 
@@ -763,6 +781,7 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
         if (other->FindTag(L"Sea")&&!m_isJump) {
             GetComponent<RigidbodyBox>()->SetLinearVelocity(Vec3(0, 0, 0));
             if (!m_isInvincible&&!m_isWaveTouch&&m_isFirstJump) {
+                m_isTouchSea = true;
                 GroundWaveSpeedDown();
             }
         }
