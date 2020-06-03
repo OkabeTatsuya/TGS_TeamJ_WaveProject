@@ -7,8 +7,16 @@
 #include "stdafx.h"
 
 namespace basecross {
+	enum WaveType {
+		en_waveS,
+		en_waveM,
+		en_waveL
+	};
+
     class Wave : public MoveSpriteBase {
     protected:
+		//波のタイプ
+		WaveType m_waveType;
         //移動判定
         bool m_isMove;
         //画面外判定のｘ座標
@@ -26,6 +34,8 @@ namespace basecross {
         virtual void OnUpdate() override;
         virtual void OnCreate() override;
 
+		//コリジョンの作成
+		void CreateCollision();
         //移動処理
         void Move();
         //移動判定のゲッター
