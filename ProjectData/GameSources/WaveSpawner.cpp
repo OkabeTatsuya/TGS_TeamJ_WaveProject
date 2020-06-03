@@ -38,9 +38,29 @@ namespace basecross {
 	void WaveSpawner::CreateObject() {
 		for (int i = 0; i < 3; i++) {
 			m_waveObject.push_back(vector<shared_ptr<Wave>>());
-			for (int j = 0; j < m_defaultObjectNum[i]; j++) {
-				Vec3 firstPos = Vec3(-6.0f, m_waveState.Pos[i].y, m_waveState.Pos[i].z);
-				m_waveObject[i].push_back(GetStage()->AddGameObject<Wave>(m_waveState.Rot, m_waveState.Sca[i], firstPos, m_waveState.Layer,m_waveState.Tex[i]));
+
+			switch (i)
+			{
+			case 0:
+				for (int j = 0; j < m_defaultObjectNum[i]; j++) {
+					Vec3 firstPos = Vec3(-6.0f, m_waveState.Pos[i].y, m_waveState.Pos[i].z);
+					m_waveObject[i].push_back(GetStage()->AddGameObject<Wave>(m_waveState.Rot, m_waveState.Sca[i], firstPos, m_waveState.Layer,m_waveState.Tex[i]));
+				}
+				break;
+			case 1:
+				for (int j = 0; j < m_defaultObjectNum[i]; j++) {
+					Vec3 firstPos = Vec3(-6.0f, m_waveState.Pos[i].y, m_waveState.Pos[i].z);
+					m_waveObject[i].push_back(GetStage()->AddGameObject<TestWave>(m_waveState.Rot, m_waveState.Sca[i], firstPos, m_waveState.Layer, m_waveState.Tex[i]));
+				}
+				break;
+			case 2:
+				for (int j = 0; j < m_defaultObjectNum[i]; j++) {
+					Vec3 firstPos = Vec3(-6.0f, m_waveState.Pos[i].y, m_waveState.Pos[i].z);
+					m_waveObject[i].push_back(GetStage()->AddGameObject<TestWave>(m_waveState.Rot, m_waveState.Sca[i], firstPos, m_waveState.Layer, m_waveState.Tex[i]));
+				}
+				break;
+			default:
+				break;
 			}
 		}
 	}

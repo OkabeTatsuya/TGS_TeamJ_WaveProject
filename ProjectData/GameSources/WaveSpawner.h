@@ -7,12 +7,6 @@
 #include "stdafx.h"
 
 namespace basecross {
-	enum WaveType {
-		en_waveS,
-		en_waveM,
-		en_waveL
-	};
-
 	struct WaveState
 	{
 		Vec3 Rot;
