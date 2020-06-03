@@ -61,7 +61,7 @@ namespace basecross {
 			m_playerIconTrans = m_playerIconUI->GetComponent<Transform>();
 			AddGameObject<SeaCollision>(Vec3(0, 0, 0), Vec3(1, 0.5, 1), Vec3(-4, -4.0, -7.0));
 
-			//ÔøΩXÔøΩRÔøΩAUI
+			//ÉXÉRÉAUI
 			m_scoreCountUI = AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(50.0f, 50.0f, 1.0f), Vec2(350.0f, 350.f), float(5.0f), L"Number.png", 7, false);
 			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(200.0f, 50.0f, 1.0f), Vec2(30.0f, 350.f), float(5.0f), L"Score2.png");
  
@@ -85,16 +85,24 @@ namespace basecross {
 		m_efkInterface->OnUpdate();
 		FrastTimeCount();
 		GameClear();
+		UpdateScoreUI();
 		auto BGM = App::GetApp()->GetXAudio2Manager();
 		BGM->MyFadeIn(m_BGM, 0.5f, 2.0f);
 		SpecialJumpController();
 		Hundler();
+		MovePlayerIcon();
+		m_playerIconTrans->GetPosition().x;
 	}
 
 	void GameStage::OnDestroy() {
 		//BGMÇÃÉXÉgÉbÉv
-		auto BGM = App::GetApp()->GetXAudio2Manager();
-		BGM->Stop(m_BGM);
+		auto audioManager = App::GetApp()->GetXAudio2Manager();
+		audioManager->Stop(m_BGM);
+
+		for each (auto se in m_SE)
+		{
+			audioManager->Stop(se);
+		}	
 	}
 
 	void GameStage::OnDraw() {
@@ -103,21 +111,110 @@ namespace basecross {
 		m_efkInterface->OnDraw();
 	}
 
+	void GameStage::CreateGameUI() {
+		//ÉAÉCÉeÉÄÇÃÉ|ÉWÉVÉáÉì
+		Vec2 baseItemPos = Vec2(-550.0f, 320.0f);
+		vector<Vec2> itemUIPos = { 
+			baseItemPos,
+			Vec2(baseItemPos.x + 100.0f, baseItemPos.y),
+			Vec2(baseItemPos.x + 150.0f, baseItemPos.y),
+			Vec2(baseItemPos.x + 230.0f, baseItemPos.y)
+		};
+
+		//É}ÉbÉvÇÃÉ|ÉWÉVÉáÉì
+		m_baseMapUIPos = Vec2(-380.0f, 360.0f);
+		m_mapUIPos = {
+			m_baseMapUIPos,
+			Vec2(m_baseMapUIPos.x +  255.0f, m_baseMapUIPos.y + -5.0f),
+			Vec2(m_baseMapUIPos.x + -245.0f, m_baseMapUIPos.y + -5.0f),
+		};
+
+		float baseCommandUIPosY = 45;
+		Vec2 baseCommandUIPos = Vec2(450.0f, 350.0f);
+		vector<Vec2> commandUIPos = {
+			Vec2(baseCommandUIPos.x + 0.0f, baseCommandUIPos.y + -baseCommandUIPosY * 0),
+			Vec2(baseCommandUIPos.x + 0.0f, baseCommandUIPos.y + -baseCommandUIPosY * 1),
+			Vec2(baseCommandUIPos.x + 0.0f, baseCommandUIPos.y + -baseCommandUIPosY * 2),
+			Vec2(baseCommandUIPos.x + 0.0f, baseCommandUIPos.y + -baseCommandUIPosY * 3)
+		};
+
+		vector<Vec2> commandIconUIPos = {
+			Vec2(baseCommandUIPos.x + 120.0f, baseCommandUIPos.y + -baseCommandUIPosY * 0),
+			Vec2(baseCommandUIPos.x + 120.0f, baseCommandUIPos.y + -baseCommandUIPosY * 1),
+			Vec2(baseCommandUIPos.x + 120.0f, baseCommandUIPos.y + -baseCommandUIPosY * 2),
+			Vec2(baseCommandUIPos.x + 120.0f, baseCommandUIPos.y + -baseCommandUIPosY * 3)
+		};
+
+		Vec3 itemScale = Vec3(40.0f, 40.0f, 1.0f);
+		AddGameObject<ImageUI>(Vec3(0.0f), itemScale, baseItemPos, float(5.0f), L"Coin.png");
+		//ÉAÉCÉeÉÄè„å¿UI
+		m_itemCountUI = AddGameObject<ScoreUIPanel>(Vec3(0.0f), itemScale, itemUIPos[3], float(5.0f), L"GoldenNumbers.png", 2, false);
+		//ï`âÊÇ∑ÇÈêîéö
+		auto drawNum = GameManager::GetInstance().GetMaxSpecialCount();
+		m_itemCountUI->ScoreDraw(drawNum);
+
+		AddGameObject<ImageUI>(Vec3(0.0f), itemScale, itemUIPos[2], float(5.0f), L"Slash.png");
+
+		//ÉAÉCÉeÉÄÉJÉEÉìÉgUI
+		m_itemCountUI = AddGameObject<ScoreUIPanel>(Vec3(0.0f), itemScale, itemUIPos[1], float(5.0f), L"GoldenNumbers.png", 2, false);
+
+		drawNum = GameManager::GetInstance().GetSpecialCount();
+		m_itemCountUI->ScoreDraw(drawNum);
+
+		//É}ÉbÉvUI
+		AddGameObject<ImageUI>(Vec3(0.0f), Vec3(512.0f, 125.0f, 1.0f), m_mapUIPos[0], float(5.0f), L"MapStage.png");
+		AddGameObject<ImageUI>(Vec3(0.0f), Vec3(30.0f, 30.0f, 1.0f), m_mapUIPos[1], float(6.0f), L"MapGoal.png");
+		m_playerIconUI = AddGameObject<ImageUI>(Vec3(0.0f), Vec3(20.0f, 20.0f, 1.0f), m_mapUIPos[2], float(7.0f), L"MapPlayer.png");
+
+		m_cutInUI = AddGameObject<CutInUI>(Vec3(0.0f), Vec3(1300.0f, 400.0f, 1.0f), Vec2(0.0f), float(5.0f), L"CutIn.png");
+
+		Vec2 baseCommandIconScl = Vec2(4.0f, 2.0f);
+		float magnification = 30;
+		float magnification1 = 25;
+
+		vector<Vec3> commandScl = {
+			Vec3(48.0f, 48.0f, 1.0f),
+			Vec3(baseCommandIconScl.x * magnification, baseCommandIconScl.y * magnification, 1.0f),
+			Vec3(baseCommandIconScl.x * magnification, baseCommandIconScl.y * magnification, 1.0f),
+			Vec3(baseCommandIconScl.x * magnification, baseCommandIconScl.y * magnification, 1.0f)
+		};
+
+		vector<Vec3> commandIconScl = {
+			Vec3(48.0f, 48.0f, 1.0f),
+			Vec3(baseCommandIconScl.x * magnification1, baseCommandIconScl.y * magnification1, 1.0f),
+			Vec3(baseCommandIconScl.x * magnification1, baseCommandIconScl.y * magnification1, 1.0f),
+			Vec3(baseCommandIconScl.x * magnification1, baseCommandIconScl.y * magnification1, 1.0f)
+		};
+
+		//ÉRÉ}ÉìÉhUI
+		AddGameObject<ImageUI>(Vec3(0.0f), commandScl[1], commandUIPos[0], float(5.0f), L"JunpUI.png");
+		AddGameObject<ImageUI>(Vec3(0.0f), commandScl[1], commandUIPos[1], float(6.0f), L"CommandUI1.png");
+		AddGameObject<ImageUI>(Vec3(0.0f), commandScl[1], commandUIPos[2], float(6.0f), L"CommandUI2.png");
+		AddGameObject<ImageUI>(Vec3(0.0f), commandScl[1], commandUIPos[3], float(6.0f), L"CommandUI3.png");
+
+		//ÉAÉCÉRÉìUI
+		AddGameObject<ImageUI>(Vec3(0.0f), commandIconScl[0], commandIconUIPos[0], float(5.0f), L"ABttun.png");
+		AddGameObject<ImageUI>(Vec3(0.0f), commandIconScl[1], commandIconUIPos[1], float(6.0f), L"Icon1.png");
+		AddGameObject<ImageUI>(Vec3(0.0f), commandIconScl[2], commandIconUIPos[2], float(6.0f), L"Icon2.png");
+		AddGameObject<ImageUI>(Vec3(0.0f), commandIconScl[3], commandIconUIPos[3], float(6.0f), L"Icon3.png");
+
+	};
+
 	//ÉAÉjÉÅÅ[ÉVÉáÉìÇ∑ÇÈUIÇçÏê¨
 	void GameStage::CreateAnimUI() {
 		St_AnimUI statUIState1 = {
 			//èâä˙ÉgÉâÉìÉXÉtÉHÅ[ÉÄ
-			Vec2(1000.0f,100.0f),Vec3(0.0f),m_textScale,
+			Vec2(1000.0f,50.0f),Vec3(0.0f),m_textScale,
 			//ÉAÉjÉÅÅ[ÉVÉáÉìå„ÇÃÉgÉâÉìÉXÉtÉHÅ[ÉÄ
-			Vec2(0.0f,100.0f),Vec3(0.0f),m_textScale,
+			Vec2(0.0f,50.0f),Vec3(0.0f),m_textScale,
 			//ç∂Ç©ÇÁÅ@ÉåÉCÉÑÅ[ÅAÉAÉjÉÅÅ[ÉVÉáÉìäJénéûä‘ÅAèIóπéûä‘
 			8.0f,0.0f,0.5f,
 			//ÉAÉjÉÅÅ[ÉVÉáÉìèIóπå„ÇÃèàóù
 			AnimType::Delete
 		};
 		St_AnimUI statUIState2 = {
-			Vec2(1000.0f,-200.0f),Vec3(0.0f),m_textScale,
-			Vec2(0.0f,-200.0f),Vec3(0.0f),m_textScale,
+			Vec2(1000.0f,-50.0f),Vec3(0.0f),m_textScale,
+			Vec2(0.0f,-50.0f),Vec3(0.0f),m_textScale,
 			8.0f,2.0f,2.5f,AnimType::Delete
 		};
 		
@@ -176,7 +273,7 @@ namespace basecross {
 		AddGameObject<BGGenerator>(CloudState);
 		AddGameObject<RandomGenerator>(IslandState, 10.0f, 15);
 
-		AddGameObject<WaveSpawner>();
+		m_waveSpawner = AddGameObject<WaveSpawner>();
 		AddGameObject<ItemGenerator>();
 		AddGameObject<GoalGenerator>();
 	}
@@ -189,6 +286,15 @@ namespace basecross {
 			wstring effectStr = dataDir + L"Effect\\" + m_effectNames.EffectName[i];
 			m_efkEffect.push_back(ObjectFactory::Create<EfkEffect>(m_efkInterface, effectStr));
 		}
+	}
+
+	void GameStage::UpdateScoreUI() {
+		auto drawNum = GameManager::GetInstance().GetSpecialCount();
+		m_itemCountUI->ScoreDraw(drawNum);
+
+		drawNum = GameManager::GetInstance().GetGameScore();
+		m_scoreCountUI->ScoreDraw(drawNum);
+
 	}
 
 	void GameStage::Hundler() {
@@ -243,7 +349,7 @@ namespace basecross {
 			
 		}
 
-		if (m_loadStageTimeCount > m_maxLoadStageTime) {
+		if (!m_isLoadStage && m_loadStageTimeCount > m_maxLoadStageTime) {
 			int gameScore = GameManager::GetInstance().GetGameScore();
 
 			auto maxStageNum = gameManager.GetSaveScore().size();
@@ -255,18 +361,32 @@ namespace basecross {
 
 			SaveGameData();
 			LoadResultStage();
+			//m_loadStageTimeCount = 0;
 			m_isLoadStage = true;
-			m_loadStageTimeCount = 0;
 		}
 	}
 
 	void GameStage::SpecialJumpController() {
 		//ÉWÉÉÉìÉvÉtÉâÉOÇ™óßÇ¡ÇƒÇ¢ÇΩÇÁÉXÉsÅ[ÉhÇâ∫Ç∞ÇÈ
 		auto specialJumpFlag = GameManager::GetInstance().GetIsSpecialJump();
+
+		auto specialJumpTimeFlag = GameManager::GetInstance().GetIsSpecialTime();
+
+		if (!specialJumpTimeFlag) {
+			m_playSpecialSE = false;
+		}
+
+		if (specialJumpTimeFlag && !m_playSpecialSE) {
+			m_cutInUI->ResetState();
+			PlaySE(EN_SoundTypeSE::en_SystemSE, EN_SE::en_SpecialTimeSE, 0.9f);
+			PlaySE(EN_SoundTypeSE::en_VoiceSE, EN_SE::en_SpecialTImeVoice1, 1.0f);
+			m_playSpecialSE = true;
+		}
+
 		if (specialJumpFlag) {
 			GameManager::GetInstance().SetGameSpeed(m_SpecialJumpSpeed);
 
-			float maxCount = 0.2f;
+			float maxCount = 0.1f;
 			float delta = App::GetApp()->GetElapsedTime();
 			m_specialJumpTimer += delta;
 			if (m_specialJumpTimer > maxCount) {
@@ -291,15 +411,15 @@ namespace basecross {
 
 	//ÉQÅ[ÉÄÇÃÉZÅ[Éu
 	int GameStage::SaveGameData() {
+		if (!m_isLoadStage) {
+			vector<int> saveScore = GameManager::GetInstance().GetSaveScore();
+			int stageNum = GameManager::GetInstance().GetSelectStageNum();
+			int score = GameManager::GetInstance().GetGameScore();
 
-		vector<int> saveScore = GameManager::GetInstance().GetSaveScore();
-		int stageNum = GameManager::GetInstance().GetSelectStageNum();
-		int score = GameManager::GetInstance().GetGameScore();
-
-
-		if (saveScore[stageNum] < score) {
-			saveScore[stageNum] = score;
-			GameManager::GetInstance().SetSaveScore(saveScore);
+			if (saveScore[stageNum] < score) {
+				saveScore[stageNum] = score;
+				GameManager::GetInstance().SetSaveScore(saveScore);
+			}
 		}
 		return 0;
 	}
