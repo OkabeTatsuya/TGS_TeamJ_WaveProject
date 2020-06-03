@@ -26,16 +26,12 @@ namespace basecross {
 
 		//描画するレイヤー
 		float LayerNum;
-
 		//動き始める時間
 		float StartTime;
-
 		//動き終わる時間
 		float EndTime;
-
 		//アニメーションが終わった時の動き
 		AnimType En_AnimType;
-
 	};
 
 	class AnimationUI : public UIBase {
@@ -45,7 +41,10 @@ namespace basecross {
 
 		//アニメーションタイプに応じたアクションをさせる時間
 		float m_typeActionTime;
-
+		//再生するSE
+		wstring m_SEName;
+		shared_ptr<SoundItem> m_SE;
+		bool m_isPlaySE;
 
 		bool m_isStartAnim;
 		bool m_isEndAnim;
@@ -57,12 +56,21 @@ namespace basecross {
 
 		AnimationUI(const shared_ptr<Stage>& stage,
 			St_AnimUI& animUI_state,
+			wstring tex, wstring seName);
+
+		AnimationUI(const shared_ptr<Stage>& stage,
+			St_AnimUI& animUI_state,
 			wstring tex, float typeActionTime);
 
+		AnimationUI(const shared_ptr<Stage>& stage,
+			St_AnimUI& animUI_state,
+			wstring tex, float typeActionTime, wstring seName);
 
 		virtual void OnCreate() override;
 
 		virtual void OnUpdate() override;
+
+		virtual void OnDestroy() override;
 
 		//セッター
 		void SetIsStartAnim(bool set) { m_isStartAnim = set; };
@@ -82,6 +90,8 @@ namespace basecross {
 		void MoveSca();
 
 		void TypeAction();
+
+		void PlaySE();
 	};
 }
 //end basecross

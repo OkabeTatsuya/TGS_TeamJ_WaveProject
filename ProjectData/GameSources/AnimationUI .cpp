@@ -19,10 +19,27 @@ namespace basecross {
 		m_st_animUI(animUI_state)
 	{
 		m_nowTime = 0.0f;
-
 		m_isStartAnim = true;
 		m_isEndAnim = false;
+		m_typeActionTime = 0;
+		m_SEName = L"";
+	}
 
+	AnimationUI::AnimationUI(const shared_ptr<Stage>& stage,
+		St_AnimUI& animUI_state,
+		wstring tex, wstring seName) :
+		UIBase(stage,
+			animUI_state.StartRot,
+			animUI_state.StartSca,
+			animUI_state.StartPos,
+			animUI_state.LayerNum,
+			tex),
+		m_st_animUI(animUI_state),
+		m_SEName(seName)
+	{
+		m_nowTime = 0.0f;
+		m_isStartAnim = true;
+		m_isEndAnim = false;
 		m_typeActionTime = 0;
 	}
 
@@ -39,12 +56,28 @@ namespace basecross {
 		m_typeActionTime(typeActionTime)
 	{
 		m_nowTime = 0.0f;
-
 		//m_isStartAnim = true;
 		m_isEndAnim = false;
-
+		m_SEName = L"";
 	}
 
+	AnimationUI::AnimationUI(const shared_ptr<Stage>& stage,
+		St_AnimUI& animUI_state,
+		wstring tex, float typeActionTime, wstring seName) :
+		UIBase(stage,
+			animUI_state.StartRot,
+			animUI_state.StartSca,
+			animUI_state.StartPos,
+			animUI_state.LayerNum,
+			tex),
+		m_st_animUI(animUI_state),
+		m_typeActionTime(typeActionTime),
+		m_SEName(seName)
+	{
+		m_nowTime = 0.0f;
+		//m_isStartAnim = true;
+		m_isEndAnim = false;
+	}
 
 	void AnimationUI::OnCreate() {
 		DrawingImage();
@@ -56,11 +89,17 @@ namespace basecross {
 		MovePos();
 	}
 
+	void AnimationUI::OnDestroy() {
+		auto audioManager = App::GetApp()->GetXAudio2Manager();
+		audioManager->Stop(m_SE);
+	}
+
 	void AnimationUI::ConfirmTime() {
 		//アニメーションをスタートさせる
 		if (m_isStartAnim) {
 			//
 			if (m_typeActionTime > m_nowTime) {
+				PlaySE();
 				auto delta = App::GetApp()->GetElapsedTime();
 				m_nowTime += delta;
 			}
@@ -109,5 +148,13 @@ namespace basecross {
 		}
 	}
 
+	void AnimationUI::PlaySE() {
+		bool moveAnim = m_st_animUI.StartTime < m_nowTime;
+		if (m_SEName != L"" && !m_isPlaySE && moveAnim) {
+			auto audioManager = App::GetApp()->GetXAudio2Manager();
+			audioManager->Start(m_SEName, 0, 1.0f);
+			m_isPlaySE = true;
+		}
+	}
 
 }
