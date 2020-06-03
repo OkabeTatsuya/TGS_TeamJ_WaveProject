@@ -64,10 +64,20 @@ namespace basecross {
 			//Aƒ{ƒ^ƒ“
 			if (cntVec[0].wPressedButtons & XINPUT_GAMEPAD_A)
 			{
+				SetNextStage();
 
 				auto SE = App::GetApp()->GetXAudio2Manager();
 				m_SE = SE->Start(L"se_maoudamashii_system37.wav", 0, 0.5f);
 
+			}
+		}
+	}
+
+	void ResultStage::SetNextStage() {
+		auto &gameManager = GameManager::GetInstance();
+		if (m_ResultUiCount == 2) {
+			if (gameManager.GetSelectStageNum() < gameManager.GetSaveScore().size()-1) {
+				gameManager.SetSelectStageNum(gameManager.GetSelectStageNum() + 1);
 			}
 		}
 	}

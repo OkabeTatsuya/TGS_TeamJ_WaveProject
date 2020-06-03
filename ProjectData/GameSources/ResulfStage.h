@@ -16,7 +16,11 @@ namespace basecross {
 		void CreateViewLight();
 
 		shared_ptr<SoundItem> m_SE;
+		shared_ptr<SoundItem> m_voiceSE;
 		shared_ptr<SoundItem> m_BGM;
+
+		vector<wstring> m_gameclearVoiceStr;
+		vector<wstring> m_gameoverVoiceStr;
 
 		float m_Time=0;//Aボタン押して3秒後にステージ画面に遷移
 		bool m_isPush;//Aボタン押して3秒後にステージ画面に遷移
@@ -38,7 +42,11 @@ namespace basecross {
 		Vec2 m_Pos[3];
 	public:
 		//構築と破棄
-		ResultStage() :Stage() {}
+		ResultStage() :Stage() {
+			m_gameclearVoiceStr = { L"Voice1_12.wav",L"Voice1_13.wav" };
+			m_gameoverVoiceStr = { L"Voice1_14.wav",L"Voice1_14.wav" };
+		}
+
 		virtual ~ResultStage() {}
 		//初期化
 		virtual void OnCreate()override;
@@ -51,6 +59,10 @@ namespace basecross {
 		void Sceneloader();
 		//コントローラーを押す
 		void Press();
+		void SetNextStage();
+
+		void CreateResultUI();
+
 		//BGMを流す
 		void GetBGM();
 		//SEを流す
