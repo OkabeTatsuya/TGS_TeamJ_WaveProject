@@ -52,6 +52,7 @@ namespace basecross {
 			//UI作成
 			CreateAnimUI();
 			CreateGoalUI();
+			CreateGameUI();
 
 			//オブジェクト生成
 			CreateGenerator();
@@ -63,8 +64,15 @@ namespace basecross {
             AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(55.0f, 55.0f, 1.0f), Vec2(600.0f, 350.f), float(5.0f),L"Number.png",7,false);
 			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(256.0f, 64.0f, 1.0f), Vec2(100.0f, 350.f), float(5.0f), L"Score.png");
 
-			auto BGM = App::GetApp()->GetXAudio2Manager();
-			m_BGM = BGM->Start(L"game_maoudamashii_5_town05.wav", XAUDIO2_LOOP_INFINITE, 0.0f);
+			m_fadeInUI = AddGameObject<Fade>(L"ToResulfStage");
+			m_fadeInUI->SetUpdateActive(false);
+
+			auto audioManager = App::GetApp()->GetXAudio2Manager();
+			m_BGM = audioManager->Start(L"game_maoudamashii_5_town05.wav", XAUDIO2_LOOP_INFINITE, 0.0f);
+
+			for (int i = 0; i < 2; i++) {
+				m_SE.push_back(nullptr);
+			}
 		}
 		catch (...) {
 			throw;
@@ -122,8 +130,13 @@ namespace basecross {
 			L"Go.png"
 		};
 
+		vector<wstring> se{
+			L"Voice1_7.wav",
+			L"Voice1_8.wav"
+		};
+
 		for (int i = 0; i < animUIState.size(); i++) {
-			m_startUI.push_back(AddGameObject<AnimationUI>(animUIState[i], texter[i], m_maxStartTime));
+			m_startUI.push_back(AddGameObject<AnimationUI>(animUIState[i], texter[i], m_maxStartTime, se[i]));
 			m_startUI[i]->SetIsStartAnim(true);
 		}
 
@@ -212,13 +225,12 @@ namespace basecross {
 
 			if (gameManager.GetGameClearScore(stageNum) < gameScore) {
 				gameManager.SetIsGameClear(true);
-				auto AudioManager = App::GetApp()->GetXAudio2Manager();
-				m_SE = AudioManager->Start(L"se_GameClear.wav", 0, 0.9f);
+				PlaySE(EN_SoundTypeSE::en_SystemSE, EN_SE::en_GameClearSE, 0.9f);
+				PlaySE(EN_SoundTypeSE::en_VoiceSE, EN_SE::en_GameClearSE, 0.9f);
 			}
 			else {
 				gameManager.SetIsGameClear(false);
-				auto AudioManager = App::GetApp()->GetXAudio2Manager();
-				m_SE = AudioManager->Start(L"se_GameOver.wav", 0, 0.9f);
+				PlaySE(EN_SoundTypeSE::en_SystemSE, EN_SE::en_GameOverSE, 0.9f);
 			}
 		}
 

@@ -70,6 +70,7 @@ namespace basecross {
 			auto XAPtr = App::GetApp()->GetXAudio2Manager();
 			m_BGM = XAPtr->Start(L"game_maoudamashii_5_town12.wav", XAUDIO2_LOOP_INFINITE, 0.5f);
 			
+			m_SE = XAPtr->Start(L"Voice1_1.wav", 0, 1.0f);
 			//App::GetApp()->GetScene<Scene>()->LoadStage(L"ToGameStage");
 
 		}
@@ -86,7 +87,9 @@ namespace basecross {
 				if (!m_isPushA) {
 					//SE再生と音量調整
 					auto XAPtr = App::GetApp()->GetXAudio2Manager();
-					m_SE = XAPtr->Start(L"se_maoudamashii_system37.wav", 0, 0.3f);
+					XAPtr->Stop(m_SE);
+
+					m_SE = XAPtr->Start(L"Voice1_3.wav", 0, 1.0f);
 					//Aボタンを押したときの処理
 					m_isPushA = true;
 				}
@@ -99,7 +102,7 @@ namespace basecross {
 		}
 
 		//Aボタンを押して、2秒経ったらシーン移動
-		if (m_time >= 0.5f) {
+		if (m_time >= 1.0f) {
 			AddGameObject<Fade>(L"ToSelectStage");
 			m_time = 0;
 		}

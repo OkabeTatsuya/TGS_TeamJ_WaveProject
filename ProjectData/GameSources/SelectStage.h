@@ -35,6 +35,7 @@ namespace basecross {
 		vector<wstring> m_stageNumImageName;
 
 		shared_ptr<SoundItem> m_SE;
+		shared_ptr<SoundItem> m_voiceSE;
 		shared_ptr<SoundItem> m_BGM;
 
 		shared_ptr<ImageUI> m_stageImageUI;
@@ -95,6 +96,8 @@ namespace basecross {
 
 		//BGM‚ğÄ¶‚³‚¹‚éŠÖ”
 		void PlayBGM(wstring soundName, float vol);
+
+		void PlayeVoice(wstring soundName, float vol);
 
 		//SE‚ğÄ¶‚³‚¹‚éŠÖ”
 		void PlaySE(wstring soundName, float vol);

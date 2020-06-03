@@ -47,6 +47,8 @@ namespace basecross {
 
 			//サウンドの追加
 			PlayBGM(L"bgm_maoudamashii_acoustic13.wav", 0.5f);
+
+			PlaySE(L"Voice1_5.wav", 1.0f);
 		}
 		catch (...) {
 
@@ -60,11 +62,11 @@ namespace basecross {
 	}
 
 	void SelectStage::OnDestroy() {
-
-		auto SEManager = App::GetApp()->GetXAudio2Manager();
-		SEManager->Stop(m_SE);
-
 		auto AudioManager = App::GetApp()->GetXAudio2Manager();
+
+		AudioManager->Stop(m_SE);
+		AudioManager->Stop(m_voiceSE);
+
 		AudioManager->Stop(m_BGM);
 
 	}
@@ -92,6 +94,7 @@ namespace basecross {
 			if (controlVec.wPressedButtons & XINPUT_GAMEPAD_X) {
 				GameManager::GetInstance().SetClearStageNum(3);
 				PlaySE(L"se_maoudamashii_system37.wav", 0.5f);
+
 			}
 
 		}
@@ -101,6 +104,7 @@ namespace basecross {
 	void SelectStage::PushA() {
 		GameManager::GetInstance().SetSelectStageNum(m_stageNum);
 		PlaySE(L"se_maoudamashii_system37.wav", 0.5f);
+		PlayeVoice(L"Voice1_6.wav", 1.0f);
 		Sceneloader();
 		m_isSelectStage = true;
 	}
@@ -213,9 +217,15 @@ namespace basecross {
 	//SEを再生させる関数
 	//--------------------------------------------------------------------------------------
 	void SelectStage::PlaySE(wstring soundName, float vol) {
-		//BGM再生と音量調整
+		//SE再生と音量調整
 		auto XAPtr = App::GetApp()->GetXAudio2Manager();
 		m_SE = XAPtr->Start(soundName, 0.0f, vol);
+	}
+
+	void SelectStage::PlayeVoice(wstring soundName, float vol) {
+		//SE再生と音量調整
+		auto XAPtr = App::GetApp()->GetXAudio2Manager();
+		m_voiceSE = XAPtr->Start(soundName, 0.0f, vol);
 	}
 
 	//ボタンを押すとシーン遷移する

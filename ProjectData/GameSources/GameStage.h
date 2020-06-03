@@ -39,6 +39,27 @@ namespace basecross {
 		en_MoveEffect
 	};
 
+	enum EN_MapIcon {
+		en_var,
+		en_goal,
+		en_player
+	};
+
+	enum EN_SE {
+		en_SpecialTimeSE,
+		en_GameClearSE,
+		en_GameOverSE,
+		en_GameClearVoice,
+		en_GameOverVoice,
+		en_SpecialTImeVoice1,
+
+	};
+
+	enum EN_SoundTypeSE {
+		en_SystemSE,
+		en_VoiceSE
+	};
+
 	//--------------------------------------------------------------------------------------
 	//	ゲームステージクラス
 	//--------------------------------------------------------------------------------------
@@ -51,7 +72,8 @@ namespace basecross {
 
 		//BGMの再生
 		shared_ptr<SoundItem> m_BGM;
-		shared_ptr<SoundItem> m_SE;
+		vector<shared_ptr<SoundItem>> m_SE;
+		vector<wstring> m_seStr;
 
 		//アニメーションUI
 		vector<shared_ptr<AnimationUI>> m_startUI;
@@ -78,6 +100,7 @@ namespace basecross {
 		float m_specialJumpTimer;
 		int m_specialJumpCount;
 		int m_maxSpecialJumpCount;
+		bool m_playSpecialSE;
 
 		//ゲームを始める前の硬直時間
 		float m_startTimeCount;
@@ -106,6 +129,8 @@ namespace basecross {
 			m_maxStartTime = 3.0f;
 			m_isFrastStop = true;
 
+			m_playSpecialSE = false;
+
 			m_startTimeCount = 0.0f;
 			m_maxStartTime = 3.0f;
 
@@ -120,6 +145,8 @@ namespace basecross {
 			m_spawnFlag = 0;
 
 			m_gameClearScore = { 100,200,300,400 };
+
+			m_seStr = { L"decision16.wav", L"se_GameClear.wav", L"se_GameOver.wav", L"se_GameClear.wav", L"se_GameOver.wav", L"Voice1_11.wav" };
 		}
 
 		virtual ~GameStage() {}
