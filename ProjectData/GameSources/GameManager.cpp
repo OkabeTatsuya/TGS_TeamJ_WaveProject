@@ -107,6 +107,7 @@ namespace basecross {
 		m_specialCount = 0;
 		m_perfectJumpCount = 0;
 		m_goodJumpCount = 0;
+		m_itemCount = 0;
 		m_isGameEnd = false;
 		m_isStopSpawner = true;
 		m_isSpecialTime = false;
