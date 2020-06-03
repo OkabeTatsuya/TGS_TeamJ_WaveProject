@@ -285,7 +285,7 @@ namespace basecross {
 	//リザルトステージに移動
 	void GameStage::LoadResultStage() {
 		if (!m_isLoadStage) {
-            AddGameObject<Fade>(L"ToResulfStage");
+			m_fadeInUI->SetUpdateActive(true);
 		}
 	}
 
@@ -338,6 +338,37 @@ namespace basecross {
 		return 0;
 	}
 
+	void GameStage::MovePlayerIcon() {
+
+		auto maxMapPos = (-m_mapUIPos[EN_MapIcon::en_player].x) + m_mapUIPos[EN_MapIcon::en_goal].x;
+		auto maxPos = m_waveSpawner->GetMaxCreatePosX();
+		auto movement = (m_waveSpawner->GetSpawnTimer() / maxPos * maxMapPos);
+		
+		auto playerIconPos = m_playerIconTrans->GetPosition();
+
+		auto cell = maxMapPos / maxPos;
+
+		auto addPos = 0;
+		auto speed = 120.0f;
+		if ((m_mapUIPos[EN_MapIcon::en_player].x + movement) > playerIconPos.x) {
+			auto maxMovePos = m_mapUIPos[EN_MapIcon::en_player].x + movement;
+			addPos = speed * App::GetApp()->GetElapsedTime();
+		}
+
+		Vec3 setPos = Vec3(playerIconPos.x + addPos, playerIconPos.y, playerIconPos.z);
+
+		if (playerIconPos.x < m_mapUIPos[EN_MapIcon::en_goal].x) {
+			m_playerIconTrans->SetPosition(setPos);
+		}
+		else {
+			m_playerIconTrans->SetPosition(Vec3(m_mapUIPos[EN_MapIcon::en_goal].x, m_mapUIPos[EN_MapIcon::en_goal].y, playerIconPos.z));
+		}
+	}
+
+	void GameStage::PlaySE(EN_SoundTypeSE soundType, EN_SE seName, float vol) {
+		auto AudioManager = App::GetApp()->GetXAudio2Manager();
+		m_SE[soundType] = AudioManager->Start(m_seStr[seName], 0, vol);
+	}
 
 	//ビットフラグを上げる
 	void GameStage::TrueSpawnFlag(unsigned int bit_flag) {
