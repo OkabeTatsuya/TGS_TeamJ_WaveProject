@@ -76,6 +76,8 @@ namespace basecross{
         float m_currentInvincibleTime;
         //ジャンプミスまたは着地ミスしたときの無敵判定
         bool m_isInvincible;
+        //着地中判定
+        bool m_isTouchSea;
         //無敵アニメーションの点滅サイクル秒数
         float m_invincibleFlashSpeed;
         //連続で波に乗っている回数
@@ -226,6 +228,9 @@ namespace basecross{
 
         //スペシャルジャンプアクション
         void SpecialJumpAction();
+
+        //重力制御
+        void GravityControl();
 
     };
 
