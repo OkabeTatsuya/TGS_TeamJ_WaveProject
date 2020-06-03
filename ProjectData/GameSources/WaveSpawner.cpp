@@ -38,35 +38,28 @@ namespace basecross {
 	void WaveSpawner::CreateObject() {
 		for (int i = 0; i < 3; i++) {
 			m_waveObject.push_back(vector<shared_ptr<Wave>>());
+			WaveType waveType;
+
+			switch (i)
+			{
+			case 0:
+				waveType = WaveType::en_waveS;
+				break;
+			case 1:
+				waveType = WaveType::en_waveM;
+				break;
+			case 2:
+				waveType = WaveType::en_waveL;
+				break;
+			default:
+				waveType = WaveType::en_waveL;
+				break;
+			}
 
 			for (int j = 0; j < m_defaultObjectNum[i]; j++) {
 				Vec3 firstPos = Vec3(-6.0f, m_waveState.Pos[i].y, m_waveState.Pos[i].z);
-				m_waveObject[i].push_back(GetStage()->AddGameObject<Wave>(m_waveState.Rot, m_waveState.Sca[i], firstPos, m_waveState.Layer, m_waveState.Tex[i]));
+				m_waveObject[i].push_back(GetStage()->AddGameObject<Wave>(m_waveState.Rot, m_waveState.Sca[i], firstPos, m_waveState.Layer, m_waveState.Tex[i], waveType));
 			}
-
-			//switch (i)
-			//{
-			//case 0:
-			//	for (int j = 0; j < m_defaultObjectNum[i]; j++) {
-			//		Vec3 firstPos = Vec3(-6.0f, m_waveState.Pos[i].y, m_waveState.Pos[i].z);
-			//		m_waveObject[i].push_back(GetStage()->AddGameObject<Wave>(m_waveState.Rot, m_waveState.Sca[i], firstPos, m_waveState.Layer,m_waveState.Tex[i]));
-			//	}
-			//	break;
-			//case 1:
-			//	for (int j = 0; j < m_defaultObjectNum[i]; j++) {
-			//		Vec3 firstPos = Vec3(-6.0f, m_waveState.Pos[i].y, m_waveState.Pos[i].z);
-			//		m_waveObject[i].push_back(GetStage()->AddGameObject<TestWave>(m_waveState.Rot, m_waveState.Sca[i], firstPos, m_waveState.Layer, m_waveState.Tex[i]));
-			//	}
-			//	break;
-			//case 2:
-			//	for (int j = 0; j < m_defaultObjectNum[i]; j++) {
-			//		Vec3 firstPos = Vec3(-6.0f, m_waveState.Pos[i].y, m_waveState.Pos[i].z);
-			//		m_waveObject[i].push_back(GetStage()->AddGameObject<TestWave>(m_waveState.Rot, m_waveState.Sca[i], firstPos, m_waveState.Layer, m_waveState.Tex[i]));
-			//	}
-			//	break;
-			//default:
-			//	break;
-			//}
 		}
 	}
 
@@ -102,7 +95,8 @@ namespace basecross {
 
 			//“®‚©‚¹‚é‚à‚Ì‚ª‚È‚©‚Á‚½‚çì¬‚·‚é
 			if (m_waveObject.size() - 1 == i) {
-				m_waveObject[waveTypeNum].push_back(GetStage()->AddGameObject<Wave>(m_waveState.Rot, m_waveState.Sca[waveTypeNum], m_waveState.Pos[waveTypeNum], m_waveState.Layer, m_waveState.Tex[waveTypeNum]));
+				WaveType waveType = waveTypeNum == 0 ? WaveType::en_waveS : WaveType::en_waveM;
+				m_waveObject[waveTypeNum].push_back(GetStage()->AddGameObject<Wave>(m_waveState.Rot, m_waveState.Sca[waveTypeNum], m_waveState.Pos[waveTypeNum], m_waveState.Layer, m_waveState.Tex[waveTypeNum], waveType));
 				m_waveObject[waveTypeNum][m_waveObject.size() - 1]->SetIsMove(true);
 				m_spawnCount++;
 				break;

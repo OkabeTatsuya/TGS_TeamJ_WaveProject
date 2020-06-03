@@ -29,7 +29,8 @@ namespace basecross {
             Vec3& scale,
             Vec3& position,
 			int&  layer,
-			wstring tex);
+			wstring tex,
+			WaveType type);
 
         virtual void OnUpdate() override;
         virtual void OnCreate() override;

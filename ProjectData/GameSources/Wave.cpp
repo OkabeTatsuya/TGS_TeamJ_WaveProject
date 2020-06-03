@@ -12,12 +12,14 @@ namespace basecross {
         Vec3& scale,
         Vec3& position,
 		int&  layer,
-		wstring tex) :
+		wstring tex,
+		WaveType type) :
 
         MoveSpriteBase(stage,
             rotation, scale, position, layer
         )
     {
+		m_waveType = type;
 		m_textureName = tex;
         m_isMove = true;
         m_offScreenX = -7;
