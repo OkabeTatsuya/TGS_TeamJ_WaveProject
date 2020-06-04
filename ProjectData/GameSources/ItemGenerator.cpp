@@ -20,7 +20,7 @@ namespace basecross {
 	void ItemGenerator::OnCreate() {
 		LoadCSV(en_ObjectType::en_Item);
 		CreateObject();
-		GameManager::GetInstance().SetMaxItemNum(m_createPosX.size());
+		GameManager::GetInstance().SetMaxItemNum((int)m_createPosX.size());
 	}
 
 	void ItemGenerator::OnUpdate() {

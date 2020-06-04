@@ -145,6 +145,13 @@ namespace basecross {
 			Vec2(baseCommandUIPos.x + 120.0f, baseCommandUIPos.y + -baseCommandUIPosY * 3)
 		};
 
+		vector<wstring> commandImage = {
+			L"JunpUI.png",
+			L"CommandUI1.png",
+			L"CommandUI2.png",
+			L"CommandUI3.png"
+		};
+
 		Vec3 itemScale = Vec3(40.0f, 40.0f, 1.0f);
 		AddGameObject<ImageUI>(Vec3(0.0f), itemScale, baseItemPos, float(5.0f), L"Coin.png");
 		//アイテム上限UI
@@ -399,7 +406,6 @@ namespace basecross {
 		else {
 			m_saveGameSpeed = GameManager::GetInstance().GetGameSpeed();
 		}
-
 	}
 
 	//リザルトステージに移動
@@ -468,7 +474,7 @@ namespace basecross {
 
 		auto cell = maxMapPos / maxPos;
 
-		auto addPos = 0;
+		auto addPos = 0.0f;
 		auto speed = 120.0f;
 		if ((m_mapUIPos[EN_MapIcon::en_player].x + movement) > playerIconPos.x) {
 			auto maxMovePos = m_mapUIPos[EN_MapIcon::en_player].x + movement;
