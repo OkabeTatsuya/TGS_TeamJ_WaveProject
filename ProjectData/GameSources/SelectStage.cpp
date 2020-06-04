@@ -219,13 +219,13 @@ namespace basecross {
 	void SelectStage::PlaySE(wstring soundName, float vol) {
 		//SE再生と音量調整
 		auto XAPtr = App::GetApp()->GetXAudio2Manager();
-		m_SE = XAPtr->Start(soundName, 0.0f, vol);
+		m_SE = XAPtr->Start(soundName, 0, vol);
 	}
 
 	void SelectStage::PlayeVoice(wstring soundName, float vol) {
 		//SE再生と音量調整
 		auto XAPtr = App::GetApp()->GetXAudio2Manager();
-		m_voiceSE = XAPtr->Start(soundName, 0.0f, vol);
+		m_voiceSE = XAPtr->Start(soundName, 0, vol);
 	}
 
 	//ボタンを押すとシーン遷移する
