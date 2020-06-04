@@ -99,14 +99,14 @@ namespace basecross {
 			//AddGameObject<ImageUI>(Vec3(0.0f), Vec3(800.0f, 150.0f, 1.0f), Vec2(0.0f, 300.0f), float(2.0f), L"Tx_GameClear.png");
 
 			Vec3 buttonSize = Vec3(512.0f, 256.0f, 1.0f);
-			/*タイトルへ*/
-			AddGameObject<ImageUI>(Vec3(0.0f), buttonSize, Vec2(-450.0f, -300.0f), float(2.0f), L"TitleButton.png");
+			/*次のステージへ*/
+			AddGameObject<ImageUI>(Vec3(0.0f), buttonSize, Vec2(-450.0f, -300.0f), float(2.0f), L"NextStageButton.png");
 
 			/*ステージセレクトへ*/
 			AddGameObject<ImageUI>(Vec3(0.0f), buttonSize, Vec2(-50.0f, -300.0f), float(2.0f), L"SelectButton.png");
 
-			/*次のステージへ*/
-			AddGameObject<ImageUI>(Vec3(0.0f), buttonSize, Vec2(400.0f, -300.0f), float(2.0f), L"NextStageButton.png");
+			/*タイトルへ*/
+			AddGameObject<ImageUI>(Vec3(0.0f), buttonSize, Vec2(400.0f, -300.0f), float(2.0f), L"TitleButton.png");
 
 			/*ステージ番号の表示*/
 			AddGameObject<ImageUI>(Vec3(0.0f), buttonSize, Vec2(-450.0f, 350.0f), float(2.0f), L"StageUI.png");
@@ -141,9 +141,9 @@ namespace basecross {
 			AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(scoreSize, scoreSize, 1.0f), resultsTabe[3], float(2.0f), L"BlackNumbers.png", 2, false);
 			GameManager::GetInstance().DrawJudgeCount(JudgeName::en_Good);
 
-			m_Pos[0] = Vec2(-450.0f, -300.0f);//タイトルへ
+			m_Pos[0] = Vec2(-450.0f, -300.0f);//次のステージへ
 			m_Pos[1] = Vec2(-50.0f, -300.0f);//ステージセレクト
-			m_Pos[2] = Vec2(400.0f, -300.0f);//次のステージへ
+			m_Pos[2] = Vec2(400.0f, -300.0f);//タイトルへ
 
 			/*点滅*/
 			m_CursorUI = AddGameObject<CursorUI>(Vec3(0.0f), Vec3(400.0f, 80.0f, 1.0f), m_Pos[m_ResultUiCount], float(3.0f), L"FadeBG.png", float(2.0));
@@ -155,9 +155,9 @@ namespace basecross {
 
 			//auto SE = App::GetApp()->GetXAudio2Manager();
 			//m_SE = SE->Start(L"se_maoudamashii_system37.wav", 0, 0.5f);
-			m_ResultUi[0] = L"ToTitleStage"; //リザルト画面のボタン配置
+			m_ResultUi[0] = L"ToGameStage"; //リザルト画面のボタン配置
 			m_ResultUi[1] = L"ToSelectStage";
-			m_ResultUi[2] = L"ToGameStage";
+			m_ResultUi[2] = L"ToTitleStage";
 			//m_ResultUi[3] = L"ToGameStage";
 
 		}
