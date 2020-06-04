@@ -12,7 +12,7 @@ namespace basecross {
 	//	リザルトステージクラス実体
 	//--------------------------------------------------------------------------------------
 	void ResultStage::CreateViewLight() {//リザルト画面
-		const Vec3 eye(0.0f, 0.0f, -5.0f);
+		const Vec3 eye(0.0f, 0.0f, -20.0f);
 		const Vec3 at(0.0f);
 		auto PtrView = CreateView<SingleView>();
 
@@ -91,9 +91,14 @@ namespace basecross {
 			AddGameObject<Fade>();
 
 			///*BG(バックグラウンド)*/
-			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1300.0f, 800.0f, 1.0f), Vec2(0.0f, 0.0f), float(2.0f), L"ResultBG.png");//空の画像
+			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1300.0f, 800.0f, 1.0f), Vec2(0.0f, 0.0f), float(0.0f), L"ResultBG.png");//空の画像
 
-			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(700.0f, 700.0f, 1.0f), Vec2(-200.0f, -50.0f), float(2.0f), L"Junp3_34.png");//プレイヤーの画像
+			if (GameManager::GetInstance().GetIsGameClear()) {
+				AddGameObject<ImageUI>(Vec3(0.0f), Vec3(600.0f, 600.0f, 1.0f), Vec2(-250.0f, -0.0f), float(1.0f), L"WinIllsutration.png");//プレイヤーの画像
+			}
+			else {
+				AddGameObject<ImageUI>(Vec3(0.0f), Vec3(600.0f, 600.0f, 1.0f), Vec2(-250.0f, -0.0f), float(1.0f), L"LoseIllsutration.png");//プレイヤーの画像
+			}
 			
 			/*ゲームクリアorゲームオーバー*/
 			//AddGameObject<ImageUI>(Vec3(0.0f), Vec3(800.0f, 150.0f, 1.0f), Vec2(0.0f, 300.0f), float(2.0f), L"Tx_GameClear.png");
@@ -114,32 +119,7 @@ namespace basecross {
 			AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(40.0f, 40.0f, 1.0f), Vec2(-400.0f, 350.0f), float(2.0f), L"BlackNumbers.png", 1, false);
 			GameManager::GetInstance().DrawStageNum();
 
-			Vec2 resultsTabelPos = Vec2(350.0f, 0.0f);
-			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(512.0f, 512.0f, 1.0f), resultsTabelPos, float(2.0f), L"ResultsTable.png");
-
-			float scoreSize = 40.0f;
-			vector<Vec2> resultsTabe = {
-				resultsTabelPos + Vec2(200.0f, 110.0f),
-				resultsTabelPos + Vec2(200.0f, 35.0f),
-				resultsTabelPos + Vec2(120.0f, -40.0f),
-				resultsTabelPos + Vec2(120.0f, -120.0f)
-			};
-
-			//スコアの表示
-			AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(50.0f, 50.0f, 1.0f), resultsTabe[0], float(2.0f), L"PinkNumbers.png", 7, false);
-			GameManager::GetInstance().DrawScore();
-
-			//クリアスコアの表示
-			AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(scoreSize, scoreSize, 1.0f), resultsTabe[1], float(2.0f), L"GrayNumbers.png", 7, false);
-			GameManager::GetInstance().DrawClearScore(GameManager::GetInstance().GetSelectStageNum());
-
-			//Perfectの回数を表示
-			AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(scoreSize, scoreSize, 1.0f), resultsTabe[2], float(2.0f), L"BlackNumbers.png", 2, false);
-			GameManager::GetInstance().DrawJudgeCount(JudgeName::en_Perfect);
-
-			//Goodの回数を表示
-			AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(scoreSize, scoreSize, 1.0f), resultsTabe[3], float(2.0f), L"BlackNumbers.png", 2, false);
-			GameManager::GetInstance().DrawJudgeCount(JudgeName::en_Good);
+			CreateResultUI();
 
 			m_Pos[0] = Vec2(-450.0f, -300.0f);//次のステージへ
 			m_Pos[1] = Vec2(-50.0f, -300.0f);//ステージセレクト
@@ -153,8 +133,8 @@ namespace basecross {
 			auto BGM = App::GetApp()->GetXAudio2Manager();
 			m_BGM = BGM->Start(L"bgm_maoudamashii_acoustic41.wav", XAUDIO2_LOOP_INFINITE, 0.5f);
 
-			//auto SE = App::GetApp()->GetXAudio2Manager();
-			//m_SE = SE->Start(L"se_maoudamashii_system37.wav", 0, 0.5f);
+			RandomVoiceSE();
+
 			m_ResultUi[0] = L"ToGameStage"; //リザルト画面のボタン配置
 			m_ResultUi[1] = L"ToSelectStage";
 			m_ResultUi[2] = L"ToTitleStage";
@@ -212,8 +192,82 @@ namespace basecross {
 
 		auto AudioManager = App::GetApp()->GetXAudio2Manager();
 		AudioManager->Stop(m_BGM);
-
+		AudioManager->Stop(m_voiceSE);
 	}
+
+	void ResultStage::CreateResultUI() {
+		//リザルトテーブル　この値を変更するとスコアUIがすべて移動する
+		Vec2 resultsTabelPos = Vec2(300.0f, 0.0f);
+		AddGameObject<ImageUI>(Vec3(0.0f), Vec3(650.0f, 670.0f, 1.0f), resultsTabelPos, float(2.0f), L"WhiteBoard.png");
+
+		float scoreSize = 40.0f;
+		vector<Vec2> resultsTabe = {
+			resultsTabelPos + Vec2(0.0f, 110.0f),		//スコア
+			resultsTabelPos + Vec2(220.0f, 65.0f),		//クリアスコア
+			resultsTabelPos + Vec2(80.0f, -10.0f),		//パーファクト回数
+			resultsTabelPos + Vec2(80.0f, -90.0f),		//グッド回数
+			resultsTabelPos + Vec2(40.0f, 90.0f),		//スコア間の線
+			resultsTabelPos + Vec2(10.0f, 30.0f),		//スコアテキスト
+			resultsTabelPos + Vec2(10.0f, 30.0f),		//スコアの下線
+			resultsTabelPos + Vec2(-100.0f, -10.0f),	//パーフェクトテキスト
+			resultsTabelPos + Vec2(-140.0f, -90.0f),	//グッドテキスト
+			resultsTabelPos + Vec2(-00.0f, -40.0f),		//パーフェクト回数の下線
+			resultsTabelPos + Vec2(-00.0f, -120.0f),	//グッド回数の下線
+			resultsTabelPos + Vec2(-140.0f, -170.0f),	//アイテム
+			resultsTabelPos + Vec2(80.0f, -170.0f),		//アイテム個数
+			resultsTabelPos + Vec2(200.0f, -170.0f),	//アイテム個数の上限
+			resultsTabelPos + Vec2(130.0f, -10.0f),		//×テキスト１
+			resultsTabelPos + Vec2(130.0f, -90.0f),		//×テキスト２
+			resultsTabelPos + Vec2(130.0f, -170.0f),	//×テキスト３
+			resultsTabelPos + Vec2(200.0f, -10.0f),		//パーフェクトのスコア
+			resultsTabelPos + Vec2(200.0f, -90.0f),		//グッドのスコア
+		};
+
+		Vec2 baseScale = Vec2(1.0f);
+
+		//スコアの表示
+		AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(45.0f, 45.0f, 1.0f), resultsTabe[0], float(3.0f), L"PinkNumbers.png", 7, false);
+		GameManager::GetInstance().DrawScore();
+
+		//クリアスコアの表示
+		AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(scoreSize, scoreSize, 1.0f), resultsTabe[1], float(2.0f), L"GrayNumbers.png", 7, false);
+		GameManager::GetInstance().DrawClearScore(GameManager::GetInstance().GetSelectStageNum());
+
+		//Perfectの回数を表示
+		AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(scoreSize, scoreSize, 1.0f), resultsTabe[2], float(2.0f), L"BlackNumbers.png", 2, false);
+		GameManager::GetInstance().DrawJudgeCount(JudgeName::en_Perfect);
+
+		//Goodの回数を表示
+		AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(scoreSize, scoreSize, 1.0f), resultsTabe[3], float(2.0f), L"BlackNumbers.png", 2, false);
+		GameManager::GetInstance().DrawJudgeCount(JudgeName::en_Good);
+
+		//セレクトテキスト
+		AddGameObject<ImageUI>(Vec3(0.0f), Vec3(512.0f, 512.0f, 1.0f), resultsTabe[5], float(3.0f), L"ScoreLetter.png");
+		//スコア下線
+		AddGameObject<ImageUI>(Vec3(0.0f), Vec3(420.0f, 7.0f, 1.0f), resultsTabe[6], float(3.0f), L"Border.png");
+		AddGameObject<ImageUI>(Vec3(0.0f), Vec3(256.0f, 128.0f, 1.0f), resultsTabe[7], float(4.0f), L"Perfect.png");
+		AddGameObject<ImageUI>(Vec3(0.0f), Vec3(256.0f, 128.0f, 1.0f), resultsTabe[8], float(4.0f), L"Good.png");
+
+		//下線
+		AddGameObject<ImageUI>(Vec3(0.0f), Vec3(154.0f, 92.0f, 1.0f), resultsTabe[4], float(3.0f), L"DaigonalLine.png");
+		AddGameObject<ImageUI>(Vec3(0.0f), Vec3(413.0f, 3.0f, 1.0f), resultsTabe[9], float(5.0f), L"UnderLine.png");
+		AddGameObject<ImageUI>(Vec3(0.0f), Vec3(413.0f, 3.0f, 1.0f), resultsTabe[10], float(5.0f), L"UnderLine.png");
+
+		//アイテム
+		AddGameObject<ImageUI>(Vec3(0.0f), Vec3(60.0f, 60.0f, 1.0f), resultsTabe[11], float(4.0f), L"Coin.png");
+
+		//アイテム個数
+		AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(scoreSize, scoreSize, 1.0f), resultsTabe[12], float(3.0f), L"BlackNumbers.png", 2, false);
+		GameManager::GetInstance().DrawNum(GameManager::GetInstance().GetItemCount());
+
+		//アイテムの上限
+		AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(scoreSize, scoreSize, 1.0f), resultsTabe[13], float(3.0f), L"BlackNumbers.png", 2, false);
+		GameManager::GetInstance().DrawNum(GameManager::GetInstance().GetMaxItemNum());
+
+		//Xテキスト
+		AddGameObject<ImageUI>(Vec3(0.0f), Vec3(50.0f, 50.0f, 1.0f), resultsTabe[16], float(5.0f), L"Slash.png");
+	};
+
 
 	Vec2 ResultStage::GetMoveVector()
 	{
