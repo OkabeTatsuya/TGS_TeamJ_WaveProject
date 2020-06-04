@@ -156,6 +156,17 @@ namespace basecross{
         int m_currentSpecialJumpActionCount;
         //前フレームのスペシャルジャンプの回数
         int m_beforeSpecialJumpActionCount;
+
+        //ノックバック倍率
+        float m_knockBackMagnification;
+        //ノックバックフラグ
+        bool m_isKnockBack;
+        //ノックバックの移動量
+        float m_knockBackValue;
+        //ノックバックの移動先座標
+        float m_knockBackPos;
+        //パーフェクトジャンプ時前進フラグ
+        bool m_isKnockUp;
     private:
         //プレイヤーの角度
         Vec3 m_rot;
@@ -239,6 +250,11 @@ namespace basecross{
 
         //重力制御
         void GravityControl();
+
+        //ノックバック処理初期化
+        void InitKnockBack(float mag);
+        //ノックバック処理
+        void KnockBack();
 
     };
 

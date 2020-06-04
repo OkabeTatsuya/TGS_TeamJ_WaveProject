@@ -69,6 +69,7 @@ namespace basecross {
         m_currentSpecialJumpCount = 0;
         m_specialJumpCount = 3;
         m_specialJumpActionMaxCount = 2;
+        m_knockBackValue = 0.5f;
     }
 
     void Player::OnCreate() {
@@ -82,7 +83,7 @@ namespace basecross {
         transPtr->SetRotation(m_rotation);
 
         PsBoxParam param(transPtr->GetWorldMatrix(), 1.0f, false, PsMotionType::MotionTypeActive);
-        AddComponent<RigidbodyBox>(param)->SetDrawActive(true);
+        AddComponent<RigidbodyBox>(param);
 
         auto colPtr = AddComponent<CollisionObb>();
         colPtr->SetMakedSize(Vec3(1.0f, 1.0f, 1.0f));
@@ -149,6 +150,7 @@ namespace basecross {
         Invincible();
         SpeedScoreMagnification();
         GravityControl();
+        KnockBack();
         m_scoreUpUI->AdjustPosition(GetComponent<Transform>()->GetPosition());
 		m_judgJumpUI->SetingPos(GetComponent<Transform>()->GetPosition());
 		FollowEffect();
@@ -307,7 +309,7 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
     //重力制御
     void Player::GravityControl()
     {
-        if (GameManager::GetInstance().GetIsSpecialTime() && GetComponent<RigidbodyBox>()->GetLinearVelocity().y<=0 && !m_isTouchSea){
+        if (GameManager::GetInstance().GetIsSpecialTime() && GetComponent<RigidbodyBox>()->GetLinearVelocity().y<0 && !m_isTouchSea){
             GetComponent<RigidbodyBox>()->SetAutoGravity(false);
             auto gravity = GetComponent<RigidbodyBox>()->GetLinearVelocity();
             gravity.y -= 3.0f * App::GetApp()->GetElapsedTime();
@@ -539,6 +541,8 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
             m_isJumpActionZAnimation = false;
             m_currentAnimationKeyCount = 0;
             if (isGreatJump) {
+                m_knockBackMagnification = 4.0f;
+                InitKnockBack(m_knockBackMagnification);
                 SpeedUp(m_upSpeedValue * m_jumpGradeSpeedMagnification);
                 HighJump(m_greatJumpMagnification);
                 JumpEffect(EN_EffectName::en_GoodEffect, L"se_maoudamashii_onepoint16.wav");
@@ -580,6 +584,8 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
             m_isJumpActionZAnimation = false;
             m_currentAnimationKeyCount = 0;
             if (isGreatJump) {
+                m_knockBackMagnification = 2.0f;
+                InitKnockBack(m_knockBackMagnification);
                 SpeedUp(m_upSpeedValue * m_jumpGradeSpeedMagnification);
                 MidJump(m_greatJumpMagnification);
                 JumpEffect(EN_EffectName::en_GoodEffect, L"se_maoudamashii_onepoint16.wav");
@@ -622,6 +628,8 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
             m_isJumpActionZAnimation = false;
             m_currentAnimationKeyCount = 0;
             if (isGreatJump) {
+                m_knockBackMagnification = 1.0f;
+                InitKnockBack(m_knockBackMagnification);
                 SpeedUp(m_upSpeedValue * m_jumpGradeSpeedMagnification);
                 LowJump(m_greatJumpMagnification);
                 JumpEffect(EN_EffectName::en_GoodEffect, L"se_maoudamashii_onepoint16.wav");
@@ -680,6 +688,43 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
         }
     }
 
+    //ノックバック処理初期化
+    void Player::InitKnockBack(float mag) {
+        if (m_isTouchSea) {
+            m_knockBackPos = GetComponent<Transform>()->GetPosition().x - mag * m_knockBackValue;
+            m_isKnockBack = true;
+        }
+        else {
+            m_knockBackPos = GetComponent<Transform>()->GetPosition().x + mag * m_knockBackValue;
+            if (m_knockBackPos >= -2.0f) 
+                m_knockBackPos = -2.0f;
+            else
+            m_isKnockUp = true;
+        }
+    }
+
+    //ノックバック処理
+    void Player::KnockBack() {
+        if (m_isKnockBack) {
+            auto linerVel = GetComponent<RigidbodyBox>()->GetLinearVelocity();
+            linerVel.x = -3.0f;
+            GetComponent<RigidbodyBox>()->SetLinearVelocity(linerVel);
+            if (GetComponent<Transform>()->GetPosition().x <= m_knockBackPos) {
+                m_isKnockBack = false;
+            }
+        }
+        if (m_isKnockUp && m_isTouchSea) {
+            auto linerVel = GetComponent<RigidbodyBox>()->GetLinearVelocity();
+            linerVel.x = +1.0f;
+            GetComponent<RigidbodyBox>()->SetLinearVelocity(linerVel);
+            if (GetComponent<Transform>()->GetPosition().x >= m_knockBackPos) {
+                linerVel.x = 0.0f;
+                GetComponent<RigidbodyBox>()->SetLinearVelocity(linerVel);
+                m_isKnockUp = false;
+            }
+        }
+    }
+
     //効果音
     void Player::ActiveSE(wstring se) {
 		float pitch = m_combo == 0.0f ? 1.0f : m_combo / 10.0f + 1.0f;
@@ -723,6 +768,7 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
     //コリジョンの最初に当たった瞬間１回のみの処理
     void Player::OnCollisionEnter(shared_ptr<GameObject>& other) {
         if (other->FindTag(L"Sea")) {
+            m_isTouchSea = true;
             if (m_isSpecialJumpAction) {
                 m_isSpecialJumpAction = false;
                 m_currentSpecialJumpActionCount = 0;
@@ -783,8 +829,32 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
 
     //コリジョンから抜けた瞬間１回のみの処理
     void Player::OnCollisionExit(shared_ptr<GameObject>&other) {
-        if ((other->FindTag(L"SmallWave") || other->FindTag(L"MidWave") || other->FindTag(L"BigWave"))&& !m_isJump) {
+        if (other->FindTag(L"BigWave")&&m_isTouchSea) {
             if (!m_isInvincible&&m_isFirstJump) {
+                m_knockBackMagnification = 4.0f;
+                InitKnockBack(m_knockBackMagnification);
+                JumpMissSpeedDown();
+                m_isInvincible = true;
+            }
+            m_currentJumpGradeTime = 0;
+            m_combo = 0;
+            m_isWaveTouch = false;
+        }
+        if (other->FindTag(L"MidWave") && m_isTouchSea) {
+            if (!m_isInvincible&&m_isFirstJump) {
+                m_knockBackMagnification = 2.0f;
+                InitKnockBack(m_knockBackMagnification);
+                JumpMissSpeedDown();
+                m_isInvincible = true;
+            }
+            m_currentJumpGradeTime = 0;
+            m_combo = 0;
+            m_isWaveTouch = false;
+        }
+        if (other->FindTag(L"SmallWave")&&m_isTouchSea) {
+            if (!m_isInvincible&&m_isFirstJump) {
+                m_knockBackMagnification = 1.0f;
+                InitKnockBack(m_knockBackMagnification);
                 JumpMissSpeedDown();
                 m_isInvincible = true;
             }
