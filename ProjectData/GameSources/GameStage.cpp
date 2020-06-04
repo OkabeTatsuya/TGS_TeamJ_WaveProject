@@ -379,10 +379,16 @@ namespace basecross {
 		auto &gameManager = GameManager::GetInstance();
 		if (playerPosX < m_gameOverPos) {
 			gameManager.SetIsGameEnd(true);
-			m_goalUI->SetIsStartAnim(false);
+			m_gameOver = true;
 		}
-		else {
-			m_goalUI->SetIsStartAnim(true);
+
+		if (gameManager.GetIsGameEnd()) {
+			if (m_gameOver) {
+				m_goalUI->SetIsStartAnim(false);
+			}
+			else {
+				m_goalUI->SetIsStartAnim(true);
+			}
 		}
 	}
 

@@ -131,6 +131,7 @@ namespace basecross {
 		bool m_isLoadStage;
 		bool m_isCreateGoalUI;
 
+		bool m_gameOver;
 		float m_gameOverPos;
 
 		//スポナーの生成終了フラグ
