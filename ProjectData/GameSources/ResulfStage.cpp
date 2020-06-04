@@ -326,5 +326,20 @@ namespace basecross {
 
 		return angle;
 	}
+
+	void ResultStage::RandomVoiceSE() {
+		std::random_device rando;
+		std::mt19937 mt(rando());
+		int num = mt() % 2;
+
+		auto SE = App::GetApp()->GetXAudio2Manager();
+		if (GameManager::GetInstance().GetIsGameClear()) {
+			m_voiceSE = SE->Start(m_gameclearVoiceStr[num], 0, 1.5f);
+		}
+		else {
+			m_voiceSE = SE->Start(m_gameoverVoiceStr[num], 0, 1.0f);
+		}
+
+	}
 }
 //end basecross

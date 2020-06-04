@@ -43,8 +43,8 @@ namespace basecross {
 	public:
 		//構築と破棄
 		ResultStage() :Stage() {
-			m_gameclearVoiceStr = { L"Voice1_12.wav",L"Voice1_13.wav" };
-			m_gameoverVoiceStr = { L"Voice1_14.wav",L"Voice1_14.wav" };
+			m_gameclearVoiceStr = { L"Voice1_12.wav",L"Voice1_13.wav",L"Voice2_16.wav", L"Voice2_17.wav" };
+			m_gameoverVoiceStr = { L"Voice1_14.wav",L"Voice2_15.wav",L"Voice2_14.wav" };
 		}
 
 		virtual ~ResultStage() {}
@@ -67,6 +67,8 @@ namespace basecross {
 		void GetBGM();
 		//SEを流す
 		void GetSE();
+
+		void RandomVoiceSE();
 	};
 
 	//コントローラー
