@@ -52,7 +52,6 @@ namespace basecross {
 		en_GameClearVoice,
 		en_GameOverVoice,
 		en_SpecialTImeVoice1,
-
 	};
 
 	enum EN_SoundTypeSE {
@@ -87,6 +86,8 @@ namespace basecross {
 		vector<shared_ptr<EfkPlay>> m_efkPlay;
 
 		shared_ptr<GameObject> m_playerObj;
+		shared_ptr<Transform> m_playerObjTrans;
+
 		shared_ptr<UIBase> m_fadeInUI;
 
 		//プレイヤーアイコン
@@ -130,6 +131,8 @@ namespace basecross {
 		bool m_isLoadStage;
 		bool m_isCreateGoalUI;
 
+		float m_gameOverPos;
+
 		//スポナーの生成終了フラグ
 		unsigned int m_spawnFlag;
 		bool m_isReset;
@@ -163,6 +166,7 @@ namespace basecross {
 			m_gameClearScore = { 100,200,300,400 };
 
 			m_seStr = { L"decision16.wav", L"se_GameClear.wav", L"se_GameOver.wav", L"se_GameClear.wav", L"se_GameOver.wav", L"Voice1_11.wav" };
+			m_gameOverPos = -5.0f;
 		}
 
 		virtual ~GameStage() {}
@@ -220,6 +224,9 @@ namespace basecross {
 		//ゲームクリア時の処理
 		void GameClear();
 		
+		//ゲームオーバー時の処理
+		void GameEnd();
+
 		//スペシャルジャンプに入った時
 		void SpecialJumpController();
 
@@ -227,7 +234,7 @@ namespace basecross {
 		void MovePlayerIcon();
 
 		//SEを再生する
-		void PlaySE(EN_SoundTypeSE soundType, EN_SE seName, float vol);
+		void PlaySE(EN_SoundTypeSE soundType, wstring seName, float vol);
 
 		//ビットフラグを上げる
 		void TrueSpawnFlag(unsigned int bit_flag);

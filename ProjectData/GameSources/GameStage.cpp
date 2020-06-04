@@ -196,10 +196,9 @@ namespace basecross {
 		};
 
 		//コマンドUI
-		AddGameObject<ImageUI>(Vec3(0.0f), commandScl[1], commandUIPos[0], float(5.0f), L"JunpUI.png");
-		AddGameObject<ImageUI>(Vec3(0.0f), commandScl[1], commandUIPos[1], float(6.0f), L"CommandUI1.png");
-		AddGameObject<ImageUI>(Vec3(0.0f), commandScl[1], commandUIPos[2], float(6.0f), L"CommandUI2.png");
-		AddGameObject<ImageUI>(Vec3(0.0f), commandScl[1], commandUIPos[3], float(6.0f), L"CommandUI3.png");
+		for (int i = 0; i < commandUIPos.size(); i++) {
+			AddGameObject<ImageUI>(Vec3(0.0f), commandScl[1], commandUIPos[i], float(6.0f), commandImage[i]);
+		}
 
 		//アイコンUI
 		AddGameObject<ImageUI>(Vec3(0.0f), commandIconScl[0], commandIconUIPos[0], float(5.0f), L"ABttun.png");
@@ -372,6 +371,18 @@ namespace basecross {
 			LoadResultStage();
 			//m_loadStageTimeCount = 0;
 			m_isLoadStage = true;
+		}
+	}
+
+	void GameStage::GameEnd() {
+		auto playerPosX = m_playerObjTrans->GetPosition().x;
+		auto &gameManager = GameManager::GetInstance();
+		if (playerPosX < m_gameOverPos) {
+			gameManager.SetIsGameEnd(true);
+			m_goalUI->SetIsStartAnim(false);
+		}
+		else {
+			m_goalUI->SetIsStartAnim(true);
 		}
 	}
 
