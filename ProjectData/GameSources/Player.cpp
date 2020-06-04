@@ -97,8 +97,6 @@ namespace basecross {
 
 		m_judgJumpUI = GetStage()->AddGameObject<JudgJumpUI>(Vec3(0.0f), Vec3(256.0f, 128.0f, 1.0f), Vec2(0.0f), float(7.0f), L"Perfect.png");
 
-        GameManager::GetInstance().SetIsSpecialTime(true);
-
     }
 
     void Player::InitAnimation() {
