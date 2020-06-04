@@ -24,8 +24,9 @@ namespace basecross {
         m_currentAnimationKeyCount = 0;
         m_isWaveTouch = false;
         m_jumpActionTime = 0.5f;
-        m_highJumpMoveY = 8.0f;
-        m_lowJumpMoveY = 6.0f;
+        m_highJumpMoveY = 7.5f;
+        m_midJumpMoveY = 5.5f;
+        m_lowJumpMoveY = 4.0f;
         m_maxSpeed = 6.0f;
         m_minSpeed = 3.0f;
         GameManager::GetInstance().SetGameSpeed((m_maxSpeed - m_minSpeed) / 3 + m_minSpeed);
@@ -72,6 +73,7 @@ namespace basecross {
 
     void Player::OnCreate() {
 
+
         DrawingImage(L"Wait_1.png");
         InitAnimation();
         auto transPtr = AddComponent<Transform>();
@@ -94,6 +96,8 @@ namespace basecross {
 		m_effectObj->GetComponent<Transform>()->SetPosition(Vec3(0.0f));
 
 		m_judgJumpUI = GetStage()->AddGameObject<JudgJumpUI>(Vec3(0.0f), Vec3(256.0f, 128.0f, 1.0f), Vec2(0.0f), float(7.0f), L"Perfect.png");
+
+        GameManager::GetInstance().SetIsSpecialTime(true);
 
     }
 
@@ -308,7 +312,7 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
         if (GameManager::GetInstance().GetIsSpecialTime() && GetComponent<RigidbodyBox>()->GetLinearVelocity().y<=0 && !m_isTouchSea){
             GetComponent<RigidbodyBox>()->SetAutoGravity(false);
             auto gravity = GetComponent<RigidbodyBox>()->GetLinearVelocity();
-            gravity.y -= 3.0 * App::GetApp()->GetElapsedTime();
+            gravity.y -= 3.0f * App::GetApp()->GetElapsedTime();
             GetComponent<RigidbodyBox>()->SetLinearVelocity(gravity);
 
         }
@@ -372,86 +376,7 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
         }
 
     }
-    //スペシャルジャンプ
-    void Player::SpecialJump() {
 
-        bool isGreatJump = false;
-        auto controller = App::GetApp()->GetInputDevice().GetControlerVec()[0];
-        auto &gm = GameManager::GetInstance();
-        m_currentJumpGradeTime += App::GetApp()->GetElapsedTime();
-        if (m_jumpGradeTime <= m_currentJumpGradeTime) {
-            isGreatJump = true;
-        }
-        if (controller.wPressedButtons & XINPUT_GAMEPAD_A && !m_isJump) {
-            m_currentSpecialJumpCount++;
-            if (m_currentSpecialJumpCount > m_specialJumpCount) {
-                m_isSpecialJump = false;
-                gm.SetIsSpecialTime(false);
-                m_managerniaruyatu = false;
-                m_currentSpecialJumpCount = 0;
-            }
-            m_isJumpStartAnimation = true;
-            m_isJumpFinishAnimation = false;
-            m_isWaitingAnimation = false;
-            m_isJumpActionXAnimation = false;
-            m_isJumpActionYAnimation = false;
-            m_isJumpActionZAnimation = false;
-            m_currentAnimationKeyCount = 0;
-            if (isGreatJump) {
-                SpeedUp(m_upSpeedValue * m_jumpGradeSpeedMagnification);
-                HighJump(m_greatJumpMagnification);
-                JumpEffect(EN_EffectName::en_GoodEffect, L"se_maoudamashii_onepoint16.wav");
-                gm.AddJumpScore(m_currentSpeedScoreMagnification, m_combo*m_comboMagnification, true);
-
-                Vec3 pos = GetComponent<Transform>()->GetPosition();
-                m_judgJumpUI->VisibleUI(L"Perfect.png", pos);
-            }
-            else {
-                SpeedUp(m_upSpeedValue);
-                HighJump(1.0f);
-                JumpEffect(EN_EffectName::en_GoodEffect, L"se_maoudamashii_onepoint17.wav");
-                gm.AddJumpScore(m_currentSpeedScoreMagnification, m_combo*m_comboMagnification, false);
-
-                Vec3 pos = GetComponent<Transform>()->GetPosition();
-                m_judgJumpUI->VisibleUI(L"Good.png", pos);
-            }
-            m_currentJumpGradeTime = 0;
-            m_combo++;
-        }
-
-        //auto controller = App::GetApp()->GetInputDevice().GetControlerVec()[0];
-        //auto &gm = GameManager::GetInstance();
-        //m_currentJumpGradeTime += App::GetApp()->GetElapsedTime();
-
-    //    if (m_jumpGradeTime * m_jumpGradeTimeJudge <= m_currentJumpGradeTime) {
-            //m_currentSpecialJumpCount++;
-            //if (m_currentSpecialJumpCount > m_specialJumpCount) {
-            //    m_isSpecialJump = false;
-            //    gm.SetIsSpecialTime(false);
-            //    m_managerniaruyatu = false;
-            //    m_currentSpecialJumpCount = 0;
-            //}
-    //        else {
-    //            m_isJumpStartAnimation = true;
-    //            m_isJumpFinishAnimation = false;
-    //            m_isWaitingAnimation = false;
-    //            m_isJumpActionXAnimation = false;
-    //            m_isJumpActionYAnimation = false;
-    //            m_isJumpActionZAnimation = false;
-    //            m_currentAnimationKeyCount = 0;
-    //            SpeedUp(m_upSpeedValue * m_jumpGradeSpeedMagnification);
-    //            HighJump(m_greatJumpMagnification);
-    //            gm.AddJumpScore(m_currentSpeedScoreMagnification, m_combo*m_comboMagnification, false);
-    //            m_currentJumpGradeTime = 0;
-    //            m_combo++;
-    //            m_isJumpAction = true;
-				//m_isSpecialJump = true;
-    //            m_isSpecialJumpAction = true;
-				//gm.SetIsSpecialTime(true);
-    //        }
-    //    }
-
-    }
 
     //スペシャルジャンプアクション
     void Player::SpecialJumpAction() {
@@ -507,7 +432,7 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
             m_isJumpAction = true;
             m_currentAnimationKeyCount = 0;
         }
-        if (m_isLeftJumpAction&&m_isRightJumpAction && !m_isTopJumpAction && !m_isBottomJumpAction) {
+        if (m_isJump && m_isLeftJumpAction&&m_isRightJumpAction && !m_isTopJumpAction && !m_isBottomJumpAction) {
             m_isLeftJumpAction = false;
             m_isRightJumpAction = false;
             m_isJumpStartAnimation = false;
@@ -590,9 +515,8 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
             }
         }
     }
-
-    //ジャンプ処理
-    void Player::Jump() {
+    //大波のジャンプ処理
+    void Player::BigWaveJump() {
         bool isGreatJump = false;
         auto controller = App::GetApp()->GetInputDevice().GetControlerVec()[0];
         auto &gm = GameManager::GetInstance();
@@ -602,9 +526,95 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
         }
         if (gm.GetIsSpecialTime() && controller.wPressedButtons & XINPUT_GAMEPAD_A && !m_isJump) {
             m_isTouchSea = false;
-            SpecialJump();
+            m_currentSpecialJumpCount++;
+            if (m_currentSpecialJumpCount > m_specialJumpCount) {
+                m_isSpecialJump = false;
+                gm.SetIsSpecialTime(false);
+                m_managerniaruyatu = false;
+                m_currentSpecialJumpCount = 0;
+            }
+            m_isJumpStartAnimation = true;
+            m_isJumpFinishAnimation = false;
+            m_isWaitingAnimation = false;
+            m_isJumpActionXAnimation = false;
+            m_isJumpActionYAnimation = false;
+            m_isJumpActionZAnimation = false;
+            m_currentAnimationKeyCount = 0;
+            if (isGreatJump) {
+                SpeedUp(m_upSpeedValue * m_jumpGradeSpeedMagnification);
+                HighJump(m_greatJumpMagnification);
+                JumpEffect(EN_EffectName::en_GoodEffect, L"se_maoudamashii_onepoint16.wav");
+                gm.AddJumpScore(m_currentSpeedScoreMagnification, m_combo*m_comboMagnification, true);
+
+                Vec3 pos = GetComponent<Transform>()->GetPosition();
+                m_judgJumpUI->VisibleUI(L"Perfect.png", pos);
+            }
+            else {
+                SpeedUp(m_upSpeedValue);
+                HighJump(1.0f);
+                JumpEffect(EN_EffectName::en_GoodEffect, L"se_maoudamashii_onepoint17.wav");
+                gm.AddJumpScore(m_currentSpeedScoreMagnification, m_combo*m_comboMagnification, false);
+
+                Vec3 pos = GetComponent<Transform>()->GetPosition();
+                m_judgJumpUI->VisibleUI(L"Good.png", pos);
+            }
+            m_currentJumpGradeTime = 0;
+            m_combo++;
         }
-        else if (controller.wPressedButtons & XINPUT_GAMEPAD_A && !m_isJump) {
+    }
+
+    //中波のジャンプ処理
+    void Player::MidWaveJump() {
+        bool isGreatJump = false;
+        auto controller = App::GetApp()->GetInputDevice().GetControlerVec()[0];
+        auto &gm = GameManager::GetInstance();
+        m_currentJumpGradeTime += App::GetApp()->GetElapsedTime();
+        if (m_jumpGradeTime <= m_currentJumpGradeTime) {
+            isGreatJump = true;
+        }
+        if (controller.wPressedButtons & XINPUT_GAMEPAD_A && !m_isJump) {
+            m_isTouchSea = false;
+            m_isJumpStartAnimation = true;
+            m_isJumpFinishAnimation = false;
+            m_isWaitingAnimation = false;
+            m_isJumpActionXAnimation = false;
+            m_isJumpActionYAnimation = false;
+            m_isJumpActionZAnimation = false;
+            m_currentAnimationKeyCount = 0;
+            if (isGreatJump) {
+                SpeedUp(m_upSpeedValue * m_jumpGradeSpeedMagnification);
+                MidJump(m_greatJumpMagnification);
+                JumpEffect(EN_EffectName::en_GoodEffect, L"se_maoudamashii_onepoint16.wav");
+                gm.AddJumpScore(m_currentSpeedScoreMagnification, m_combo*m_comboMagnification, true);
+
+                Vec3 pos = GetComponent<Transform>()->GetPosition();
+                m_judgJumpUI->VisibleUI(L"Perfect.png", pos);
+            }
+            else {
+                SpeedUp(m_upSpeedValue);
+                MidJump(1.0f);
+                JumpEffect(EN_EffectName::en_GoodEffect, L"se_maoudamashii_onepoint17.wav");
+                gm.AddJumpScore(m_currentSpeedScoreMagnification, m_combo*m_comboMagnification, false);
+
+                Vec3 pos = GetComponent<Transform>()->GetPosition();
+                m_judgJumpUI->VisibleUI(L"Good.png", pos);
+            }
+            m_currentJumpGradeTime = 0;
+            m_combo++;
+        }
+
+    }
+
+    //小波のジャンプ処理
+    void Player::SmallWaveJump() {
+        bool isGreatJump = false;
+        auto controller = App::GetApp()->GetInputDevice().GetControlerVec()[0];
+        auto &gm = GameManager::GetInstance();
+        m_currentJumpGradeTime += App::GetApp()->GetElapsedTime();
+        if (m_jumpGradeTime <= m_currentJumpGradeTime) {
+            isGreatJump = true;
+        }
+        if (controller.wPressedButtons & XINPUT_GAMEPAD_A && !m_isJump) {
             m_isTouchSea = false;
             m_isJumpStartAnimation = true;
             m_isJumpFinishAnimation = false;
@@ -616,60 +626,39 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
             if (isGreatJump) {
                 SpeedUp(m_upSpeedValue * m_jumpGradeSpeedMagnification);
                 LowJump(m_greatJumpMagnification);
-				JumpEffect(EN_EffectName::en_GoodEffect, L"se_maoudamashii_onepoint16.wav");
-				gm.AddJumpScore(m_currentSpeedScoreMagnification, m_combo*m_comboMagnification, true);
+                JumpEffect(EN_EffectName::en_GoodEffect, L"se_maoudamashii_onepoint16.wav");
+                gm.AddJumpScore(m_currentSpeedScoreMagnification, m_combo*m_comboMagnification, true);
 
-				Vec3 pos = GetComponent<Transform>()->GetPosition();
-				m_judgJumpUI->VisibleUI(L"Perfect.png", pos);
-			}
+                Vec3 pos = GetComponent<Transform>()->GetPosition();
+                m_judgJumpUI->VisibleUI(L"Perfect.png", pos);
+            }
             else {
                 SpeedUp(m_upSpeedValue);
                 LowJump(1.0f);
-				JumpEffect(EN_EffectName::en_GoodEffect, L"se_maoudamashii_onepoint17.wav");
-				gm.AddJumpScore(m_currentSpeedScoreMagnification, m_combo*m_comboMagnification, false);
+                JumpEffect(EN_EffectName::en_GoodEffect, L"se_maoudamashii_onepoint17.wav");
+                gm.AddJumpScore(m_currentSpeedScoreMagnification, m_combo*m_comboMagnification, false);
 
-				Vec3 pos = GetComponent<Transform>()->GetPosition();
-				m_judgJumpUI->VisibleUI(L"Good.png", pos);
-			}
+                Vec3 pos = GetComponent<Transform>()->GetPosition();
+                m_judgJumpUI->VisibleUI(L"Good.png", pos);
+            }
             m_currentJumpGradeTime = 0;
             m_combo++;
         }
-   //     if (controller.wPressedButtons & XINPUT_GAMEPAD_B && !m_isJump) {
-   //         m_isJumpStartAnimation = true;
-   //         m_isJumpFinishAnimation = false;
-   //         m_isWaitingAnimation = false;
-   //         m_isJumpActionXAnimation = false;
-   //         m_isJumpActionYAnimation = false;
-   //         m_isJumpActionZAnimation = false;
-   //         m_currentAnimationKeyCount = 0;
-   //         if (isGreatJump) {
-   //             SpeedUp(m_upSpeedValue * m_jumpGradeSpeedMagnification);
-   //             LowJump(m_greatJumpMagnification);
-			//	JumpEffect(EN_EffectName::en_GoodEffect, L"se_maoudamashii_onepoint16.wav");
- 		//
-			//	Vec3 pos = GetComponent<Transform>()->GetPosition();
-			//	m_judgJumpUI->VisibleUI(L"Perfect.png", pos);
-			//}
-   //         else {
-   //             SpeedUp(m_upSpeedValue);
-   //             LowJump(1.0f);
-			//	JumpEffect(EN_EffectName::en_GoodEffect, L"se_maoudamashii_onepoint17.wav");
-
-			//	Vec3 pos = GetComponent<Transform>()->GetPosition();
-			//	m_judgJumpUI->VisibleUI(L"Good.png", pos);
-			//}
-   //         m_currentJumpGradeTime = 0;
-   //         gm.AddJumpScore(m_currentSpeedScoreMagnification, m_combo * m_comboMagnification,isGreatJump);
-   //         m_combo++;
-   //     }
     }
-    
+
 
     //ハイジャンプ
     void Player::HighJump(float jumpMag) {
         m_isJump = true;
         GetComponent<RigidbodyBox>()->SetAutoGravity(true);
         GetComponent<RigidbodyBox>()->SetLinearVelocity(Vec3(0, m_highJumpMoveY * jumpMag, 0));
+    }
+
+    //ミドルジャンプ
+    void Player::MidJump(float jumpMag) {
+        m_isJump = true;
+        GetComponent<RigidbodyBox>()->SetAutoGravity(true);
+        GetComponent<RigidbodyBox>()->SetLinearVelocity(Vec3(0, m_midJumpMoveY * jumpMag, 0));
     }
 
     //ロージャンプ
@@ -758,7 +747,7 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
             }
             GetComponent<RigidbodyBox>()->SetAutoGravity(false);
         }
-        if (other->FindTag(L"Wave")) {
+        if ((other->FindTag(L"SmallWave") || other->FindTag(L"MidWave") || other->FindTag(L"BigWave"))) {
             m_isFirstJump = true;
             float playerColSize = 1.0f;
             float inSpeed = GameManager::GetInstance().GetGameSpeed();
@@ -772,15 +761,22 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
 
     //コリジョンに当たり続けているときの処理
     void Player::OnCollisionExcute(shared_ptr<GameObject>& other) {
-        if (other->FindTag(L"Wave")) {
+        if (other->FindTag(L"BigWave")) {
             m_isWaveTouch = true;
-			auto &gm = GameManager::GetInstance();
-            Jump();
+            BigWaveJump();
+        }
+        if (other->FindTag(L"MidWave")) {
+            m_isWaveTouch = true;
+            MidWaveJump();
+        }
+        if (other->FindTag(L"SmallWave")) {
+            m_isWaveTouch = true;
+            SmallWaveJump();
         }
         //落下防止処理
-        if (other->FindTag(L"Sea")&&!m_isJump) {
+        if (other->FindTag(L"Sea") && !m_isJump) {
             GetComponent<RigidbodyBox>()->SetLinearVelocity(Vec3(0, 0, 0));
-            if (!m_isInvincible&&!m_isWaveTouch&&m_isFirstJump) {
+            if (!m_isInvincible && !m_isWaveTouch&&m_isFirstJump) {
                 m_isTouchSea = true;
                 GroundWaveSpeedDown();
             }
@@ -789,7 +785,7 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
 
     //コリジョンから抜けた瞬間１回のみの処理
     void Player::OnCollisionExit(shared_ptr<GameObject>&other) {
-        if (other->FindTag(L"Wave") && !m_isJump) {
+        if ((other->FindTag(L"SmallWave") || other->FindTag(L"MidWave") || other->FindTag(L"BigWave"))&& !m_isJump) {
             if (!m_isInvincible&&m_isFirstJump) {
                 JumpMissSpeedDown();
                 m_isInvincible = true;

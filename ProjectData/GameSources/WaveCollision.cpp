@@ -10,12 +10,14 @@ namespace basecross{
     WaveCollision::WaveCollision(const shared_ptr<Stage>& stage,
         Vec3& rotation,
         Vec3& scale,
-        Vec3& position
+        Vec3& position,
+        wstring typeName
         ):
 
         ObjectBase(stage,
             rotation, scale, position
-        )
+        ),
+        m_typeName(typeName)
 	{}
 
 	void WaveCollision::OnCreate() {
@@ -26,12 +28,11 @@ namespace basecross{
 
         
         auto collision = AddComponent<CollisionObb>();
-        //collision->SetDrawActive(true);
-        collision->SetMakedSize(Vec3(1.0f));
+        collision->SetDrawActive(true);
         collision->SetAfterCollision(AfterCollision::None);
 
 
-        AddTag(L"Wave");
+        AddTag(m_typeName);
 
 		//SetTexture(L"");
 	}

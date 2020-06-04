@@ -23,6 +23,8 @@ namespace basecross{
         bool m_isJump = true;
         //ハイジャンプの上昇量
         float m_highJumpMoveY;
+        //ミドルジャンプの上昇量
+        float m_midJumpMoveY;
         //ロージャンプの上昇量
         float m_lowJumpMoveY;
         //良ジャンプ時のジャンプの上昇量倍率
@@ -173,10 +175,16 @@ namespace basecross{
         virtual void OnCollisionExcute(shared_ptr<GameObject>& other) override;
         //コリジョンから抜けた瞬間１回のみの処理
         virtual void OnCollisionExit(shared_ptr<GameObject>& other)override;
-        //ジャンプ
-        void Jump();
+        //大波のジャンプ
+        void BigWaveJump();
+        //中波のジャンプ
+        void MidWaveJump();
+        //小波のジャンプ
+        void SmallWaveJump();
         //ハイジャンプ
         void HighJump(float jumpMag);
+        //ミドルジャンプ
+        void MidJump(float jumpMag);
         //ロージャンプ
         void LowJump(float jumpMag);
         //ジャンプアクション
@@ -213,8 +221,7 @@ namespace basecross{
         void InvincibleAnimation();
         //ジャンプ中の滞空アクション
         void FlightAction();
-        //スペシャルジャンプ
-        void SpecialJump();
+
 
 		//SEを鳴らす処理
 		void ActiveSE(wstring se);
