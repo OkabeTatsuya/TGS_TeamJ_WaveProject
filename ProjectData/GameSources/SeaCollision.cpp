@@ -19,6 +19,7 @@ namespace basecross {
         transPtr->SetRotation(m_rotation);
 
         auto collision = AddComponent<CollisionObb>();
+        //collision->SetDrawActive(true);
         collision->SetFixed(true);
 
         AddTag(L"Sea");
