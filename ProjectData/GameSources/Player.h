@@ -9,6 +9,8 @@
 namespace basecross{
     class Player : public ObjectBase {
     protected:
+        //ジャンプアクション入力判定難易度
+        float m_jumpActionDif;
         //ジャンプ中滞空アクションの最大時間
         float m_maxFlightTime;
         //現在のジャンプ中滞空アクションの時間

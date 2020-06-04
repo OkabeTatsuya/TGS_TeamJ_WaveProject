@@ -18,6 +18,7 @@ namespace basecross {
             rotation, scale, position, layer
         )
     {
+        m_jumpActionDif = 0.8f;
         m_isFirstJump = false;
         m_currentFlightTime = 0;
         m_maxFlightTime = 0.5f;
@@ -404,16 +405,16 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
             m_currentJumpActionTime += App::GetApp()->GetElapsedTime();
         }
         if (m_isJump && !m_isJumpAction && m_currentJumpActionTime <= m_jumpActionLimitTime) {
-            if (controller.fThumbLY >= 1.0f) {
+            if (controller.fThumbLY >= m_jumpActionDif) {
                 m_isTopJumpAction = true;
             }
-            if (controller.fThumbLY <= -1.0f) {
+            if (controller.fThumbLY <= -m_jumpActionDif) {
                 m_isBottomJumpAction = true;
             }
-            if (controller.fThumbLX <= -1.0f) {
+            if (controller.fThumbLX <= -m_jumpActionDif) {
                 m_isLeftJumpAction = true;
             }
-            if (controller.fThumbLX >= 1.0f) {
+            if (controller.fThumbLX >= m_jumpActionDif) {
                 m_isRightJumpAction = true;
             }
         }
@@ -786,6 +787,8 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
                 m_isJumpActionZAnimation = false;
             }
             if (m_rot.z!=0) {
+                m_knockBackMagnification = 0.5f;
+                InitKnockBack(m_knockBackMagnification);
                 JumpMissSpeedDown();
                 m_isInvincible = true;
             }
