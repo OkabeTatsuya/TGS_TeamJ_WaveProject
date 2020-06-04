@@ -74,6 +74,7 @@ namespace basecross {
 		shared_ptr<SoundItem> m_BGM;
 		vector<shared_ptr<SoundItem>> m_SE;
 		vector<wstring> m_seStr;
+		vector<wstring> m_voiceSEStr;
 
 		//アニメーションUI
 		vector<shared_ptr<AnimationUI>> m_startUI;

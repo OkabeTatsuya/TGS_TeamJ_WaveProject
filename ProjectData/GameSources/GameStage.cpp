@@ -58,6 +58,8 @@ namespace basecross {
 			CreateGenerator();
 
 			m_playerObj = AddGameObject<Player>(Vec3(0, 0, 0), Vec3(1.0f, 1.0f, 1), Vec3(-4.0, -2, -7.0), 7);
+			m_playerObjTrans = m_playerObj->GetComponent<Transform>();
+
 			m_playerIconTrans = m_playerIconUI->GetComponent<Transform>();
 			AddGameObject<SeaCollision>(Vec3(0, 0, 0), Vec3(1, 0.5, 1), Vec3(-4, -4.0, -7.0));
 
@@ -334,26 +336,26 @@ namespace basecross {
 		auto &gameManager = GameManager::GetInstance();
 		bool isGameEnd = gameManager.GetIsGameEnd();
 
+		GameEnd();
+
 		if (isGameEnd && m_loadStageTimeCount == 0) {
 			int stageNum = gameManager.GetSelectStageNum();
 			int gameScore = gameManager.GetGameScore();
 
 			if (gameManager.GetGameClearScore(stageNum) < gameScore) {
 				gameManager.SetIsGameClear(true);
-				PlaySE(EN_SoundTypeSE::en_SystemSE, EN_SE::en_GameClearSE, 0.9f);
-				PlaySE(EN_SoundTypeSE::en_VoiceSE, EN_SE::en_GameClearSE, 0.9f);
+				PlaySE(EN_SoundTypeSE::en_SystemSE, m_seStr[EN_SE::en_GameClearSE], 0.9f);
+				PlaySE(EN_SoundTypeSE::en_VoiceSE, m_seStr[EN_SE::en_GameClearVoice], 0.9f);
 			}
 			else {
 				gameManager.SetIsGameClear(false);
-				PlaySE(EN_SoundTypeSE::en_SystemSE, EN_SE::en_GameOverSE, 0.9f);
+				PlaySE(EN_SoundTypeSE::en_SystemSE, m_seStr[EN_SE::en_GameOverSE], 0.9f);
 			}
 		}
 
 		if (isGameEnd && !m_isLoadStage) {
 			auto time = App::GetApp()->GetElapsedTime();
 			m_loadStageTimeCount += time;
-			m_goalUI->SetIsStartAnim(true);
-			
 		}
 
 		if (!m_isLoadStage && m_loadStageTimeCount > m_maxLoadStageTime) {
@@ -385,8 +387,8 @@ namespace basecross {
 
 		if (specialJumpTimeFlag && !m_playSpecialSE) {
 			m_cutInUI->ResetState();
-			PlaySE(EN_SoundTypeSE::en_SystemSE, EN_SE::en_SpecialTimeSE, 0.9f);
-			PlaySE(EN_SoundTypeSE::en_VoiceSE, EN_SE::en_SpecialTImeVoice1, 1.0f);
+			PlaySE(EN_SoundTypeSE::en_SystemSE, m_seStr[EN_SE::en_SpecialTimeSE], 0.9f);
+			PlaySE(EN_SoundTypeSE::en_VoiceSE, m_seStr[EN_SE::en_SpecialTImeVoice1], 1.0f);
 			m_playSpecialSE = true;
 		}
 
@@ -491,9 +493,9 @@ namespace basecross {
 		}
 	}
 
-	void GameStage::PlaySE(EN_SoundTypeSE soundType, EN_SE seName, float vol) {
+	void GameStage::PlaySE(EN_SoundTypeSE soundType, wstring seName, float vol) {
 		auto AudioManager = App::GetApp()->GetXAudio2Manager();
-		m_SE[soundType] = AudioManager->Start(m_seStr[seName], 0, vol);
+		m_SE[soundType] = AudioManager->Start(seName, 0, vol);
 	}
 
 	//ビットフラグを上げる
