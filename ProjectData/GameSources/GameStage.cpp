@@ -343,11 +343,12 @@ namespace basecross {
 			if (gameManager.GetGameClearScore(stageNum) < gameScore) {
 				gameManager.SetIsGameClear(true);
 				PlaySE(EN_SoundTypeSE::en_SystemSE, m_seStr[EN_SE::en_GameClearSE], 0.9f);
-				PlaySE(EN_SoundTypeSE::en_VoiceSE, m_seStr[EN_SE::en_GameClearVoice], 0.9f);
+				PlaySE(EN_SoundTypeSE::en_VoiceSE, m_seStr[EN_SE::en_GameClearVoice], 1.0f);
 			}
 			else {
 				gameManager.SetIsGameClear(false);
 				PlaySE(EN_SoundTypeSE::en_SystemSE, m_seStr[EN_SE::en_GameOverSE], 0.9f);
+				PlaySE(EN_SoundTypeSE::en_VoiceSE, m_seStr[EN_SE::en_GameOverVoice], 1.0f);
 			}
 		}
 

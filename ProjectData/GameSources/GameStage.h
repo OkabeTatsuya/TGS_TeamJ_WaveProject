@@ -166,7 +166,7 @@ namespace basecross {
 
 			m_gameClearScore = { 100,200,300,400 };
 
-			m_seStr = { L"decision16.wav", L"se_GameClear.wav", L"se_GameOver.wav", L"se_GameClear.wav", L"se_GameOver.wav", L"Voice1_11.wav" };
+			m_seStr = { L"decision16.wav", L"se_GameClear.wav", L"se_GameOver.wav", L"Voice2_13.wav", L"Voice2_15.wav", L"Voice1_11.wav" };
 			m_gameOverPos = -5.0f;
 		}
 
