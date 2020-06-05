@@ -212,6 +212,7 @@ int MainLoop(HINSTANCE hInstance, HWND hWnd, bool isFullScreen, int iClientWidth
 }
 
 
+
 //--------------------------------------------------------------------------------------
 //	int APIENTRY _tWinMain();
 //	用途: エントリポイント
@@ -232,11 +233,11 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 	//ウインドウの幅と高さ
 	int iClientWidth = 1280;
 	int iClientHeight = 800;
-	//int iClientWidth = 1920;
-	//int iClientHeight = 1080;
+	//iClientWidth = 1920;
+	//iClientHeight = 1080;
 	// フルスクリーンにするかどうかの判定
 	// コマンドラインに/fが設定されていたらフルスクリーンにする
-	bool isFullScreen = true;
+	bool isFullScreen = false;
 	wstring wstrcmd = lpCmdLine;
 	if (wstrcmd == L"/f" || wstrcmd == L"/F") {
 		isFullScreen = true;     // フラグをtrueに設定
@@ -256,6 +257,24 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 }
 
 
+//--------------------------------------------------------------------------------------
+//
+//  関数: MakeWindowModeRectFunc()
+//
+//  目的: ウインドウモードに移行する矩形を作成する
+//	表示するサイズは固定
+//--------------------------------------------------------------------------------------
+void MakeWindowModeRectFunc(RECT& rc) {
+	rc = { 0, 0, 1280, 800 };
+	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
+	int CXWidth = GetSystemMetrics(SM_CXSCREEN);
+	int CYHeight = GetSystemMetrics(SM_CYSCREEN);
+	int RCWidth = rc.right - rc.left;
+	int RCHeight = rc.bottom - rc.top;
+	int OffsetLeft = CXWidth / 2 - RCWidth / 2;
+	int OffsetTop = CYHeight / 2 - RCHeight / 2;
+	OffsetRect(&rc, OffsetLeft, OffsetTop);
+}
 
 
 //--------------------------------------------------------------------------------------
@@ -285,6 +304,22 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_KEYDOWN:                // キーが押された
 		if (wParam == VK_ESCAPE) {  // 押されたのはESCキーだ
 			DestroyWindow(hWnd);	//ウインドウを破棄する
+		}
+
+		if (wParam == VK_RETURN) {
+			if (GetAsyncKeyState(VK_SHIFT)) {
+				if (App::AppCheck()) {
+					if (App::GetApp()->IsFullScreen()) {
+						//ウインドウモードに移行
+						RECT rc;
+						MakeWindowModeRectFunc(rc);
+						App::GetApp()->SetWindowMode(rc);
+					}
+					else {
+						App::GetApp()->SetFullScreenMode();
+					}
+				}
+			}
 		}
 		break;
 	default:
