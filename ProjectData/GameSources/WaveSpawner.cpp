@@ -82,6 +82,10 @@ namespace basecross {
 	}
 
 	void WaveSpawner::VisibleObject(int waveTypeNum) {
+		if (m_spawnCount > (int)m_createPosX.size() - 1) {
+			return;
+		}
+
 		for (int i = 0; i < m_waveObject[waveTypeNum].size(); i++) {
 			//プーリングしたオブジェクトから動かせるものを探す
 			if (!m_waveObject[waveTypeNum][i]->GetIsMove()) {

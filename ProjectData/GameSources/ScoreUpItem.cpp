@@ -32,7 +32,6 @@ namespace basecross {
 
 		auto collision = AddComponent<CollisionObb>();
 		collision->SetAfterCollision(AfterCollision::None);
-		//SetTexture(L"");
 	}
 
 	void ScoreUpItem::OnUpdate() {
@@ -41,7 +40,8 @@ namespace basecross {
 	}
 
 	void ScoreUpItem::OnDestroy() {
-
+		auto audioManager = App::GetApp()->GetXAudio2Manager();
+		audioManager->Stop(m_SE);
 	}
 
 	void ScoreUpItem::OnCollisionEnter(shared_ptr<GameObject>& other) {
@@ -61,6 +61,8 @@ namespace basecross {
 	void ScoreUpItem::OffScreen() {
 		if (GetComponent<Transform>()->GetPosition().x <= m_offScreenX) {
 			SetIsMove(false);
+			auto drawPtr = GetComponent<PCTStaticDraw>();
+			drawPtr->SetDrawActive(false);
 		}
 	}
 
