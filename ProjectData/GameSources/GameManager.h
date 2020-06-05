@@ -35,6 +35,7 @@ namespace basecross {
 			m_baseActionScore = { 100, 150, 250 };
 			m_itemScore = 100;
 
+			m_gameSpeed = 1.0f;
 			m_selectStageNum = 0;
 			m_clearStageNum = 0;
 
