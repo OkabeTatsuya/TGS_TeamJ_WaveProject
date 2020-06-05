@@ -104,14 +104,19 @@ namespace basecross {
 			//AddGameObject<ImageUI>(Vec3(0.0f), Vec3(800.0f, 150.0f, 1.0f), Vec2(0.0f, 300.0f), float(2.0f), L"Tx_GameClear.png");
 
 			Vec3 buttonSize = Vec3(512.0f, 256.0f, 1.0f);
+
+			m_Pos[0] = Vec2(-430.0f, -300.0f);//次のステージへ
+			m_Pos[1] = Vec2(0.0f, -300.0f);//ステージセレクト
+			m_Pos[2] = Vec2(430.0f, -300.0f);//タイトルへ
+
 			/*次のステージへ*/
-			AddGameObject<ImageUI>(Vec3(0.0f), buttonSize, Vec2(-450.0f, -300.0f), float(2.0f), L"NextStageButton.png");
+			AddGameObject<ImageUI>(Vec3(0.0f), buttonSize, m_Pos[0], float(2.0f), L"NextStageButton.png");
 
 			/*ステージセレクトへ*/
-			AddGameObject<ImageUI>(Vec3(0.0f), buttonSize, Vec2(-50.0f, -300.0f), float(2.0f), L"SelectButton.png");
+			AddGameObject<ImageUI>(Vec3(0.0f), buttonSize, m_Pos[1], float(2.0f), L"SelectButton.png");
 
 			/*タイトルへ*/
-			AddGameObject<ImageUI>(Vec3(0.0f), buttonSize, Vec2(400.0f, -300.0f), float(2.0f), L"TitleButton.png");
+			AddGameObject<ImageUI>(Vec3(0.0f), buttonSize, m_Pos[2], float(2.0f), L"TitleButton.png");
 
 			/*ステージ番号の表示*/
 			AddGameObject<ImageUI>(Vec3(0.0f), buttonSize, Vec2(-450.0f, 350.0f), float(2.0f), L"StageUI.png");
@@ -120,10 +125,6 @@ namespace basecross {
 			GameManager::GetInstance().DrawStageNum();
 
 			CreateResultUI();
-
-			m_Pos[0] = Vec2(-450.0f, -300.0f);//次のステージへ
-			m_Pos[1] = Vec2(-50.0f, -300.0f);//ステージセレクト
-			m_Pos[2] = Vec2(400.0f, -300.0f);//タイトルへ
 
 			/*点滅*/
 			m_CursorUI = AddGameObject<CursorUI>(Vec3(0.0f), Vec3(400.0f, 80.0f, 1.0f), m_Pos[m_ResultUiCount], float(3.0f), L"FadeBG.png", float(2.0));
