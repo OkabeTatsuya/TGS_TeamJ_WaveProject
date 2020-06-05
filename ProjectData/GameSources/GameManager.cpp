@@ -27,7 +27,7 @@ namespace basecross {
 		m_scoreUpUIPanel->ScoreDraw(addScore);
         m_scoreUIPanel->ScoreDraw(m_gameScore);
 
-		SpecialCheck();
+		//SpecialCheck();
 	}
 
 	void GameManager::AddActionScore(float magnification, float comboMagnification, JumpActionType jumpActionType) {
@@ -53,16 +53,12 @@ namespace basecross {
 		m_gameScore += addScore;
         m_scoreUpUIPanel->ScoreDraw(addScore);
         m_scoreUIPanel->ScoreDraw(m_gameScore);
-
-		//SpecialCheck();
 	}
 
 	void GameManager::AddItemScore() {
-		m_gameScore += m_itemScore;
-		m_scoreUpUIPanel->ScoreDraw(m_itemScore);
 		m_itemCount++;
 		m_specialCount++;
-		SpecialCheck();
+		//SpecialCheck();
 	}
 
 	void GameManager::DrawScore() {
