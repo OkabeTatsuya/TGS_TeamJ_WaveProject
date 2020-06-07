@@ -315,6 +315,11 @@ namespace basecross {
 			{
 				PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToTitleStage");
 			}
+			//���X�^�[�g
+			if (cntVec[0].wPressedButtons & XINPUT_GAMEPAD_START) 
+			{
+				PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
+			}
 		}
 	}
 
