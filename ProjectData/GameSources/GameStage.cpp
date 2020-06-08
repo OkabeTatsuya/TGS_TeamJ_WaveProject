@@ -46,6 +46,7 @@ namespace basecross {
 
 			//’l‚Ì‰Šú‰»
 			GameManager::GetInstance().ResetGame();
+			GameManager::GetInstance().SetMaxSpecialCount(m_maxSpecialCount[m_specialJumpCount]);
 
             AddGameObject<Fade>();
 
@@ -159,13 +160,12 @@ namespace basecross {
 		m_itemCountUI = AddGameObject<ScoreUIPanel>(Vec3(0.0f), itemScale, itemUIPos[3], float(5.0f), L"GoldenNumbers.png", 2, false);
 		//•`‰æ‚·‚é”š
 		auto drawNum = GameManager::GetInstance().GetMaxSpecialCount();
-		m_itemCountUI->ScoreDraw(drawNum);
+		m_maxItemCountUI->ScoreDraw(drawNum);
 
 		AddGameObject<ImageUI>(Vec3(0.0f), itemScale, itemUIPos[2], float(5.0f), L"Slash.png");
 
 		//ƒAƒCƒeƒ€ƒJƒEƒ“ƒgUI
 		m_itemCountUI = AddGameObject<ScoreUIPanel>(Vec3(0.0f), itemScale, itemUIPos[1], float(5.0f), L"GoldenNumbers.png", 2, false);
-
 		drawNum = GameManager::GetInstance().GetSpecialCount();
 		m_itemCountUI->ScoreDraw(drawNum);
 
@@ -174,6 +174,7 @@ namespace basecross {
 		AddGameObject<ImageUI>(Vec3(0.0f), Vec3(30.0f, 30.0f, 1.0f), m_mapUIPos[1], float(6.0f), L"MapGoal.png");
 		m_playerIconUI = AddGameObject<ImageUI>(Vec3(0.0f), Vec3(20.0f, 20.0f, 1.0f), m_mapUIPos[2], float(7.0f), L"MapPlayer.png");
 
+		//ï¿½Jï¿½bï¿½gï¿½Cï¿½ï¿½UI
 		m_cutInUI = AddGameObject<CutInUI>(Vec3(0.0f), Vec3(1300.0f, 400.0f, 1.0f), Vec2(0.0f), float(5.0f), L"CutIn.png");
 
 		Vec2 baseCommandIconScl = Vec2(4.0f, 2.0f);
@@ -298,6 +299,9 @@ namespace basecross {
 	void GameStage::UpdateScoreUI() {
 		auto drawNum = GameManager::GetInstance().GetSpecialCount();
 		m_itemCountUI->ScoreDraw(drawNum);
+
+		drawNum = GameManager::GetInstance().GetMaxSpecialCount();
+		m_maxItemCountUI->ScoreDraw(drawNum);
 
 		drawNum = GameManager::GetInstance().GetGameScore();
 		m_scoreCountUI->ScoreDraw(drawNum);
