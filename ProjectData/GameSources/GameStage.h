@@ -94,7 +94,7 @@ namespace basecross {
 		shared_ptr<UIBase> m_playerIconUI;
 		shared_ptr<Transform> m_playerIconTrans;
 
-		//ÔøΩXÔøΩRÔøΩAUI
+		//ÅEΩXÅEΩRÅEΩAUI
 		shared_ptr<ScoreUIPanel> m_itemCountUI;
 		shared_ptr<ScoreUIPanel> m_scoreCountUI;
 		shared_ptr<ScoreUIPanel> m_maxItemCountUI;
