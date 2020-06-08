@@ -63,7 +63,7 @@ namespace basecross {
 			AddGameObject<SeaCollision>(Vec3(0, 0, 0), Vec3(5, 0.5f, 1), Vec3(-2.5, -4.0, -7.0));
 
 			//スコアUI
-			m_scoreCountUI = AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(50.0f, 50.0f, 1.0f), Vec2(350.0f, 350.f), float(5.0f), L"Number.png", 7, false);
+			m_scoreCountUI = AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(50.0f, 50.0f, 1.0f), Vec2(175.0f, 350.f), float(5.0f), L"Number.png", 7, false);
 			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(200.0f, 50.0f, 1.0f), Vec2(30.0f, 350.f), float(5.0f), L"Score2.png");
  
 
@@ -117,9 +117,9 @@ namespace basecross {
 		Vec2 baseItemPos = Vec2(-550.0f, 320.0f);
 		vector<Vec2> itemUIPos = { 
 			baseItemPos,
-			Vec2(baseItemPos.x + 100.0f, baseItemPos.y),
+			Vec2(baseItemPos.x + 330.0f, baseItemPos.y),
 			Vec2(baseItemPos.x + 150.0f, baseItemPos.y),
-			Vec2(baseItemPos.x + 230.0f, baseItemPos.y)
+			Vec2(baseItemPos.x + 380.0f, baseItemPos.y)
 		};
 
 		//マップのポジション
@@ -232,7 +232,7 @@ namespace basecross {
 
 		//張り付けるテクスチャ
 		vector<wstring> texter {
-			L"Lady.png",
+			L"Ready.png",
 			L"Go.png"
 		};
 

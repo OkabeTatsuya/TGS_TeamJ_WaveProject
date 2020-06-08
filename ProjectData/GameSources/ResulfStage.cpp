@@ -121,7 +121,7 @@ namespace basecross {
 			/*ステージ番号の表示*/
 			AddGameObject<ImageUI>(Vec3(0.0f), buttonSize, Vec2(-450.0f, 350.0f), float(2.0f), L"StageUI.png");
 
-			AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(40.0f, 40.0f, 1.0f), Vec2(-400.0f, 350.0f), float(2.0f), L"BlackNumbers.png", 1, false);
+			AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(40.0f, 40.0f, 1.0f), Vec2(-200.0f, 350.0f), float(3.0f), L"BlackNumbers.png", 1, false);
 			GameManager::GetInstance().DrawStageNum();
 
 			CreateResultUI();
@@ -204,9 +204,9 @@ namespace basecross {
 		float scoreSize = 40.0f;
 		vector<Vec2> resultsTabe = {
 			resultsTabelPos + Vec2(0.0f, 110.0f),		//スコア
-			resultsTabelPos + Vec2(220.0f, 65.0f),		//クリアスコア
-			resultsTabelPos + Vec2(80.0f, -10.0f),		//パーファクト回数
-			resultsTabelPos + Vec2(80.0f, -90.0f),		//グッド回数
+			resultsTabelPos + Vec2(-40.0f, 65.0f),		//クリアスコア
+			resultsTabelPos + Vec2(-110.0f, -10.0f),	//パーファクト回数
+			resultsTabelPos + Vec2(-110.0f, -90.0f),	//グッド回数
 			resultsTabelPos + Vec2(40.0f, 90.0f),		//スコア間の線
 			resultsTabelPos + Vec2(10.0f, 30.0f),		//スコアテキスト
 			resultsTabelPos + Vec2(10.0f, 30.0f),		//スコアの下線
@@ -214,9 +214,9 @@ namespace basecross {
 			resultsTabelPos + Vec2(-140.0f, -90.0f),	//グッドテキスト
 			resultsTabelPos + Vec2(-00.0f, -40.0f),		//パーフェクト回数の下線
 			resultsTabelPos + Vec2(-00.0f, -120.0f),	//グッド回数の下線
-			resultsTabelPos + Vec2(-140.0f, -170.0f),	//アイテム
-			resultsTabelPos + Vec2(80.0f, -170.0f),		//アイテム個数
-			resultsTabelPos + Vec2(200.0f, -170.0f),	//アイテム個数の上限
+			resultsTabelPos + Vec2(-120.0f, -170.0f),	//アイテム
+			resultsTabelPos + Vec2(-110.0f, -170.0f),   //アイテム個数
+			resultsTabelPos + Vec2(-40.0f, -170.0f),	//アイテム個数の上限
 			resultsTabelPos + Vec2(130.0f, -10.0f),		//×テキスト１
 			resultsTabelPos + Vec2(130.0f, -90.0f),		//×テキスト２
 			resultsTabelPos + Vec2(130.0f, -170.0f),	//×テキスト３
@@ -227,19 +227,19 @@ namespace basecross {
 		Vec2 baseScale = Vec2(1.0f);
 
 		//スコアの表示
-		AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(45.0f, 45.0f, 1.0f), resultsTabe[0], float(3.0f), L"PinkNumbers.png", 7, false);
+		AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(45.0f, 45.0f, 1.0f), resultsTabe[0], float(3.0f), L"PinkNumbers.png", 7, false,true);
 		GameManager::GetInstance().DrawScore();
 
 		//クリアスコアの表示
-		AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(scoreSize, scoreSize, 1.0f), resultsTabe[1], float(2.0f), L"GrayNumbers.png", 7, false);
+		AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(scoreSize, scoreSize, 1.0f), resultsTabe[1], float(3.0f), L"GrayNumbers.png", 7, false);
 		GameManager::GetInstance().DrawClearScore(GameManager::GetInstance().GetSelectStageNum());
 
 		//Perfectの回数を表示
-		AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(scoreSize, scoreSize, 1.0f), resultsTabe[2], float(2.0f), L"BlackNumbers.png", 2, false);
+		AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(scoreSize, scoreSize, 1.0f), resultsTabe[2], float(3.0f), L"BlackNumbers.png", 2, false);
 		GameManager::GetInstance().DrawJudgeCount(JudgeName::en_Perfect);
 
 		//Goodの回数を表示
-		AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(scoreSize, scoreSize, 1.0f), resultsTabe[3], float(2.0f), L"BlackNumbers.png", 2, false);
+		AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(scoreSize, scoreSize, 1.0f), resultsTabe[3], float(3.0f), L"BlackNumbers.png", 2, false);
 		GameManager::GetInstance().DrawJudgeCount(JudgeName::en_Good);
 
 		//セレクトテキスト

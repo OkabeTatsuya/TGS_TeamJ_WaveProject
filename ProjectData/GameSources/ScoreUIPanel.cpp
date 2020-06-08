@@ -29,7 +29,35 @@ namespace basecross {
 		m_addPosMagnification = 0.7f;
     }
 
+    ScoreUIPanel::ScoreUIPanel(const shared_ptr<Stage>& stage,
+        Vec3& rotation,
+        Vec3& scale,
+        Vec2& position,
+        float& layer,
+        wstring tex,
+        int count,
+        bool isPlayerPlusScore,
+        bool isAdjustRight) :
+        UIBase(stage, rotation,
+            scale,
+            position,
+            layer,
+            tex),
+        m_count(count),
+        m_isScorePlusUI(isPlayerPlusScore),
+        m_isAdjustRight(isAdjustRight)
+    {
+        m_currentScorePlusDrawTime = 0;
+        m_maxScorePlusDrawTime = 1.0f;
+        m_isScorePlusUIActive = false;
+        m_addPosMagnification = 0.7f;
+    }
+
+
+
+
     void ScoreUIPanel::OnCreate() {
+        m_initPosX = m_position.x;
         for (int i = 0; i < m_count; i++) {
             auto scoreUI = GetStage()->AddGameObject<ScoreUI>(Vec3(m_rotation), Vec3(m_scale), Vec2(m_position.x - i * (m_scale.x * m_addPosMagnification), m_position.y), float(m_layer), m_textureName);
             scoreUI->GetComponent<Transform>()->SetParent(GetThis<GameObject>());
@@ -49,7 +77,42 @@ namespace basecross {
         }
     }
 
+    void ScoreUIPanel::AdjustLeftPosition() {
+        auto transPtr = GetComponent<Transform>();
+        auto pos = transPtr->GetPosition();
+        pos.x =  m_initPosX - (m_adjustLeftPosCount * m_scale.x * m_addPosMagnification);
+        transPtr->SetPosition(Vec3(pos.x,pos.y,m_layer));
+    }
+
+    void ScoreUIPanel::ScoreCountJudge(int score) {
+        m_adjustLeftPosCount = 0;
+        m_isFirstNumber = false;
+        int mask = 10;
+        for (int i = m_count-1; i >= 0; i--) {
+            int digit = (int)pow(mask, i);
+            int digitScore = score / digit;
+            if (digitScore == 0 && !m_isFirstNumber) {
+                m_scoreUIs[i]->SetDrawActive(false);
+                m_adjustLeftPosCount += 1;
+            }
+            else {
+                m_scoreUIs[i]->SetDrawActive(true);
+            }
+            if (digitScore != 0) {
+                m_isFirstNumber = true;
+            }
+            if (score == 0) {
+                m_scoreUIs[0]->SetDrawActive(true);
+                m_adjustLeftPosCount = m_count-1;
+            }
+        }
+    }
+
     void ScoreUIPanel::ScoreDraw(int score) {
+        ScoreCountJudge(score);
+        if (!m_isAdjustRight) {
+            AdjustLeftPosition();
+        }
         if (m_isScorePlusUI) {
             m_currentScorePlusDrawTime = 0;
             m_isScorePlusUIActive = true;

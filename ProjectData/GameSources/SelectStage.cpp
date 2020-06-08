@@ -185,7 +185,7 @@ namespace basecross {
 		AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1300.0f, 800.0f, 1.0f), Vec2(0.0f, 0.0f), float(1.0f), L"SelectBG.png");
 		AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1280.0f, 800.0f, 1.0f), Vec2(0.0f, -300.0f), float(2.0f), L"ScoreBG.png"); 
 
-		AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(80.0f, 80.0f, 1.0f), Vec2(200.0f, -300.0f), float(5.0f), L"Number.png", 7, false);
+		AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(80.0f, 80.0f, 1.0f), Vec2(120.0f, -300.0f), float(5.0f), L"Number.png", 7, false,true);
 		GameManager::GetInstance().DrawClearScore(m_stageNum);
 
 		AddGameObject<FlashingUI>(Vec3(0.0f), Vec3(128.0f, 128.0f, 1.0f), Vec2(550.0f, -00.0f), float(4.0f), L"RightArrow.png", 3.0f);
