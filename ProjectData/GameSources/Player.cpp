@@ -744,12 +744,49 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
         }
     }
 
+	void Player::SpecialCheck() {
+		if (m_isTouchSea) {
+			auto& gameManager = GameManager::GetInstance();
+			gameManager.SpecialCheck();
+
+			if (gameManager.GetIsSpecialTime()) {
+				gameManager.SetIsSpecialJump(false);
+			}
+
+			if (gameManager.GetIsJumpBigWave()) {
+				gameManager.SetIsSpecialTime(false);
+				gameManager.SetIsJumpBigWave(false);
+			}
+		}
+	}
+
     //効果音
     void Player::ActiveSE(wstring se) {
 		float pitch = m_combo == 0.0f ? 1.0f : m_combo / 10.0f + 1.0f;
         auto XAPtr = App::GetApp()->GetXAudio2Manager();	
 		m_SE = XAPtr->MyStart(se, 0, 0.5f, pitch);
     }
+
+	void Player::PlayVoiceSE(float vol) {
+		auto XAPtr = App::GetApp()->GetXAudio2Manager();
+		auto &gameManager = GameManager::GetInstance();
+
+		std::random_device rando;
+		std::mt19937 mt(rando());
+		int voiceItr = mt() % m_playerSpecialVoiceStr.size();
+		int spVoiceItr = mt() % m_playerVoiceStr.size();
+
+		bool JumpAcionFlag = (m_isJumpActionXAnimation || m_isJumpActionYAnimation || m_isJumpActionZAnimation);
+		if (!JumpAcionFlag) {
+			if (gameManager.GetIsSpecialTime()) {
+				m_voiceSE = XAPtr->Start(m_playerSpecialVoiceStr[voiceItr], 0, vol);
+			}
+			else
+			{
+				m_voiceSE = XAPtr->Start(m_playerVoiceStr[spVoiceItr], 0, vol);
+			}
+		}
+	}
 
 	//エフェクトの再生
 	void Player::JumpEffect(EN_EffectName effectName, wstring seName) {
