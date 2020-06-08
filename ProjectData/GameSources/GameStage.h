@@ -94,8 +94,11 @@ namespace basecross {
 		shared_ptr<UIBase> m_playerIconUI;
 		shared_ptr<Transform> m_playerIconTrans;
 
+		//ï¿½Xï¿½Rï¿½AUI
 		shared_ptr<ScoreUIPanel> m_itemCountUI;
 		shared_ptr<ScoreUIPanel> m_scoreCountUI;
+		shared_ptr<ScoreUIPanel> m_maxItemCountUI;
+
 
 		shared_ptr<WaveSpawner> m_waveSpawner;
 
@@ -118,6 +121,8 @@ namespace basecross {
 		int m_specialJumpCount;
 		int m_maxSpecialJumpCount;
 		bool m_playSpecialSE;
+		bool m_isVisibleBigWaveScore;
+		vector<int> m_maxSpecialCount;
 
 		//ƒQ[ƒ€‚ğn‚ß‚é‘O‚Ìd’¼ŠÔ
 		float m_startTimeCount;
@@ -158,6 +163,7 @@ namespace basecross {
 			m_specialJumpTimer = 0.0f;
 			m_specialJumpCount = 0;
 			m_maxSpecialJumpCount = 3;
+			m_maxSpecialCount = {5, 8, 10};
 
 			m_maxLoadStageTime = 3.0f;
 

@@ -68,7 +68,7 @@ namespace basecross {
 
 			//BGMÄ¶‚Æ‰¹—Ê’²®
 			auto XAPtr = App::GetApp()->GetXAudio2Manager();
-			m_BGM = XAPtr->Start(L"game_maoudamashii_5_town12.wav", XAUDIO2_LOOP_INFINITE, 0.5f);
+			m_BGM = XAPtr->Start(L"game_maoudamashii_5_town12.wav", XAUDIO2_LOOP_INFINITE, 0.9f);
 			
 			m_SE = XAPtr->Start(L"Voice1_1.wav", 0, 1.0f);
 			//App::GetApp()->GetScene<Scene>()->LoadStage(L"ToGameStage");

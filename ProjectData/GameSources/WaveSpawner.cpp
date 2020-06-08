@@ -14,11 +14,11 @@ namespace basecross {
 		m_spawnCount = 0;
 		m_offScreen = 12.0f;
 
-		m_waveState.Pos = { Vec3(6.0f, -3.0f, -7.0f),Vec3(6.0f, -2.5f, -7.0f),Vec3(6.0f, -2.1f, -7.0f) };
+		m_waveState.Pos = { Vec3(6.0f, -3.0f, -7.0f),Vec3(6.0f, -2.5f, -7.0f),Vec3(6.0f, -2.3f, -7.0f) };
 		m_waveState.Rot = Vec3(0.0f);
-		m_waveState.Sca = { Vec3(1.0f) , Vec3(1.8f),Vec3(1.8f),Vec3(1.0f), Vec3(1.0f) };
+		m_waveState.Sca = { Vec3(1.0f), Vec3(1.8f), Vec3(2.2f, 1.6f, 1.0f)};
 		m_waveState.Layer = 6;
-		m_waveState.Tex = { L"SamllWave.png",L"MediumWave.png",L"BigWave.png" };
+		m_waveState.Tex = { L"SamllWave.png", L"MediumWave.png", L"BigWave1.png" };
 
 		m_createBigWaveTimer = 0.0f;
 		m_maxWaitingTime = 2.0f;
@@ -82,6 +82,10 @@ namespace basecross {
 	}
 
 	void WaveSpawner::VisibleObject(int waveTypeNum) {
+		if (m_spawnCount > (int)m_createPosX.size() - 1) {
+			return;
+		}
+
 		for (int i = 0; i < m_waveObject[waveTypeNum].size(); i++) {
 			//ƒv[ƒŠƒ“ƒO‚µ‚½ƒIƒuƒWƒFƒNƒg‚©‚ç“®‚©‚¹‚é‚à‚Ì‚ð’T‚·
 			if (!m_waveObject[waveTypeNum][i]->GetIsMove()) {
@@ -126,8 +130,9 @@ namespace basecross {
 			m_isCreateBigWave = false;
 		}
 
-		if (m_isCreateBigWave && !m_waveObject[WaveType::en_waveL][0]->GetIsMove()) {
+		if (m_isCreateBigWave && !m_waveObject[WaveType::en_waveL][0]->GetIsMove() && !gameManager.GetIsJumpBigWave()) {
 			gameManager.SetIsSpecialTime(false);
+			//MessageBox(nullptr, L"WeveSpawner.cpp 141", L"ï¿½eï¿½Xï¿½g", MB_OK);
 		}
 	}
 

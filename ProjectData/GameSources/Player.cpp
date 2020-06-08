@@ -71,6 +71,9 @@ namespace basecross {
         m_specialJumpCount = 3;
         m_specialJumpActionMaxCount = 2;
         m_knockBackValue = 0.5f;
+
+		m_playerVoiceStr = { L"Voice2_1.wav", L"Voice2_3.wav", L"Voice2_4.wav"};
+		m_playerSpecialVoiceStr = { L"Voice2_6.wav", L"Voice2_10.wav"};
     }
 
     void Player::OnCreate() {
@@ -155,8 +158,7 @@ namespace basecross {
         m_scoreUpUI->AdjustPosition(GetComponent<Transform>()->GetPosition());
 		m_judgJumpUI->SetingPos(GetComponent<Transform>()->GetPosition());
 		FollowEffect();
-		JumpAcionEffect(EN_EffectName::en_GoodEffect, L"se_maoudamashii_onepoint16.wav", m_currentAnimationTime);
-
+		SpecialCheck();
     }
 
     void Player::OnUpdate2() {
@@ -166,11 +168,15 @@ namespace basecross {
     //滞空アニメーション
     void Player::JumpActionXAnimation() {    
         if (m_isJumpActionXAnimation) {
+			JumpAcionEffect(EN_EffectName::en_GoodEffect, L"se_maoudamashii_onepoint16.wav");
+			m_animeTimeCounter += App::GetApp()->GetElapsedTime();
+
             m_currentAnimationTime += App::GetApp()->GetElapsedTime();
             if (m_currentAnimationTime >= m_maxAnimationTime) {
                 DrawingImage(m_jumpActionAnimationXKeys[m_currentAnimationKeyCount]);
                 m_currentAnimationKeyCount++;
                 if (m_currentAnimationKeyCount >= m_jumpActionAnimationXKeyCount) {
+					m_animeTimeCounter = 0;
                     m_currentAnimationKeyCount = 0;
                     m_isJumpActionXAnimation = false;
                     if (m_isSpecialJumpAction) {
@@ -185,13 +191,19 @@ namespace basecross {
     //ジャンプアクションアニメーション（Y軸）
     void Player::JumpActionYAnimation() {
         if (m_isJumpActionYAnimation) {
+			JumpAcionEffect(EN_EffectName::en_GoodEffect, L"se_maoudamashii_onepoint16.wav");
+			m_animeTimeCounter += App::GetApp()->GetElapsedTime();
+
             m_currentAnimationTime += App::GetApp()->GetElapsedTime();
             if (m_currentAnimationTime >= m_maxAnimationTime) {
                 DrawingImage(m_jumpActionAnimationYKeys[m_currentAnimationKeyCount]);
                 m_currentAnimationKeyCount++;
                 if (m_currentAnimationKeyCount >= m_jumpActionAnimationYKeyCount) {
                     m_isJumpActionYAnimation = false;
+					m_animeTimeCounter = 0;
                     m_currentAnimationKeyCount = 0;
+					GameManager::GetInstance().AddActionScore(m_currentSpeedScoreMagnification, m_combo * m_comboMagnification, JumpActionType::en_ActionY);
+
                     if (m_isSpecialJumpAction) {
                         m_currentSpecialJumpActionCount++;
                     }
@@ -204,6 +216,9 @@ namespace basecross {
     //ジャンプアクションアニメーション（Z軸）
     void Player::JumpActionZAnimation() {
         if (m_isJumpActionZAnimation) {
+			JumpAcionEffect(EN_EffectName::en_GoodEffect, L"se_maoudamashii_onepoint16.wav");
+			m_animeTimeCounter += App::GetApp()->GetElapsedTime();
+
             m_currentAnimationTime += App::GetApp()->GetElapsedTime();
             if (m_isInvincible) {
                 m_isJumpStartAnimation = false;
@@ -490,7 +505,9 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
                     m_rot.z = 0;
                     m_isJumpAction = false;
                     m_isInvincible = false;
+					m_animeTimeCounter = 0;
                     GameManager::GetInstance().AddActionScore(m_currentSpeedScoreMagnification, m_combo * m_comboMagnification, JumpActionType::en_ActionZ);
+					GameManager::GetInstance().SetIsSpecialJump(true);
 				}
                     m_currentSpecialJumpActionCount++;
                 }
@@ -511,6 +528,7 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
                     m_rot.z = 0;
                     m_isJumpAction = false;
                     m_isInvincible = false;
+					m_animeTimeCounter = 0;
                     GameManager::GetInstance().AddActionScore(m_currentSpeedScoreMagnification, m_combo * m_comboMagnification, JumpActionType::en_ActionZ);
                 }
             }
@@ -530,7 +548,6 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
             m_currentSpecialJumpCount++;
             if (m_currentSpecialJumpCount > m_specialJumpCount) {
                 m_isSpecialJump = false;
-                gm.SetIsSpecialTime(false);
                 m_managerniaruyatu = false;
                 m_currentSpecialJumpCount = 0;
             }
@@ -563,6 +580,7 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
             }
             m_currentJumpGradeTime = 0;
             m_combo++;
+			gm.SetIsJumpBigWave(true);
         }
     }
 
@@ -726,24 +744,62 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
         }
     }
 
+	void Player::SpecialCheck() {
+		if (m_isTouchSea) {
+			auto& gameManager = GameManager::GetInstance();
+			gameManager.SpecialCheck();
+
+			if (gameManager.GetIsSpecialTime()) {
+				gameManager.SetIsSpecialJump(false);
+			}
+
+			if (gameManager.GetIsJumpBigWave()) {
+				gameManager.SetIsSpecialTime(false);
+				gameManager.SetIsJumpBigWave(false);
+			}
+		}
+	}
+
     //効果音
     void Player::ActiveSE(wstring se) {
 		float pitch = m_combo == 0.0f ? 1.0f : m_combo / 10.0f + 1.0f;
         auto XAPtr = App::GetApp()->GetXAudio2Manager();	
-        auto SE = XAPtr->MyStart(se, 0, 0.5f, pitch);
+		m_SE = XAPtr->MyStart(se, 0, 0.5f, pitch);
     }
+
+	void Player::PlayVoiceSE(float vol) {
+		auto XAPtr = App::GetApp()->GetXAudio2Manager();
+		auto &gameManager = GameManager::GetInstance();
+
+		std::random_device rando;
+		std::mt19937 mt(rando());
+		int voiceItr = mt() % m_playerSpecialVoiceStr.size();
+		int spVoiceItr = mt() % m_playerVoiceStr.size();
+
+		bool JumpAcionFlag = (m_isJumpActionXAnimation || m_isJumpActionYAnimation || m_isJumpActionZAnimation);
+		if (!JumpAcionFlag) {
+			if (gameManager.GetIsSpecialTime()) {
+				m_voiceSE = XAPtr->Start(m_playerSpecialVoiceStr[voiceItr], 0, vol);
+			}
+			else
+			{
+				m_voiceSE = XAPtr->Start(m_playerVoiceStr[spVoiceItr], 0, vol);
+			}
+		}
+	}
 
 	//エフェクトの再生
 	void Player::JumpEffect(EN_EffectName effectName, wstring seName) {
 		auto pos = GetComponent<Transform>()->GetPosition();
 		m_effectObj->PlayEffect(EN_EffectName::en_GoodEffect, EffectType::en_Jump, Vec3(pos.x, pos.y, -10.0f));
 		ActiveSE(seName);
+		PlayVoiceSE(0.5f);
 	}
 
-	void Player::JumpAcionEffect(EN_EffectName effectName, wstring seName, int animTime) {
+	void Player::JumpAcionEffect(EN_EffectName effectName, wstring seName) {
 		bool JumpAcionFlag = (m_isJumpActionXAnimation || m_isJumpActionYAnimation || m_isJumpActionZAnimation);
 		
-			if (JumpAcionFlag && m_currentAnimationKeyCount == 0) {
+		if (JumpAcionFlag && m_animeTimeCounter == 0) {
 			JumpEffect(effectName, seName);
 		}
 	};
@@ -827,6 +883,11 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
                 m_isTouchSea = true;
                 GroundWaveSpeedDown();
             }
+			bool JumpAcionFlag = (m_isJumpActionXAnimation || m_isJumpActionYAnimation || m_isJumpActionZAnimation);
+
+			if (JumpAcionFlag) {
+				m_combo = 0;
+			}
         }
     }
 
@@ -837,6 +898,7 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
                 m_knockBackMagnification = 4.0f;
                 InitKnockBack(m_knockBackMagnification);
                 JumpMissSpeedDown();
+				GameManager::GetInstance().SetIsSpecialTime(false);
                 m_isInvincible = true;
             }
             m_currentJumpGradeTime = 0;

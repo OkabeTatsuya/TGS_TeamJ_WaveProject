@@ -45,7 +45,9 @@ namespace basecross {
 
 	void GoalObject::MoveObject() {
 		auto pos = GetComponent<Transform>()->GetPosition();
-		if (pos.x >= m_offsetPosX) {
+		auto& gameManager = GameManager::GetInstance();
+
+		if (pos.x >= m_offsetPosX && !gameManager.GetIsSpecialTime()) {
 			Movement(GetComponent<Transform>());
 		}
 	}

@@ -144,9 +144,18 @@ namespace basecross{
         int m_currentSpecialJumpCount;
         //スペシャルジャンプ中フラグ
         bool m_isSpecialJump;
-
+		//アニメーション再生時間
+		float m_animeTimeCounter = 0;
+		//再生するエフェクトオブジェクト
 		shared_ptr<EffectObject> m_effectObj;
+		//ジャンプ判定を表示するUI
 		shared_ptr<JudgJumpUI> m_judgJumpUI;
+		//ボイスSE
+		shared_ptr<SoundItem> m_voiceSE;
+		shared_ptr<SoundItem> m_SE;
+		vector<wstring> m_playerVoiceStr;
+		vector<wstring> m_playerSpecialVoiceStr;
+		bool m_isJumpBigWave = false;
 
         //スペシャルジャンプ起動フラグ
         bool m_managerniaruyatu;
@@ -236,12 +245,15 @@ namespace basecross{
         void FlightAction();
 
 
+		void SpecialCheck();
 		//SEを鳴らす処理
 		void ActiveSE(wstring se);
+		//ボイスSEを鳴らす
+		void PlayVoiceSE(float vol);
 		//ジャンプのエフェクトとSEを再生
 		void JumpEffect(EN_EffectName effectName, wstring seName);
 		//ジャンプアクションのエフェクトとSEを再生
-		void JumpAcionEffect(EN_EffectName effectName, wstring seName, int animTime);
+		void JumpAcionEffect(EN_EffectName effectName, wstring seName);
 		//スペシャルジャンプフラグを立てる
 		void SetUpSpecialJumpFlag();
 		//エフェクトを追従させる

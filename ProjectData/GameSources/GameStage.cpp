@@ -46,6 +46,7 @@ namespace basecross {
 
 			//値の初期化
 			GameManager::GetInstance().ResetGame();
+			GameManager::GetInstance().SetMaxSpecialCount(m_maxSpecialCount[m_specialJumpCount]);
 
             AddGameObject<Fade>();
 
@@ -156,16 +157,15 @@ namespace basecross {
 		Vec3 itemScale = Vec3(40.0f, 40.0f, 1.0f);
 		AddGameObject<ImageUI>(Vec3(0.0f), itemScale, baseItemPos, float(5.0f), L"Coin.png");
 		//アイテム上限UI
-		m_itemCountUI = AddGameObject<ScoreUIPanel>(Vec3(0.0f), itemScale, itemUIPos[3], float(5.0f), L"GoldenNumbers.png", 2, false);
+		m_maxItemCountUI = AddGameObject<ScoreUIPanel>(Vec3(0.0f), itemScale, itemUIPos[3], float(5.0f), L"GoldenNumbers.png", 2, false);
 		//描画する数字
 		auto drawNum = GameManager::GetInstance().GetMaxSpecialCount();
-		m_itemCountUI->ScoreDraw(drawNum);
+		m_maxItemCountUI->ScoreDraw(drawNum);
 
 		AddGameObject<ImageUI>(Vec3(0.0f), itemScale, itemUIPos[2], float(5.0f), L"Slash.png");
 
 		//アイテムカウントUI
 		m_itemCountUI = AddGameObject<ScoreUIPanel>(Vec3(0.0f), itemScale, itemUIPos[1], float(5.0f), L"GoldenNumbers.png", 2, false);
-
 		drawNum = GameManager::GetInstance().GetSpecialCount();
 		m_itemCountUI->ScoreDraw(drawNum);
 
@@ -174,6 +174,7 @@ namespace basecross {
 		AddGameObject<ImageUI>(Vec3(0.0f), Vec3(30.0f, 30.0f, 1.0f), m_mapUIPos[1], float(6.0f), L"MapGoal.png");
 		m_playerIconUI = AddGameObject<ImageUI>(Vec3(0.0f), Vec3(20.0f, 20.0f, 1.0f), m_mapUIPos[2], float(7.0f), L"MapPlayer.png");
 
+		//カットインUI
 		m_cutInUI = AddGameObject<CutInUI>(Vec3(0.0f), Vec3(1300.0f, 400.0f, 1.0f), Vec2(0.0f), float(5.0f), L"CutIn.png");
 
 		Vec2 baseCommandIconScl = Vec2(4.0f, 2.0f);
@@ -205,6 +206,8 @@ namespace basecross {
 		AddGameObject<ImageUI>(Vec3(0.0f), commandIconScl[2], commandIconUIPos[2], float(6.0f), L"Icon2.png");
 		AddGameObject<ImageUI>(Vec3(0.0f), commandIconScl[3], commandIconUIPos[3], float(6.0f), L"Icon3.png");
 
+		//ビッグウェーブで獲得したスコアを表示
+		//m_bigWaveScoreUI = AddGameObject<BigWaveScoreUI>(Vec3(0.0f), Vec3(1300.0f, 400.0f, 1.0f), Vec2(0.0f), float(5.0f), L"CutIn.png");
 	};
 
 	//アニメーションするUIを作成
@@ -299,6 +302,9 @@ namespace basecross {
 		auto drawNum = GameManager::GetInstance().GetSpecialCount();
 		m_itemCountUI->ScoreDraw(drawNum);
 
+		drawNum = GameManager::GetInstance().GetMaxSpecialCount();
+		m_maxItemCountUI->ScoreDraw(drawNum);
+
 		drawNum = GameManager::GetInstance().GetGameScore();
 		m_scoreCountUI->ScoreDraw(drawNum);
 
@@ -314,6 +320,11 @@ namespace basecross {
 			if (m_isReset)
 			{
 				PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToTitleStage");
+			}
+			//リスタート
+			if (cntVec[0].wPressedButtons & XINPUT_GAMEPAD_START) 
+			{
+				PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
 			}
 		}
 	}
@@ -394,36 +405,44 @@ namespace basecross {
 
 	void GameStage::SpecialJumpController() {
 		//ジャンプフラグが立っていたらスピードを下げる
-		auto specialJumpFlag = GameManager::GetInstance().GetIsSpecialJump();
+		auto& gameManager = GameManager::GetInstance();
+		auto specialJumpFlag = gameManager.GetIsSpecialJump();
 
-		auto specialJumpTimeFlag = GameManager::GetInstance().GetIsSpecialTime();
+		auto specialJumpTimeFlag = gameManager.GetIsSpecialTime();
 
 		if (!specialJumpTimeFlag) {
 			m_playSpecialSE = false;
 		}
+		else {
+			m_isVisibleBigWaveScore = false;
+		}
 
 		if (specialJumpTimeFlag && !m_playSpecialSE) {
 			m_cutInUI->ResetState();
+			if (m_specialJumpCount < m_maxSpecialCount.size() -1) {
+				m_specialJumpCount++;
+				gameManager.SetMaxSpecialCount(m_maxSpecialCount[m_specialJumpCount]);
+			}
 			PlaySE(EN_SoundTypeSE::en_SystemSE, m_seStr[EN_SE::en_SpecialTimeSE], 0.9f);
 			PlaySE(EN_SoundTypeSE::en_VoiceSE, m_seStr[EN_SE::en_SpecialTImeVoice1], 1.0f);
 			m_playSpecialSE = true;
 		}
 
 		if (specialJumpFlag) {
-			GameManager::GetInstance().SetGameSpeed(m_SpecialJumpSpeed);
+			gameManager.SetGameSpeed(m_SpecialJumpSpeed);
 
 			float maxCount = 0.1f;
 			float delta = App::GetApp()->GetElapsedTime();
 			m_specialJumpTimer += delta;
 			if (m_specialJumpTimer > maxCount) {
 				m_specialJumpTimer = 0.0f;
-				GameManager::GetInstance().SetGameSpeed(m_saveGameSpeed);
-				GameManager::GetInstance().SetIsSpecialTime(false);
-				GameManager::GetInstance().SetIsSpecialJump(false);
+				gameManager.SetGameSpeed(m_saveGameSpeed);
+				//gameManager.SetIsSpecialTime(false);
+				gameManager.SetIsSpecialJump(false);
 			}
 		}
 		else {
-			m_saveGameSpeed = GameManager::GetInstance().GetGameSpeed();
+			m_saveGameSpeed = gameManager.GetGameSpeed();
 		}
 	}
 

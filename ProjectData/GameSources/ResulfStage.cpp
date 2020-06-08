@@ -75,7 +75,7 @@ namespace basecross {
 
 	void ResultStage::SetNextStage() {
 		auto &gameManager = GameManager::GetInstance();
-		if (m_ResultUiCount == 2) {
+		if (m_ResultUiCount == 0) {
 			if (gameManager.GetSelectStageNum() < gameManager.GetSaveScore().size()-1) {
 				gameManager.SetSelectStageNum(gameManager.GetSelectStageNum() + 1);
 			}
