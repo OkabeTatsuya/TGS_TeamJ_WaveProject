@@ -468,7 +468,7 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
             m_isFlightAction = true;
             GetComponent<RigidbodyBox>()->SetAutoGravity(false);
         }
-        if (m_isFlightAction) {
+        if (m_isFlightAction && !m_isTouchSea) {
             m_isJumpStartAnimation = false;
             m_isJumpFinishAnimation = false;
             m_isWaitingAnimation = false;
@@ -879,8 +879,11 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
         //—Ž‰º–hŽ~ˆ—
         if (other->FindTag(L"Sea") && !m_isJump) {
             GetComponent<RigidbodyBox>()->SetLinearVelocity(Vec3(0, 0, 0));
+            GetComponent<RigidbodyBox>()->SetAutoGravity(false);
+            m_currentFlightTime = m_maxFlightTime;
             if (!m_isInvincible && !m_isWaveTouch&&m_isFirstJump) {
                 m_isTouchSea = true;
+
                 GroundWaveSpeedDown();
             }
 			bool JumpAcionFlag = (m_isJumpActionXAnimation || m_isJumpActionYAnimation || m_isJumpActionZAnimation);
