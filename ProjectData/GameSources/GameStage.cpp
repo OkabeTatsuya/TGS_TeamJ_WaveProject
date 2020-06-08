@@ -157,7 +157,7 @@ namespace basecross {
 		Vec3 itemScale = Vec3(40.0f, 40.0f, 1.0f);
 		AddGameObject<ImageUI>(Vec3(0.0f), itemScale, baseItemPos, float(5.0f), L"Coin.png");
 		//ƒAƒCƒeƒ€ãŒÀUI
-		m_itemCountUI = AddGameObject<ScoreUIPanel>(Vec3(0.0f), itemScale, itemUIPos[3], float(5.0f), L"GoldenNumbers.png", 2, false);
+		m_maxItemCountUI = AddGameObject<ScoreUIPanel>(Vec3(0.0f), itemScale, itemUIPos[3], float(5.0f), L"GoldenNumbers.png", 2, false);
 		//•`‰æ‚·‚é”š
 		auto drawNum = GameManager::GetInstance().GetMaxSpecialCount();
 		m_maxItemCountUI->ScoreDraw(drawNum);
@@ -174,7 +174,7 @@ namespace basecross {
 		AddGameObject<ImageUI>(Vec3(0.0f), Vec3(30.0f, 30.0f, 1.0f), m_mapUIPos[1], float(6.0f), L"MapGoal.png");
 		m_playerIconUI = AddGameObject<ImageUI>(Vec3(0.0f), Vec3(20.0f, 20.0f, 1.0f), m_mapUIPos[2], float(7.0f), L"MapPlayer.png");
 
-		//ï¿½Jï¿½bï¿½gï¿½Cï¿½ï¿½UI
+		//ƒJƒbƒgƒCƒ“UI
 		m_cutInUI = AddGameObject<CutInUI>(Vec3(0.0f), Vec3(1300.0f, 400.0f, 1.0f), Vec2(0.0f), float(5.0f), L"CutIn.png");
 
 		Vec2 baseCommandIconScl = Vec2(4.0f, 2.0f);
@@ -206,6 +206,8 @@ namespace basecross {
 		AddGameObject<ImageUI>(Vec3(0.0f), commandIconScl[2], commandIconUIPos[2], float(6.0f), L"Icon2.png");
 		AddGameObject<ImageUI>(Vec3(0.0f), commandIconScl[3], commandIconUIPos[3], float(6.0f), L"Icon3.png");
 
+		//ƒrƒbƒOƒEƒF[ƒu‚ÅŠl“¾‚µ‚½ƒXƒRƒA‚ğ•\¦
+		//m_bigWaveScoreUI = AddGameObject<BigWaveScoreUI>(Vec3(0.0f), Vec3(1300.0f, 400.0f, 1.0f), Vec2(0.0f), float(5.0f), L"CutIn.png");
 	};
 
 	//ƒAƒjƒ[ƒVƒ‡ƒ“‚·‚éUI‚ğì¬
@@ -319,7 +321,7 @@ namespace basecross {
 			{
 				PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToTitleStage");
 			}
-			//ï¿½ï¿½ï¿½Xï¿½^ï¿½[ï¿½g
+			//ƒŠƒXƒ^[ƒg
 			if (cntVec[0].wPressedButtons & XINPUT_GAMEPAD_START) 
 			{
 				PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
@@ -403,23 +405,31 @@ namespace basecross {
 
 	void GameStage::SpecialJumpController() {
 		//ƒWƒƒƒ“ƒvƒtƒ‰ƒO‚ª—§‚Á‚Ä‚¢‚½‚çƒXƒs[ƒh‚ğ‰º‚°‚é
-		auto specialJumpFlag = GameManager::GetInstance().GetIsSpecialJump();
+		auto& gameManager = GameManager::GetInstance();
+		auto specialJumpFlag = gameManager.GetIsSpecialJump();
 
-		auto specialJumpTimeFlag = GameManager::GetInstance().GetIsSpecialTime();
+		auto specialJumpTimeFlag = gameManager.GetIsSpecialTime();
 
 		if (!specialJumpTimeFlag) {
 			m_playSpecialSE = false;
 		}
+		else {
+			m_isVisibleBigWaveScore = false;
+		}
 
 		if (specialJumpTimeFlag && !m_playSpecialSE) {
 			m_cutInUI->ResetState();
+			if (m_specialJumpCount < m_maxSpecialCount.size() -1) {
+				m_specialJumpCount++;
+				gameManager.SetMaxSpecialCount(m_maxSpecialCount[m_specialJumpCount]);
+			}
 			PlaySE(EN_SoundTypeSE::en_SystemSE, m_seStr[EN_SE::en_SpecialTimeSE], 0.9f);
 			PlaySE(EN_SoundTypeSE::en_VoiceSE, m_seStr[EN_SE::en_SpecialTImeVoice1], 1.0f);
 			m_playSpecialSE = true;
 		}
 
 		if (specialJumpFlag) {
-			GameManager::GetInstance().SetGameSpeed(m_SpecialJumpSpeed);
+			gameManager.SetGameSpeed(m_SpecialJumpSpeed);
 
 			float maxCount = 0.1f;
 			float delta = App::GetApp()->GetElapsedTime();
@@ -432,7 +442,7 @@ namespace basecross {
 			}
 		}
 		else {
-			m_saveGameSpeed = GameManager::GetInstance().GetGameSpeed();
+			m_saveGameSpeed = gameManager.GetGameSpeed();
 		}
 	}
 
