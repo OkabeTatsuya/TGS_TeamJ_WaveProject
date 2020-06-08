@@ -14,11 +14,11 @@ namespace basecross {
 		m_spawnCount = 0;
 		m_offScreen = 12.0f;
 
-		m_waveState.Pos = { Vec3(6.0f, -3.0f, -7.0f),Vec3(6.0f, -2.5f, -7.0f),Vec3(6.0f, -2.1f, -7.0f) };
+		m_waveState.Pos = { Vec3(6.0f, -3.0f, -7.0f),Vec3(6.0f, -2.5f, -7.0f),Vec3(6.0f, -2.3f, -7.0f) };
 		m_waveState.Rot = Vec3(0.0f);
-		m_waveState.Sca = { Vec3(1.0f) , Vec3(1.8f),Vec3(1.8f),Vec3(1.0f), Vec3(1.0f) };
+		m_waveState.Sca = { Vec3(1.0f), Vec3(1.8f), Vec3(2.2f, 1.6f, 1.0f)};
 		m_waveState.Layer = 6;
-		m_waveState.Tex = { L"SamllWave.png",L"MediumWave.png",L"BigWave.png" };
+		m_waveState.Tex = { L"SamllWave.png", L"MediumWave.png", L"BigWave1.png" };
 
 		m_createBigWaveTimer = 0.0f;
 		m_maxWaitingTime = 2.0f;

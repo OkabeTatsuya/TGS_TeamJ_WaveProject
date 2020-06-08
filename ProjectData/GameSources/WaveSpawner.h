@@ -18,11 +18,9 @@ namespace basecross {
 
 	class WaveSpawner : public SpawnerBase {
 		WaveState m_waveState;
-
 		//波を保存
 		//[波の種類][波の個数]
 		vector<vector<shared_ptr<Wave>>>m_waveObject;
-
 		//事前に生成するオブジェクトの個数
 		vector<int> m_defaultObjectNum;
 		//生成したオブジェクトの個数
