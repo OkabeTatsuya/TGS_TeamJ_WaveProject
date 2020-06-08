@@ -76,11 +76,14 @@ namespace basecross {
 		//スペシャルジャンプスコア計算用
 		int m_specialCount;
 		int m_maxSpecialCount;
+		//ビッグウェーブ発生中の獲得スコア
+		int m_specialJumpScore;
 
 		//スペシャルジャンプが出来る
 		bool m_isSpecialTime;
 		//スペシャルジャンプ中
 		bool m_isSpecialJump;
+		bool m_isJumpBigWave;
 
 		//ジャンプカウント
 		int m_perfectJumpCount;
@@ -123,6 +126,8 @@ namespace basecross {
 		int GetGoodJumpCount()const { return m_goodJumpCount; }
 		int GetItemCount()const { return m_itemCount; }
 		int GetMaxItemNum()const { return m_maxItemNum; }
+		int GetSpecialJumpScore()const { return m_specialJumpScore; }
+		bool GetIsJumpBigWave()const { return m_isJumpBigWave; }
 
 		//セッター
 		void SetIsGameEnd(bool set) { m_isGameEnd = set; }
@@ -138,6 +143,9 @@ namespace basecross {
 		void SetIsSpecialTime(bool set) { m_isSpecialTime = set; }
 		void SetItemCount(int set) {  m_itemCount = set; }
 		void SetMaxItemNum(int set) {  m_maxItemNum = set; }
+		void SetMaxSpecialCount(int set) { m_maxSpecialCount = set; }
+		void SetSpecialJumpScore(int set) { m_specialJumpScore = set; }
+		void SetIsJumpBigWave(bool set) { m_isJumpBigWave = set; }
 
 		//ジャンプのスコア加算処理
 		///magnification 倍率、　combo 続けてジャンプした回数
