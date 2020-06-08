@@ -232,7 +232,7 @@ namespace basecross {
 
 		//張り付けるテクスチャ
 		vector<wstring> texter {
-			L"Lady.png",
+			L"Ready.png",
 			L"Go.png"
 		};
 
