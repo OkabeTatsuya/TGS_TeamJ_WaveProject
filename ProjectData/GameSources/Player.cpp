@@ -492,7 +492,9 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
                     m_rot.z = 0;
                     m_isJumpAction = false;
                     m_isInvincible = false;
+					m_animeTimeCounter = 0;
                     GameManager::GetInstance().AddActionScore(m_currentSpeedScoreMagnification, m_combo * m_comboMagnification, JumpActionType::en_ActionZ);
+					GameManager::GetInstance().SetIsSpecialJump(true);
 				}
                     m_currentSpecialJumpActionCount++;
                 }
@@ -513,6 +515,7 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
                     m_rot.z = 0;
                     m_isJumpAction = false;
                     m_isInvincible = false;
+					m_animeTimeCounter = 0;
                     GameManager::GetInstance().AddActionScore(m_currentSpeedScoreMagnification, m_combo * m_comboMagnification, JumpActionType::en_ActionZ);
                 }
             }
@@ -830,6 +833,11 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
                 m_isTouchSea = true;
                 GroundWaveSpeedDown();
             }
+			bool JumpAcionFlag = (m_isJumpActionXAnimation || m_isJumpActionYAnimation || m_isJumpActionZAnimation);
+
+			if (JumpAcionFlag) {
+				m_combo = 0;
+			}
         }
     }
 
@@ -840,6 +848,7 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
                 m_knockBackMagnification = 4.0f;
                 InitKnockBack(m_knockBackMagnification);
                 JumpMissSpeedDown();
+				GameManager::GetInstance().SetIsSpecialTime(false);
                 m_isInvincible = true;
             }
             m_currentJumpGradeTime = 0;
