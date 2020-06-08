@@ -130,8 +130,9 @@ namespace basecross {
 			m_isCreateBigWave = false;
 		}
 
-		if (m_isCreateBigWave && !m_waveObject[WaveType::en_waveL][0]->GetIsMove()) {
+		if (m_isCreateBigWave && !m_waveObject[WaveType::en_waveL][0]->GetIsMove() && !gameManager.GetIsJumpBigWave()) {
 			gameManager.SetIsSpecialTime(false);
+			//MessageBox(nullptr, L"WeveSpawner.cpp 141", L"�e�X�g", MB_OK);
 		}
 	}
 
