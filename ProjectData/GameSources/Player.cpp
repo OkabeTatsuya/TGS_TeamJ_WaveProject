@@ -168,11 +168,15 @@ namespace basecross {
     //滞空アニメーション
     void Player::JumpActionXAnimation() {    
         if (m_isJumpActionXAnimation) {
+			JumpAcionEffect(EN_EffectName::en_GoodEffect, L"se_maoudamashii_onepoint16.wav");
+			m_animeTimeCounter += App::GetApp()->GetElapsedTime();
+
             m_currentAnimationTime += App::GetApp()->GetElapsedTime();
             if (m_currentAnimationTime >= m_maxAnimationTime) {
                 DrawingImage(m_jumpActionAnimationXKeys[m_currentAnimationKeyCount]);
                 m_currentAnimationKeyCount++;
                 if (m_currentAnimationKeyCount >= m_jumpActionAnimationXKeyCount) {
+					m_animeTimeCounter = 0;
                     m_currentAnimationKeyCount = 0;
                     m_isJumpActionXAnimation = false;
                     if (m_isSpecialJumpAction) {
@@ -187,13 +191,19 @@ namespace basecross {
     //ジャンプアクションアニメーション（Y軸）
     void Player::JumpActionYAnimation() {
         if (m_isJumpActionYAnimation) {
+			JumpAcionEffect(EN_EffectName::en_GoodEffect, L"se_maoudamashii_onepoint16.wav");
+			m_animeTimeCounter += App::GetApp()->GetElapsedTime();
+
             m_currentAnimationTime += App::GetApp()->GetElapsedTime();
             if (m_currentAnimationTime >= m_maxAnimationTime) {
                 DrawingImage(m_jumpActionAnimationYKeys[m_currentAnimationKeyCount]);
                 m_currentAnimationKeyCount++;
                 if (m_currentAnimationKeyCount >= m_jumpActionAnimationYKeyCount) {
                     m_isJumpActionYAnimation = false;
+					m_animeTimeCounter = 0;
                     m_currentAnimationKeyCount = 0;
+					GameManager::GetInstance().AddActionScore(m_currentSpeedScoreMagnification, m_combo * m_comboMagnification, JumpActionType::en_ActionY);
+
                     if (m_isSpecialJumpAction) {
                         m_currentSpecialJumpActionCount++;
                     }
@@ -206,6 +216,9 @@ namespace basecross {
     //ジャンプアクションアニメーション（Z軸）
     void Player::JumpActionZAnimation() {
         if (m_isJumpActionZAnimation) {
+			JumpAcionEffect(EN_EffectName::en_GoodEffect, L"se_maoudamashii_onepoint16.wav");
+			m_animeTimeCounter += App::GetApp()->GetElapsedTime();
+
             m_currentAnimationTime += App::GetApp()->GetElapsedTime();
             if (m_isInvincible) {
                 m_isJumpStartAnimation = false;
