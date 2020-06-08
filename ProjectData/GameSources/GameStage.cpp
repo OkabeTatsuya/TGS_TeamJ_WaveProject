@@ -426,9 +426,9 @@ namespace basecross {
 			m_specialJumpTimer += delta;
 			if (m_specialJumpTimer > maxCount) {
 				m_specialJumpTimer = 0.0f;
-				GameManager::GetInstance().SetGameSpeed(m_saveGameSpeed);
-				GameManager::GetInstance().SetIsSpecialTime(false);
-				GameManager::GetInstance().SetIsSpecialJump(false);
+				gameManager.SetGameSpeed(m_saveGameSpeed);
+				//gameManager.SetIsSpecialTime(false);
+				gameManager.SetIsSpecialJump(false);
 			}
 		}
 		else {
