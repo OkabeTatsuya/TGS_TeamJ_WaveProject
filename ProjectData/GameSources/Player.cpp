@@ -71,6 +71,9 @@ namespace basecross {
         m_specialJumpCount = 3;
         m_specialJumpActionMaxCount = 2;
         m_knockBackValue = 0.5f;
+
+		m_playerVoiceStr = { L"Voice2_1.wav", L"Voice2_3.wav", L"Voice2_4.wav"};
+		m_playerSpecialVoiceStr = { L"Voice2_6.wav", L"Voice2_10.wav"};
     }
 
     void Player::OnCreate() {
@@ -155,8 +158,7 @@ namespace basecross {
         m_scoreUpUI->AdjustPosition(GetComponent<Transform>()->GetPosition());
 		m_judgJumpUI->SetingPos(GetComponent<Transform>()->GetPosition());
 		FollowEffect();
-		JumpAcionEffect(EN_EffectName::en_GoodEffect, L"se_maoudamashii_onepoint16.wav", m_currentAnimationTime);
-
+		SpecialCheck();
     }
 
     void Player::OnUpdate2() {
@@ -530,7 +532,6 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
             m_currentSpecialJumpCount++;
             if (m_currentSpecialJumpCount > m_specialJumpCount) {
                 m_isSpecialJump = false;
-                gm.SetIsSpecialTime(false);
                 m_managerniaruyatu = false;
                 m_currentSpecialJumpCount = 0;
             }
@@ -563,6 +564,7 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
             }
             m_currentJumpGradeTime = 0;
             m_combo++;
+			gm.SetIsJumpBigWave(true);
         }
     }
 
@@ -730,7 +732,7 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
     void Player::ActiveSE(wstring se) {
 		float pitch = m_combo == 0.0f ? 1.0f : m_combo / 10.0f + 1.0f;
         auto XAPtr = App::GetApp()->GetXAudio2Manager();	
-        auto SE = XAPtr->MyStart(se, 0, 0.5f, pitch);
+		m_SE = XAPtr->MyStart(se, 0, 0.5f, pitch);
     }
 
 	//エフェクトの再生
@@ -738,12 +740,13 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
 		auto pos = GetComponent<Transform>()->GetPosition();
 		m_effectObj->PlayEffect(EN_EffectName::en_GoodEffect, EffectType::en_Jump, Vec3(pos.x, pos.y, -10.0f));
 		ActiveSE(seName);
+		PlayVoiceSE(0.5f);
 	}
 
-	void Player::JumpAcionEffect(EN_EffectName effectName, wstring seName, int animTime) {
+	void Player::JumpAcionEffect(EN_EffectName effectName, wstring seName) {
 		bool JumpAcionFlag = (m_isJumpActionXAnimation || m_isJumpActionYAnimation || m_isJumpActionZAnimation);
 		
-			if (JumpAcionFlag && m_currentAnimationKeyCount == 0) {
+		if (JumpAcionFlag && m_animeTimeCounter == 0) {
 			JumpEffect(effectName, seName);
 		}
 	};
