@@ -46,7 +46,7 @@
 
 #include "CopywriterStage.h"
 #include"TitleStage.h"
-#include"ResulfStage.h"
+#include"ResultStage.h"
 #include "SelectStage.h"
 
 #include "SanpleStage.h"
