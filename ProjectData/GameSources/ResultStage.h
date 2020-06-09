@@ -14,11 +14,12 @@ namespace basecross {
 	class ResultStage : public Stage {
 		//ビューの作成
 		void CreateViewLight();
-
+		shared_ptr<UnlockStageUI> m_unlockStageUI;
+		//サウンド
 		shared_ptr<SoundItem> m_SE;
 		shared_ptr<SoundItem> m_voiceSE;
 		shared_ptr<SoundItem> m_BGM;
-
+		//ボイスの名前
 		vector<wstring> m_gameclearVoiceStr;
 		vector<wstring> m_gameoverVoiceStr;
 
@@ -31,6 +32,8 @@ namespace basecross {
 		wstring m_ResultUi[3]; 
 
 		int m_ResultUiCount = 0;
+
+		bool m_playUnlockStageAnim;
 
 		void m_ControllerA();
 
@@ -60,8 +63,10 @@ namespace basecross {
 		//コントローラーを押す
 		void Press();
 		void SetNextStage();
-
+		//UIを作成する
 		void CreateResultUI();
+		//ステージ解放演出
+		void UnlockStageAnim();
 
 		//BGMを流す
 		void GetBGM();

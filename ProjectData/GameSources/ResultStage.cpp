@@ -162,7 +162,7 @@ namespace basecross {
 			//ヘッターに書かないと保存されないので注意
 			//bool m_isPush = false;
 
-			if (cntVec[0].wPressedButtons & XINPUT_GAMEPAD_A)
+			if (!m_playUnlockStageAnim && cntVec[0].wPressedButtons & XINPUT_GAMEPAD_A)
 			{
 				//bollをtrueにする
 				m_isPush = true;
@@ -179,6 +179,7 @@ namespace basecross {
 				m_Time = 0.0f;
 			}
 			GetMoveVector();
+			UnlockStageAnim();
 		}
 		catch (...) {
 
@@ -267,8 +268,27 @@ namespace basecross {
 
 		//Xテキスト
 		AddGameObject<ImageUI>(Vec3(0.0f), Vec3(50.0f, 50.0f, 1.0f), resultsTabe[16], float(5.0f), L"Slash.png");
+
+		//ステージアンロック演出UI
+		m_unlockStageUI = AddGameObject<UnlockStageUI>(Vec3(0.0f), Vec3(50.0f, 50.0f, 1.0f), resultsTabe[16], float(5.0f), L"Slash.png");
 	};
 
+	void ResultStage::UnlockStageAnim() {
+		auto& manager = GameManager::GetInstance();
+
+		if (!m_unlockStageUI->GetIsEndAnim() && manager.GetIsGameClear() && manager.GetClearStageNum() < manager.GetGameClearScoreVector().size()) {
+			m_playUnlockStageAnim = true;
+		}
+
+		if (m_unlockStageUI->GetIsEndAnim()) {
+			m_playUnlockStageAnim = false;
+		}
+
+		if (m_playUnlockStageAnim) {
+			m_unlockStageUI->PlayAnim();
+		}
+
+	}
 
 	Vec2 ResultStage::GetMoveVector()
 	{
