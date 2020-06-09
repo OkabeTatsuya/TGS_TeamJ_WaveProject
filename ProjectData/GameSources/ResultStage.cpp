@@ -178,7 +178,11 @@ namespace basecross {
 				AddGameObject<Fade>(m_ResultUi[m_ResultUiCount]);
 				m_Time = 0.0f;
 			}
-			GetMoveVector();
+
+			if (!m_playUnlockStageAnim) {
+				GetMoveVector();
+			}
+
 			UnlockStageAnim();
 		}
 		catch (...) {
@@ -275,8 +279,20 @@ namespace basecross {
 
 	void ResultStage::UnlockStageAnim() {
 		auto& manager = GameManager::GetInstance();
+		auto maxStageNum = manager.GetSaveScore().size();
+		auto selectStageNum = manager.GetSelectStageNum();
+		auto clearStageNum = manager.GetClearStageNum();
 
-		if (!m_unlockStageUI->GetIsEndAnim() && manager.GetIsGameClear() && manager.GetClearStageNum() < manager.GetGameClearScoreVector().size()) {
+		//
+		bool unlockFlag = clearStageNum == selectStageNum && clearStageNum < manager.GetGameClearScoreVector().size() -1;
+		//ゲームクリアし、アンロック演出がまだ起きていない
+		if (!m_unlockStageUI->GetIsEndAnim() && manager.GetIsGameClear() && unlockFlag) {
+			auto unlockStageNum = clearStageNum + 1;
+
+			if (manager.GetIsGameClear() && unlockStageNum < maxStageNum && clearStageNum == selectStageNum) {
+				manager.SetClearStageNum(unlockStageNum);
+			}
+
 			m_playUnlockStageAnim = true;
 		}
 

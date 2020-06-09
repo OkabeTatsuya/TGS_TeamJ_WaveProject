@@ -384,14 +384,6 @@ namespace basecross {
 		}
 
 		if (!m_isLoadStage && m_loadStageTimeCount > m_maxLoadStageTime) {
-			int gameScore = GameManager::GetInstance().GetGameScore();
-
-			auto maxStageNum = gameManager.GetSaveScore().size();
-			auto unlockStageNum = gameManager.GetClearStageNum() + 1;
-
-			if (gameManager.GetIsGameClear() && unlockStageNum < maxStageNum) {
-				gameManager.SetClearStageNum(unlockStageNum);
-			}
 
 			SaveGameData();
 			LoadResultStage();
