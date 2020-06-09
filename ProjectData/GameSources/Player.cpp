@@ -847,6 +847,10 @@ namespace basecross {
                 JumpMissSpeedDown();
                 m_isInvincible = true;
             }
+            if (m_isFlightAction) {
+                m_isFlightAction = false;
+                //m_currentFlightTime = m_maxFlightTime;
+            }
             GetComponent<RigidbodyBox>()->SetAutoGravity(false);
         }
         if ((other->FindTag(L"SmallWave") || other->FindTag(L"MidWave") || other->FindTag(L"BigWave"))) {
@@ -879,7 +883,6 @@ namespace basecross {
         if (other->FindTag(L"Sea") && !m_isJump) {
             GetComponent<RigidbodyBox>()->SetLinearVelocity(Vec3(0, 0, 0));
             GetComponent<RigidbodyBox>()->SetAutoGravity(false);
-            m_currentFlightTime = m_maxFlightTime;
             if (!m_isInvincible && !m_isWaveTouch&&m_isFirstJump) {
                 m_isTouchSea = true;
 
