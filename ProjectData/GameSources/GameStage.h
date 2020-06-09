@@ -17,6 +17,7 @@
 #include "WaveSpawner.h"
 #include "ImageUI.h"
 #include "CutInUI.h"
+#include "BigWaveScoreUI.h"
 
 namespace basecross {
 	struct Bit_SpawnFlag
@@ -94,11 +95,13 @@ namespace basecross {
 		shared_ptr<UIBase> m_playerIconUI;
 		shared_ptr<Transform> m_playerIconTrans;
 
-		//・ｽX・ｽR・ｽAUI
+		//スコアUI
 		shared_ptr<ScoreUIPanel> m_itemCountUI;
 		shared_ptr<ScoreUIPanel> m_scoreCountUI;
 		shared_ptr<ScoreUIPanel> m_maxItemCountUI;
 
+		//ビッグウェーブで取得したスコアを表示するUI
+		shared_ptr<BigWaveScoreUI> m_bigWaveScoreUI;
 
 		shared_ptr<WaveSpawner> m_waveSpawner;
 
