@@ -30,7 +30,7 @@ namespace basecross {
 		BackGroundState m_objState;
 		
 		vector<shared_ptr<MoveBG>> m_BGObject;
-		vector<float> m_createPos;	
+		vector<float> m_createPos;
 
 		Vec3 m_spawnPos;
 

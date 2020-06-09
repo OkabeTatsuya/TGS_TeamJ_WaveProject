@@ -24,6 +24,13 @@ namespace basecross {
 		m_isMove = true;
 		m_objSpeed = moveSpeed;
 		m_offScreenX = -10.0f;
+
+		m_coordinate = {
+			0.0f,
+			1.0f,
+			0.0f,
+			1.0f
+		};
 	}
 
 	void MoveBG::OnCreate() {
@@ -36,7 +43,8 @@ namespace basecross {
 	}
 
 	void MoveBG::OnUpdate() {
-		Move();
+		//Move();
+		MoveTexture();
 		OffScreen();
 	}
 
@@ -57,6 +65,25 @@ namespace basecross {
 	//
 	//	//collision->SetDrawActive(true);
 	//}
+
+	void MoveBG::MoveTexture() {
+		Col4 color(1, 1, 1, 1);
+
+		for (int i = 0; i < m_vertices.size(); i++)
+		{
+			m_coordinate[i] += GameManager::GetInstance().GetGameSpeed() * App::GetApp()->GetElapsedTime() * m_objSpeed;
+			m_vertices[i].textureCoordinate.x = m_coordinate[i];
+		}
+
+		vector<uint16_t> indices =
+		{
+			0,1,2,
+			2,1,3,
+		};
+
+		auto drawComp = GetComponent<PCTStaticDraw>();
+		drawComp->CreateOriginalMesh<VertexPositionColorTexture>(m_vertices, indices);
+	}
 
 	//ˆÚ“®ˆ—
 	void MoveBG::Move() {

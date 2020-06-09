@@ -20,7 +20,7 @@ namespace basecross {
 	}
 
 	void BGGenerator::OnUpdate() {
-		GeneratBG();
+		//GeneratBG();
 	}
 
 	void BGGenerator::CreateObject() {
