@@ -21,7 +21,7 @@ namespace basecross {
 		m_waveState.Tex = { L"SamllWave.png", L"MediumWave.png", L"BigWave1.png" };
 
 		m_createBigWaveTimer = 0.0f;
-		m_maxWaitingTime = 2.0f;
+		m_maxWaitingTime = 2.5f;
 	}
 
 	void WaveSpawner::OnCreate() {
