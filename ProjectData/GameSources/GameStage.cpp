@@ -272,11 +272,25 @@ namespace basecross {
 
 	//ジェネレーターを作成
 	void GameStage::CreateGenerator() {
-		BackGroundState SkyState =		{ Vec3(0.0f), Vec3(-10.0f,  0.0f,  0.0f),	Vec2(5.0f, 5.0f), 0,L"Sky.png", -10.0f, 0.3f };
-		BackGroundState SeaBGState =	{ Vec3(0.0f), Vec3(-10.0f,  0.0f, -3.0f),	Vec2(5.0f, 5.0f), 3,L"Ocean.png", -10.0f, 0.3f};
-		BackGroundState SeaState =		{ Vec3(0.0f), Vec3(-10.0f, -0.12f, -8.0),	Vec2(5.0f, 5.0f), 8,L"Sea.png", -10.0f, 1.1f };
-		BackGroundState CloudState =	{ Vec3(0.0f), Vec3(-10.0f,  0.0f, -1.0),	Vec2(5.0f, 5.0f), 1,L"cloud.png", -10.0f, 0.05f };
-		BackGroundState IslandState =	{ Vec3(0.0f), Vec3(-10.0f, -0.3f, -2.0),	Vec2(1.5f, 1.5f), 2,L"Island.png", -10.0f, 0.2f };
+		auto& gm = GameManager::GetInstance();
+		vector<wstring> m_noonTexName = { L"Sky.png" ,L"Ocean.png" ,L"Sea.png" ,L"cloud.png" ,L"Island.png" };
+		vector<wstring> m_eveningTexName = { L"SkyAfternoon.png" ,L"OceanAfternoon.png" ,L"SeaAfternoon.png" ,L"CloudAfternoon.png" ,L"Island.png" };
+		vector<wstring> m_sunsetTexName = { L"SkySunset.png" ,L"OceanSunset.png" ,L"SeaSunset.png" ,L"CloudSunset.png" ,L"Island.png" };
+
+		vector<wstring> setTexName = m_noonTexName;
+		if (gm.GetSelectStageNum() == 2) {
+			setTexName = m_eveningTexName;
+		}
+
+		if (gm.GetSelectStageNum() == 3) {
+			setTexName = m_sunsetTexName;
+		}
+
+		BackGroundState SkyState =		{ Vec3(0.0f), Vec3(-10.0f,  0.0f,  0.0f),	Vec2(5.0f, 5.0f), 0, setTexName[0], -10.0f, 0.037f };
+		BackGroundState SeaBGState =	{ Vec3(0.0f), Vec3(-10.0f,  0.0f, -3.0f),	Vec2(5.0f, 5.0f), 3, setTexName[1], -10.0f, 0.037f };
+		BackGroundState SeaState =		{ Vec3(0.0f), Vec3(-10.0f, -0.12f, -8.0),	Vec2(5.0f, 5.0f), 8, setTexName[2], -10.0f, 0.137f };
+		BackGroundState CloudState =	{ Vec3(0.0f), Vec3(-10.0f,  0.0f, -1.0),	Vec2(5.0f, 5.0f), 1, setTexName[3], -10.0f, 0.0062f };
+		BackGroundState IslandState =	{ Vec3(0.0f), Vec3(-10.0f, -0.3f, -2.0),	Vec2(1.5f, 1.5f), 2, setTexName[4], -10.0f, 0.02f };
 
 		AddGameObject<BGGenerator>(SkyState);
 		AddGameObject<BGGenerator>(SeaBGState);
