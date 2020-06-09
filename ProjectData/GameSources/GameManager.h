@@ -111,6 +111,7 @@ namespace basecross {
 		//ÉQÉbÉ^Å[
 		int GetGameScore()const { return m_gameScore; }
 		int GetGameClearScore(int itr)const { return m_gameClearScore[itr]; }
+		vector<int> GetGameClearScoreVector()const { return m_gameClearScore; }
 		int GetSpecialCount()const { return m_specialCount; }
 		int GetMaxSpecialCount()const { return m_maxSpecialCount; }
 		float GetGameSpeed()const { return m_gameSpeed; }
