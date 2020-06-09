@@ -10,7 +10,7 @@ namespace basecross {
 	WaveSpawner::WaveSpawner(const shared_ptr<Stage>& StagePtr) : 
 		SpawnerBase(StagePtr)
 	{
-		m_defaultObjectNum = { 3, 5, 2 };
+		m_defaultObjectNum = { 3, 5, 1 };
 		m_spawnCount = 0;
 		m_offScreen = 12.0f;
 
@@ -39,6 +39,11 @@ namespace basecross {
 		for (int i = 0; i < 3; i++) {
 			m_waveObject.push_back(vector<shared_ptr<Wave>>());
 			WaveType waveType;
+			auto& gamemanager = GameManager::GetInstance();
+
+			//if (gamemanager.GetSelectStageNum() > 1) {
+			//	m_waveState.Tex = { L"SamllWave.png", L"MediumWave.png", L"BigWave1.png" };
+			//}
 
 			switch (i)
 			{
@@ -131,8 +136,8 @@ namespace basecross {
 		}
 
 		if (m_isCreateBigWave && !m_waveObject[WaveType::en_waveL][0]->GetIsMove() && !gameManager.GetIsJumpBigWave()) {
+			gameManager.SetSpecialJumpScore(0);
 			gameManager.SetIsSpecialTime(false);
-			//MessageBox(nullptr, L"WeveSpawner.cpp 141", L"�e�X�g", MB_OK);
 		}
 	}
 
