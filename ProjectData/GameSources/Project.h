@@ -41,6 +41,8 @@
 #include "FlashingUI.h"
 #include"TitleAnimationUI.h"
 #include "CutInUI.h"
+#include "BigWaveScoreUI.h"
+#include "UnlockStageUI.h"
 
 #include "CursorUI.h"
 
