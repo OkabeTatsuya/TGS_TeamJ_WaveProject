@@ -289,11 +289,11 @@ namespace basecross {
                 m_isJumpActionZAnimation = false;
                 m_currentAnimationKeyCount = 0;
             }
-if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
-    DrawingImage(m_jumpFinishAnimationKeys[m_currentAnimationKeyCount]);
-    m_currentAnimationKeyCount++;
-    m_currentAnimationTime = 0;
-}
+			if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
+			    DrawingImage(m_jumpFinishAnimationKeys[m_currentAnimationKeyCount]);
+			    m_currentAnimationKeyCount++;
+			    m_currentAnimationTime = 0;
+			}
         }
     }
 
@@ -457,7 +457,6 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
             m_isJumpActionXAnimation = false;
             m_isJumpActionYAnimation = true;
             m_isJumpActionZAnimation = false;
-			GameManager::GetInstance().AddActionScore(m_currentSpeedScoreMagnification, m_combo * m_comboMagnification, JumpActionType::en_ActionY);
         }
     }
 
