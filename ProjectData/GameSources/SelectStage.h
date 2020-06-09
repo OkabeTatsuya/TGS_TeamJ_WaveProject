@@ -40,6 +40,8 @@ namespace basecross {
 
 		shared_ptr<ImageUI> m_stageImageUI;
 		shared_ptr<ImageUI> m_stageNumUI;
+		shared_ptr<ImageUI> m_stageLockUI;
+		shared_ptr<ImageUI> m_stageIconLockUI;
 
 	public:
 		//ç\ízÇ∆îjä¸
@@ -51,10 +53,10 @@ namespace basecross {
 			m_stickDelta = 0.5f;
 			m_stickTime = 0.0f;
 			m_stageImageName = { 
-				L"Image1.png",
-				L"Image2.png",
-				L"Image3.png",
-				L"Image4.png"};
+				L"StageImage1.png",
+				L"StageImage2.png",
+				L"StageImage3.png",
+				L"StageImage4.png"};
 
 			m_stageNumImageName = {
 				L"Stage1.png",

@@ -59,6 +59,8 @@ namespace basecross {
         virtual void OnCreate() override;
         virtual void OnUpdate() override;
 
+		vector<shared_ptr<ScoreUI>> GetScoreUIs() { return m_scoreUIs; }
+
         //スコア表示
         void ScoreDraw(int score);
         //スコアアップ時の表示

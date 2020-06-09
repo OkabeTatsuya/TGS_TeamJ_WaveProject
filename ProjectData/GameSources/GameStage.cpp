@@ -64,15 +64,16 @@ namespace basecross {
 			AddGameObject<SeaCollision>(Vec3(0, 0, 0), Vec3(5, 0.5f, 1), Vec3(-2.5, -4.0, -7.0));
 
 			//スコアUI
-			m_scoreCountUI = AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(50.0f, 50.0f, 1.0f), Vec2(175.0f, 350.f), float(5.0f), L"Number.png", 7, false);
-			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(200.0f, 50.0f, 1.0f), Vec2(30.0f, 350.f), float(5.0f), L"Score2.png");
+			m_scoreCountUI = AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(50.0f, 50.0f, 1.0f), Vec2(180.0f, 350.f), float(5.0f), L"Number.png", 7, false);
+			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(200.0f, 50.0f, 1.0f), Vec2(30.0f, 350.f), float(5.0f), L"Score.png");
  
 
 			m_fadeInUI = AddGameObject<Fade>(L"ToResulfStage");
 			m_fadeInUI->SetUpdateActive(false);
 
 			auto audioManager = App::GetApp()->GetXAudio2Manager();
-			m_BGM = audioManager->Start(L"game_maoudamashii_5_town05.wav", XAUDIO2_LOOP_INFINITE, 0.0f);
+			audioManager->Stop(m_BGM);
+			m_BGM = audioManager->Start(L"game_maoudamashii_5_town05.wav", XAUDIO2_LOOP_INFINITE, 0.1f);
 
 			for (int i = 0; i < 2; i++) {
 				m_SE.push_back(nullptr);
@@ -207,7 +208,7 @@ namespace basecross {
 		AddGameObject<ImageUI>(Vec3(0.0f), commandIconScl[3], commandIconUIPos[3], float(6.0f), L"Icon3.png");
 
 		//ビッグウェーブで獲得したスコアを表示
-		//m_bigWaveScoreUI = AddGameObject<BigWaveScoreUI>(Vec3(0.0f), Vec3(1300.0f, 400.0f, 1.0f), Vec2(0.0f), float(5.0f), L"CutIn.png");
+		m_bigWaveScoreUI = AddGameObject<BigWaveScoreUI>(Vec3(0.0f), Vec3(1300.0f, 400.0f, 1.0f), Vec2(0.0f), float(5.0f), L"CutIn.png");
 	};
 
 	//アニメーションするUIを作成
@@ -351,7 +352,7 @@ namespace basecross {
 			int stageNum = gameManager.GetSelectStageNum();
 			int gameScore = gameManager.GetGameScore();
 
-			if (gameManager.GetGameClearScore(stageNum) < gameScore) {
+			if (gameManager.GetGameClearScore(stageNum) < gameScore && !m_gameOver) {
 				gameManager.SetIsGameClear(true);
 				PlaySE(EN_SoundTypeSE::en_SystemSE, m_seStr[EN_SE::en_GameClearSE], 0.9f);
 				PlaySE(EN_SoundTypeSE::en_VoiceSE, m_seStr[EN_SE::en_GameClearVoice], 1.0f);
@@ -426,6 +427,11 @@ namespace basecross {
 			PlaySE(EN_SoundTypeSE::en_SystemSE, m_seStr[EN_SE::en_SpecialTimeSE], 0.9f);
 			PlaySE(EN_SoundTypeSE::en_VoiceSE, m_seStr[EN_SE::en_SpecialTImeVoice1], 1.0f);
 			m_playSpecialSE = true;
+		}
+
+		if (m_specialJumpCount != 0 && !specialJumpTimeFlag && !m_isVisibleBigWaveScore) {
+			m_bigWaveScoreUI->ResetState();
+			m_isVisibleBigWaveScore = true;
 		}
 
 		if (specialJumpFlag) {

@@ -94,19 +94,24 @@ namespace basecross {
 			if (controlVec.wPressedButtons & XINPUT_GAMEPAD_X) {
 				GameManager::GetInstance().SetClearStageNum(3);
 				PlaySE(L"se_maoudamashii_system37.wav", 0.5f);
-
 			}
-
 		}
 	}
 
 	//Aボタンが押された時の処理
 	void SelectStage::PushA() {
-		GameManager::GetInstance().SetSelectStageNum(m_stageNum);
-		PlaySE(L"se_maoudamashii_system37.wav", 0.5f);
-		PlayeVoice(L"Voice1_6.wav", 1.0f);
-		Sceneloader();
-		m_isSelectStage = true;
+		auto& gameManager = GameManager::GetInstance();
+
+		if (m_stageNum <= gameManager.GetClearStageNum()) {
+			gameManager.SetSelectStageNum(m_stageNum);
+			PlaySE(L"se_maoudamashii_system37.wav", 0.5f);
+			PlayeVoice(L"Voice1_6.wav", 1.0f);
+			Sceneloader();
+			m_isSelectStage = true;
+		}
+		else {
+			PlaySE(L"se_maoudamashii_onepoint14.wav", 0.5f);
+		}
 	}
 
 	void SelectStage::PushB() {
@@ -149,11 +154,20 @@ namespace basecross {
 
 			//最小ステージ数を超えたら最大に移る
 			if (m_stageNum < 0) {
-				m_stageNum = gameManager.GetClearStageNum();
+				m_stageNum = m_stageImageName.size() - 1;
 			}
 			//最大ステージ数を超えたら最小に移る
-			if (m_stageNum > gameManager.GetClearStageNum()) {
+			if (m_stageNum > m_stageImageName.size() - 1) {
 				m_stageNum = 0;
+			}
+
+			if (m_stageNum <= gameManager.GetClearStageNum()) {
+				m_stageLockUI->SetDrawActive(false);
+				m_stageIconLockUI->SetDrawActive(false);
+			}
+			else {
+				m_stageLockUI->SetDrawActive(true);
+				m_stageIconLockUI->SetDrawActive(true);
 			}
 
 			//画像の差し替え
@@ -162,7 +176,6 @@ namespace basecross {
 			GameManager::GetInstance().DrawClearScore(m_stageNum);
 			PlaySE(L"se_maoudamashii_system37.wav", 0.5f);
 		}
-
 	}
 
 
@@ -195,8 +208,20 @@ namespace basecross {
 		//AddGameObject<ImageUI>(Vec3(0.0f), Vec3(512.0f, 256.0f, 1.0f), Vec2(-220.0f, -300.0f), float(4.0f), L"ClearScoreUI.png");
 
 		//ステージのイメージ画像を取得
-		m_stageImageUI = AddGameObject<ImageUI>(Vec3(0.0f), Vec3(650.0f, 400.0f, 1.0f), Vec2(0.0f, -00.0f), float(4.0f), m_stageImageName[m_stageNum]);
+		m_stageImageUI = AddGameObject<ImageUI>(Vec3(0.0f), Vec3(640.0f, 400.0f, 1.0f), Vec2(0.0f, -15.0f), float(4.0f), m_stageImageName[m_stageNum]);
 		m_stageNumUI = AddGameObject<ImageUI>(Vec3(0.0f), Vec3(512.0f, 256.0f, 1.0f), Vec2(0.0f, 250.0f), float(4.0f), m_stageNumImageName[m_stageNum]);
+		AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1350.0f, 900.0f, 1.0f), Vec2(-5.0f, 40.0f), float(3.0f), L"StageBG.png");
+
+		//ステージイメージを黒くぼかすUI
+		m_stageLockUI = AddGameObject<ImageUI>(Vec3(0.0f), Vec3(640.0f, 400.0f, 1.0f), Vec2(0.0f, -15.0f), float(4.0f), L"SpecialJumpBG.png");
+		m_stageLockUI->SetDrawActive(false);
+		auto drawPtr = m_stageLockUI->GetComponent<PCTSpriteDraw>();
+		drawPtr->SetDiffuse(Col4(1.0f,1.0f,1.0f,0.5f));
+
+		//南京錠UI
+		m_stageIconLockUI = AddGameObject<ImageUI>(Vec3(0.0f), Vec3(256.0f, 256.0f, 1.0f), Vec2(0.0f, -15.0f), float(5.0f), L"Lock.png");
+		m_stageIconLockUI->SetDrawActive(false);
+
 	}
 
 
