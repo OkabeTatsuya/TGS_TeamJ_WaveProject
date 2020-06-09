@@ -22,6 +22,8 @@ namespace basecross {
 	{
 		m_totalTime = 0.0f;
 		m_nowColor = Col4(1.0f);
+		m_maxColorA = 0.7f;
+		m_speed = 2.0f;
 	}
 
 	void SpecialJumpUI::OnCreate() {
@@ -44,16 +46,16 @@ namespace basecross {
 		float delta = App::GetApp()->GetElapsedTime();
 
 		if (isSpecialTime) {
-			if (color.w < 0.5f) {
-				color.w += delta;
+			if (color.w < m_maxColorA) {
+				color.w += delta * m_speed;
 			}
 			else {
-				color.w = 0.5f;
+				color.w = m_maxColorA;
 			}
 		}
 		else {
 			if (color.w > 0.0f) {
-				color.w -= delta;
+				color.w -= delta * m_speed;
 			}
 			else {
 				color.w = 0.0f;

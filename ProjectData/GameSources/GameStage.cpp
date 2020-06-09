@@ -176,7 +176,7 @@ namespace basecross {
 		m_playerIconUI = AddGameObject<ImageUI>(Vec3(0.0f), Vec3(20.0f, 20.0f, 1.0f), m_mapUIPos[2], float(7.0f), L"MapPlayer.png");
 
 		//カットインUI
-		m_cutInUI = AddGameObject<CutInUI>(Vec3(0.0f), Vec3(1300.0f, 400.0f, 1.0f), Vec2(0.0f), float(5.0f), L"CutIn.png");
+		m_cutInUI = AddGameObject<CutInUI>(Vec3(0.0f), Vec3(1300.0f, 400.0f, 1.0f), Vec2(0.0f), float(5.0f), L"CutIN1.png");
 
 		Vec2 baseCommandIconScl = Vec2(4.0f, 2.0f);
 		float magnification = 30;
@@ -438,8 +438,8 @@ namespace basecross {
 				m_specialJumpCount++;
 				gameManager.SetMaxSpecialCount(m_maxSpecialCount[m_specialJumpCount]);
 			}
-			PlaySE(EN_SoundTypeSE::en_SystemSE, m_seStr[EN_SE::en_SpecialTimeSE], 0.9f);
-			PlaySE(EN_SoundTypeSE::en_VoiceSE, m_seStr[EN_SE::en_SpecialTImeVoice1], 1.0f);
+			//PlaySE(EN_SoundTypeSE::en_SystemSE, m_seStr[EN_SE::en_SpecialTimeSE], 0.9f);
+			//PlaySE(EN_SoundTypeSE::en_VoiceSE, m_seStr[EN_SE::en_SpecialTImeVoice1], 1.0f);
 			m_playSpecialSE = true;
 		}
 

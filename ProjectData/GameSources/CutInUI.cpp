@@ -19,9 +19,13 @@ namespace basecross {
 			layer,
 			tex)
 	{
+		m_SE = { nullptr, nullptr };
+		m_isPlaySE = { false, false };
+
 		m_isAnimUI = false;
 		m_animTimer = 0;
-		m_animEndTime = 1.5f;
+		m_animPlayTime = 0.5f;
+		m_animEndTime = 2.0f;
 	}
 
 	void CutInUI::OnCreate() {
@@ -42,22 +46,39 @@ namespace basecross {
 
 	void CutInUI::AnimUI() {
 		auto drawPtr = GetComponent<PCTSpriteDraw>();
-
-		if (m_isAnimUI && m_animTimer < m_animEndTime) {
+		if (m_isAnimUI) {
 			m_animTimer += App::GetApp()->GetElapsedTime();
-			auto color = drawPtr->GetDiffuse();
-
-			drawPtr->SetDrawActive(true);
-		}
-		else {
-			drawPtr->SetDrawActive(false);
-			m_animTimer = 0;
-			m_isAnimUI = false;
+			if (m_animTimer > m_animPlayTime) {
+				if (m_animTimer < m_animEndTime) {
+					auto color = drawPtr->GetDiffuse();
+					PlaySE(0, L"decision16.wav", 1.0f);
+					PlaySE(1, L"Voice1_11.wav", 1.0f);
+					drawPtr->SetDrawActive(true);
+				}
+				else {
+					drawPtr->SetDrawActive(false);
+					m_animTimer = 0;
+					m_isAnimUI = false;
+				}
+			}
 		}
 	};
 
+	void CutInUI::PlaySE(int seNum, wstring seName, float seVol) {
+		if (m_isPlaySE[seNum] == false) {
+			auto audioManager = App::GetApp()->GetXAudio2Manager();
+			m_SE[seNum] = audioManager->Start(seName, 0, seVol);
+			m_isPlaySE[seNum] = true;
+		}
+	}
+
 	void CutInUI::ResetState() {
 		m_isAnimUI = true;
+
+		for each (auto seFlag in m_isPlaySE)
+		{
+			seFlag = false;
+		}
 	}
 
 }
