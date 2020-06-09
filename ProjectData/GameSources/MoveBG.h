@@ -16,6 +16,7 @@ namespace basecross {
 
 		Vec2 m_imageSize;
 		wstring m_texture;
+		vector<float> m_coordinate;
 
 	public:
 		MoveBG(const shared_ptr<Stage>& stage,
@@ -32,6 +33,8 @@ namespace basecross {
 
 		//移動処理
 		void Move();
+		//UVを使った移動処理
+		void MoveTexture();
 
 		//移動判定のゲッター
 		bool GetIsMove();

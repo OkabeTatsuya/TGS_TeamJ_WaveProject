@@ -92,6 +92,7 @@ namespace basecross {
 		};
 
 		auto drawComp = AddComponent<PCTStaticDraw>();
+		drawComp->SetSamplerState(SamplerState::PointWrap);
 		drawComp->CreateOriginalMesh<VertexPositionColorTexture>(m_vertices, indices);
 		drawComp->SetOriginalMeshUse(true);
 
