@@ -22,7 +22,7 @@ namespace basecross {
 		m_waveType = type;
 		m_textureName = tex;
         m_isMove = true;
-        m_offScreenX = -7;
+        m_offScreenX = -8;
     }
 
     void Wave::OnCreate() {
@@ -77,6 +77,7 @@ namespace basecross {
             Movement(GetComponent<Transform>());
         }
     }
+
 
     //ˆÚ“®”»’è‚ÌƒQƒbƒ^[
     bool Wave::GetIsMove() {
