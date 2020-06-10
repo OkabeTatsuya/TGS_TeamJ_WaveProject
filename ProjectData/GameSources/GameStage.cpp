@@ -261,13 +261,20 @@ namespace basecross {
 			8.0f,0.0f,0.5f,AnimType::Delete
 		};
 
-		//張り付けるテクスチャ
-		wstring texter{
-			L"Gorl.png",
+		St_AnimUI failedUIState = {
+			Vec2(1000.0f,50.0f),Vec3(0.0f),m_textScale,
+			Vec2(0.0f,50.0f),Vec3(0.0f),m_textScale,
+			8.0f,0.0f,0.5f,AnimType::Delete
 		};
 
-		m_goalUI = AddGameObject<AnimationUI>(GoalUIState, texter, m_maxLoadStageTime);
-		m_isCreateGoalUI = true;
+		//張り付けるテクスチャ
+		vector<wstring> texter{
+			L"Gorl.png",
+			L"Failed.png",
+		};
+
+		m_goalUI = AddGameObject<AnimationUI>(GoalUIState, texter[0], m_maxLoadStageTime);
+		m_failedUI = AddGameObject<AnimationUI>(failedUIState, texter[1], m_maxLoadStageTime);
 	}
 
 	//ジェネレーターを作成
@@ -402,7 +409,7 @@ namespace basecross {
 
 		if (gameManager.GetIsGameEnd()) {
 			if (m_gameOver) {
-				m_goalUI->SetIsStartAnim(false);
+				m_failedUI->SetIsStartAnim(true);
 			}
 			else {
 				m_goalUI->SetIsStartAnim(true);

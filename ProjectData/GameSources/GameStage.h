@@ -79,7 +79,8 @@ namespace basecross {
 		//アニメーションUI
 		vector<shared_ptr<AnimationUI>> m_startUI;
 		shared_ptr<AnimationUI> m_goalUI;
-		
+		shared_ptr<AnimationUI> m_failedUI;
+
 		//エフェクトインターフェイス
 		shared_ptr<EfkInterface> m_efkInterface;
 		vector<shared_ptr<EfkEffect>> m_efkEffect;
@@ -137,7 +138,6 @@ namespace basecross {
 		float m_maxLoadStageTime;
 		float m_gameClearSpeed;
 		bool m_isLoadStage;
-		bool m_isCreateGoalUI;
 
 		bool m_gameOver;
 		float m_gameOverPos;
@@ -168,7 +168,7 @@ namespace basecross {
 			m_maxSpecialJumpCount = 3;
 			m_maxSpecialCount = {5, 8, 10};
 
-			m_maxLoadStageTime = 3.0f;
+			m_maxLoadStageTime = 2.0f;
 
 			m_gameClearSpeed = 0.2f;
 			m_spawnFlag = 0;
