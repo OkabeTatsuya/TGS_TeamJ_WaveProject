@@ -28,14 +28,12 @@ namespace basecross {
 
 		m_nextAnimeTime = {0.0f, 2.0f, 3.5f};
 		m_stageImageName = { 
-			L"StageImage1.png",
 			L"StageImage2.png",
 			L"StageImage3.png",
 			L"StageImage4.png" 
 		};
 
 		m_stageNumImageName = {
-			L"Stage1.png",
 			L"Stage2.png",
 			L"Stage3.png",
 			L"Stage4.png"
@@ -71,8 +69,19 @@ namespace basecross {
 		m_lockUI = GetStage()->AddGameObject<ImageUI>(Vec3(0.0f), Vec3(128.0f, 128.0, 1.0f), Vec2(250.0f, 250.0f), float(7.0f), L"Lock.png");
 
 		auto setNum = manager.GetClearStageNum();
-		m_stageImageUI = GetStage()->AddGameObject<ImageUI>(Vec3(0.0f), Vec3(640.0f, 400.0f, 1.0f), Vec2(0.0f, -15.0f), float(7.0f), m_stageImageName[setNum]);
-		m_stageNumUI = GetStage()->AddGameObject<ImageUI>(Vec3(0.0f), Vec3(512.0f, 256.0f, 1.0f), Vec2(0.0f, 230.0f), float(7.0f), m_stageNumImageName[setNum]);
+		wstring setStageImageTex = L"";
+		wstring setStageNumImageTex = L"";
+		if (setNum < m_stageImageName.size() - 1) {
+			setStageImageTex = m_stageImageName[setNum];
+			setStageNumImageTex = m_stageNumImageName[setNum];
+		}
+		else {
+			setStageImageTex = m_stageImageName[0];
+			setStageNumImageTex = m_stageNumImageName[0];
+		}
+
+		m_stageImageUI = GetStage()->AddGameObject<ImageUI>(Vec3(0.0f), Vec3(640.0f, 400.0f, 1.0f), Vec2(0.0f, -15.0f), float(7.0f), setStageImageTex);
+		m_stageNumUI = GetStage()->AddGameObject<ImageUI>(Vec3(0.0f), Vec3(512.0f, 256.0f, 1.0f), Vec2(0.0f, 230.0f), float(7.0f), setStageNumImageTex);
 		m_UnlockBackUI = GetStage()->AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1400.0f, 1150.0f, 1.0f), Vec2(-5.0f, 100.0f), float(6.0f), L"StageBG.png");
 
 		//UI‚ð”ñ•\Ž¦‚É‚·‚é
