@@ -37,6 +37,7 @@ namespace basecross {
 	void ScoreUpItem::OnUpdate() {
 		Move();
 		OffScreen();
+		PassiveCollision();
 	}
 
 	void ScoreUpItem::OnDestroy() {
@@ -91,6 +92,15 @@ namespace basecross {
 			collision->SetUpdateActive(true);
 			auto drawPtr = GetComponent<PCTStaticDraw>();
 			drawPtr->SetDrawActive(true);
+		}
+	}
+
+	void ScoreUpItem::PassiveCollision() {
+		auto& manager = GameManager::GetInstance();
+
+		if (manager.GetIsGameEnd()) {
+			auto collision = GetComponent<CollisionObb>();
+			collision->SetUpdateActive(false);
 		}
 	}
 

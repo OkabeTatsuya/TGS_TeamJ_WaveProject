@@ -44,6 +44,8 @@ namespace basecross {
 
 		void VisibleItem();
 
+		void PassiveCollision();
+
 		void PlaySE();
 	};
 }
