@@ -71,7 +71,7 @@ namespace basecross {
 		auto setNum = manager.GetClearStageNum();
 		wstring setStageImageTex = L"";
 		wstring setStageNumImageTex = L"";
-		if (setNum < m_stageImageName.size() - 1) {
+		if (setNum <= m_stageImageName.size() - 1) {
 			setStageImageTex = m_stageImageName[setNum];
 			setStageNumImageTex = m_stageNumImageName[setNum];
 		}
