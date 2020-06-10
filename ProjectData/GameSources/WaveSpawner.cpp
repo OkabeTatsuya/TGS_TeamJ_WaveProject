@@ -38,32 +38,16 @@ namespace basecross {
 	void WaveSpawner::CreateObject() {
 		for (int i = 0; i < 3; i++) {
 			m_waveObject.push_back(vector<shared_ptr<Wave>>());
-			WaveType waveType;
+			vector<WaveType> waveType = { WaveType::en_waveS ,WaveType::en_waveM ,WaveType::en_waveL };
 			auto& gamemanager = GameManager::GetInstance();
 
 			//if (gamemanager.GetSelectStageNum() > 1) {
 			//	m_waveState.Tex = { L"SamllWave.png", L"MediumWave.png", L"BigWave1.png" };
 			//}
 
-			switch (i)
-			{
-			case 0:
-				waveType = WaveType::en_waveS;
-				break;
-			case 1:
-				waveType = WaveType::en_waveM;
-				break;
-			case 2:
-				waveType = WaveType::en_waveL;
-				break;
-			default:
-				waveType = WaveType::en_waveL;
-				break;
-			}
-
 			for (int j = 0; j < m_defaultObjectNum[i]; j++) {
 				Vec3 firstPos = Vec3(-6.0f, m_waveState.Pos[i].y, m_waveState.Pos[i].z);
-				m_waveObject[i].push_back(GetStage()->AddGameObject<Wave>(m_waveState.Rot, m_waveState.Sca[i], firstPos, m_waveState.Layer, m_waveState.Tex[i], waveType));
+				m_waveObject[i].push_back(GetStage()->AddGameObject<Wave>(m_waveState.Rot, m_waveState.Sca[i], firstPos, m_waveState.Layer, m_waveState.Tex[i], waveType[i]));
 			}
 		}
 	}
