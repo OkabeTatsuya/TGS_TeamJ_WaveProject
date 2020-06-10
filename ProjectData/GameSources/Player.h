@@ -178,6 +178,8 @@ namespace basecross{
         float m_knockBackPos;
         //パーフェクトジャンプ時前進フラグ
         bool m_isKnockUp;
+        //ビックウェーブジャンプ重力制御フラグ
+        bool m_isBigWaveJump;
     private:
         //プレイヤーの角度
         Vec3 m_rot;

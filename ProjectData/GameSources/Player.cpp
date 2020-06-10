@@ -325,7 +325,7 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
     //èdóÕêßå‰
     void Player::GravityControl()
     {
-        if (GameManager::GetInstance().GetIsSpecialTime() && GetComponent<RigidbodyBox>()->GetLinearVelocity().y<0 && !m_isTouchSea){
+        if (GameManager::GetInstance().GetIsSpecialTime() && GetComponent<RigidbodyBox>()->GetLinearVelocity().y<0 && !m_isTouchSea && m_isBigWaveJump){
             GetComponent<RigidbodyBox>()->SetAutoGravity(false);
             auto gravity = GetComponent<RigidbodyBox>()->GetLinearVelocity();
             gravity.y -= 3.0f * App::GetApp()->GetElapsedTime();
@@ -544,6 +544,7 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
             isGreatJump = true;
         }
         if (gm.GetIsSpecialTime() && controller.wPressedButtons & XINPUT_GAMEPAD_A && !m_isJump) {
+            m_isBigWaveJump = true;
             m_isTouchSea = false;
             m_currentSpecialJumpCount++;
             if (m_currentSpecialJumpCount > m_specialJumpCount) {
@@ -884,6 +885,9 @@ if (m_currentAnimationTime >= jumpFinishAnimationFrameTime) {
         if (other->FindTag(L"Sea") && !m_isJump) {
             GetComponent<RigidbodyBox>()->SetLinearVelocity(Vec3(0, 0, 0));
             GetComponent<RigidbodyBox>()->SetAutoGravity(false);
+            if (m_isBigWaveJump) {
+                m_isBigWaveJump = false;
+            }
             if (!m_isInvincible && !m_isWaveTouch&&m_isFirstJump) {
                 m_isTouchSea = true;
 
