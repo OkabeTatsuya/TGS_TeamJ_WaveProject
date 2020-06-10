@@ -75,9 +75,9 @@ namespace basecross {
 	void CutInUI::ResetState() {
 		m_isAnimUI = true;
 
-		for each (auto seFlag in m_isPlaySE)
+		for(int i = 0; i < m_isPlaySE.size(); i++)
 		{
-			seFlag = false;
+			m_isPlaySE[i] = false;
 		}
 	}
 
