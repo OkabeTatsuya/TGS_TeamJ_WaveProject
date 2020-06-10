@@ -124,6 +124,7 @@
     <ResourceCompile Include="BaseCrossDx11.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="CoinIcon.ico" />
     <Image Include="icon1.ico" />
   </ItemGroup>
   <ItemGroup>

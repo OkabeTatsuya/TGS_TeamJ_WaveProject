@@ -29,6 +29,9 @@
     <Image Include="icon1.ico">
       <Filter>リソース ファイル</Filter>
     </Image>
+    <Image Include="CoinIcon.ico">
+      <Filter>リソース ファイル</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
