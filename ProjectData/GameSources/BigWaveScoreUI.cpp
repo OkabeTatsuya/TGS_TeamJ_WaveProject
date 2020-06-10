@@ -31,7 +31,7 @@ namespace basecross {
 
 		auto drawPtr = GetComponent<PCTSpriteDraw>();
 		drawPtr->SetDrawActive(false);
-		m_scoreUI = GetStage()->AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(100.0f, 100.0f, 1.0f), Vec2(150.0f, 0.0f), float(6.0f), L"GoldenNumbers.png", 6, false);
+		m_scoreUI = GetStage()->AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(100.0f, 100.0f, 1.0f), Vec2(100.0f, 0.0f), float(6.0f), L"GoldenNumbers.png", 4, false, true);
 
 		m_scoreUI->SetDrawActive(false);
 		auto scoreUI = m_scoreUI->GetScoreUIs();

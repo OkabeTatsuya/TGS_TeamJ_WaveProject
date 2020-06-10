@@ -61,7 +61,7 @@ namespace basecross {
 			//AddGameObject<UIBase>(Vec3(0.0f), Vec3(200.0f, 200.0f, 1.0f), Vec2(500.0f, -225.0f), float(2.0f), L"JumpFinish_7.png");
 
 			//タイトル画像
-			AddGameObject<UIBase>(Vec3(0.0f), Vec3(1024.0f, 512.0f, 1.0f), Vec2(50.0f,200.0f), float(9.0f), L"TitleLogo.png");
+			AddGameObject<UIBase>(Vec3(0.0f), Vec3(1024.0f, 512.0f, 1.0f), Vec2(50.0f,100.0f), float(9.0f), L"TitleLogo.png");
 
 			//点滅させてボタン押してくださいのUI
 			AddGameObject<FlashingUI>(Vec3(0.0f), Vec3(400.0f, 200.0f, 1.0f), Vec2(-0.0f, -200.0f), float(6.0f), L"StartBattan.png", 2.0f);
