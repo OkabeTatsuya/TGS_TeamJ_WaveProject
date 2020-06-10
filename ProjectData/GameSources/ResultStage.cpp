@@ -62,10 +62,8 @@ namespace basecross {
 		if (cntVec[0].bConnected)
 		{
 			//Aボタン
-			if (cntVec[0].wPressedButtons & XINPUT_GAMEPAD_A)
+			if (!m_isPlayUnlockStageAnim && cntVec[0].wPressedButtons & XINPUT_GAMEPAD_A)
 			{
-				SetNextStage();
-
 				auto SE = App::GetApp()->GetXAudio2Manager();
 				m_SE = SE->Start(L"se_maoudamashii_system37.wav", 0, 0.5f);
 
@@ -76,8 +74,12 @@ namespace basecross {
 	void ResultStage::SetNextStage() {
 		auto &gameManager = GameManager::GetInstance();
 		if (m_ResultUiCount == 0) {
-			if (gameManager.GetSelectStageNum() < gameManager.GetSaveScore().size()-1) {
-				gameManager.SetSelectStageNum(gameManager.GetSelectStageNum() + 1);
+			auto& manager = GameManager::GetInstance();
+			auto clearStageNum = manager.GetClearStageNum();
+			auto selectStageNum = manager.GetSelectStageNum();
+
+			if (selectStageNum < gameManager.GetSaveScore().size()-1 && selectStageNum < clearStageNum) {
+				gameManager.SetSelectStageNum(selectStageNum + 1);
 			}
 		}
 	}
@@ -162,24 +164,26 @@ namespace basecross {
 			//ヘッターに書かないと保存されないので注意
 			//bool m_isPush = false;
 
-			if (!m_playUnlockStageAnim && cntVec[0].wPressedButtons & XINPUT_GAMEPAD_A)
+			if (!m_isPlayUnlockStageAnim && cntVec[0].wPressedButtons & XINPUT_GAMEPAD_A)
 			{
 				//bollをtrueにする
 				m_isPush = true;
 			}
 
-			if (m_isPush)
+			if (m_isPush && !m_isloadStage)
 			{
 				m_Time += App::GetApp()->GetElapsedTime();
 			}
 
 			if (m_Time >= 0.1)//0.1秒後にシーン遷移
 			{
+				SetNextStage();
 				AddGameObject<Fade>(m_ResultUi[m_ResultUiCount]);
+				m_isloadStage = true;
 				m_Time = 0.0f;
 			}
 
-			if (!m_playUnlockStageAnim) {
+			if (!m_isPlayUnlockStageAnim) {
 				GetMoveVector();
 			}
 
@@ -284,23 +288,24 @@ namespace basecross {
 		auto clearStageNum = manager.GetClearStageNum();
 
 		//
-		bool unlockFlag = clearStageNum == selectStageNum && clearStageNum < manager.GetGameClearScoreVector().size() -1;
+		bool unlockFlag = clearStageNum == selectStageNum && selectStageNum < manager.GetGameClearScoreVector().size() -1;
+
 		//ゲームクリアし、アンロック演出がまだ起きていない
-		if (!m_unlockStageUI->GetIsEndAnim() && manager.GetIsGameClear() && unlockFlag) {
+		if (!m_isPush && !m_unlockStageUI->GetIsEndAnim() && manager.GetIsGameClear() && unlockFlag) {
 			auto unlockStageNum = clearStageNum + 1;
 
 			if (manager.GetIsGameClear() && unlockStageNum < maxStageNum && clearStageNum == selectStageNum) {
 				manager.SetClearStageNum(unlockStageNum);
 			}
 
-			m_playUnlockStageAnim = true;
+			m_isPlayUnlockStageAnim = true;
 		}
 
 		if (m_unlockStageUI->GetIsEndAnim()) {
-			m_playUnlockStageAnim = false;
+			m_isPlayUnlockStageAnim = false;
 		}
 
-		if (m_playUnlockStageAnim) {
+		if (m_isPlayUnlockStageAnim) {
 			m_unlockStageUI->PlayAnim();
 		}
 

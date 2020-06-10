@@ -33,7 +33,9 @@ namespace basecross {
 
 		int m_ResultUiCount = 0;
 
-		bool m_playUnlockStageAnim;
+		bool m_isPlayUnlockStageAnim;
+
+		bool m_isloadStage;
 
 		void m_ControllerA();
 
