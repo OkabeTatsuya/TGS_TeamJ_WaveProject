@@ -60,7 +60,7 @@
           </PVA>
         </ScalingValues>
         <RendererCommonValues>
-          <ColorTexture>Particle01.png</ColorTexture>
+          <ColorTexture>3.png</ColorTexture>
           <FadeOut>
             <Frame>50</Frame>
           </FadeOut>

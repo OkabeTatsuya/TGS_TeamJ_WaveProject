@@ -54,8 +54,7 @@
           </Circle>
         </GenerationLocationValues>
         <RendererCommonValues>
-          <ColorTexture>Star.png</ColorTexture>
-          <AlphaBlend>2</AlphaBlend>
+          <ColorTexture>Good2/Star.png</ColorTexture>
           <FadeOut>
             <Frame>20</Frame>
           </FadeOut>
@@ -97,8 +96,7 @@
           </PVA>
         </ScalingValues>
         <RendererCommonValues>
-          <ColorTexture>Ring.png</ColorTexture>
-          <AlphaBlend>2</AlphaBlend>
+          <ColorTexture>Good2/Ring.png</ColorTexture>
           <FadeIn>
             <Frame>5</Frame>
           </FadeIn>
