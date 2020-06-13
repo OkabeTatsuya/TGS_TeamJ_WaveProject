@@ -87,10 +87,10 @@ namespace basecross {
 			if (controlVec.wPressedButtons & XINPUT_GAMEPAD_B) {
 				PushB();
 			}
-			if (controlVec.wPressedButtons & XINPUT_GAMEPAD_X) {
-				GameManager::GetInstance().SetClearStageNum(3);
-				PlaySE(L"se_maoudamashii_system37.wav", 0.5f);
-			}
+			//if (controlVec.wPressedButtons & XINPUT_GAMEPAD_X) {
+			//	GameManager::GetInstance().SetClearStageNum(3);
+			//	PlaySE(L"se_maoudamashii_system37.wav", 0.5f);
+			//}
 		}
 	}
 
