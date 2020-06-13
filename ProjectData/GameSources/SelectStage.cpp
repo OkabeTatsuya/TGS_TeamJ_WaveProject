@@ -61,7 +61,7 @@ namespace basecross {
 
 	void SelectStage::OnDestroy() {
 		auto AudioManager = App::GetApp()->GetXAudio2Manager();
-		//ï¿½Tï¿½Eï¿½ï¿½ï¿½hï¿½ï¿½~ï¿½ß‚ï¿½
+		//ƒTƒEƒ“ƒh‚ğ~‚ß‚é
 		AudioManager->Stop(m_SE);
 		AudioManager->Stop(m_voiceSE);
 		AudioManager->Stop(m_BGM);
@@ -190,6 +190,9 @@ namespace basecross {
 	}
 
 	void SelectStage::CreateUI() {
+		//ƒtƒF[ƒhƒCƒ“UI
+		AddGameObject<Fade>();
+
 		//”wŒi
 		AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1300.0f, 800.0f, 1.0f), Vec2(0.0f, 0.0f), float(1.0f), L"SelectBG.png");
 		AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1280.0f, 800.0f, 1.0f), Vec2(0.0f, -300.0f), float(2.0f), L"ScoreBG.png"); 
@@ -200,15 +203,12 @@ namespace basecross {
 		AddGameObject<FlashingUI>(Vec3(0.0f), Vec3(128.0f, 128.0f, 1.0f), Vec2(550.0f, -00.0f), float(4.0f), L"RightArrow.png", 3.0f);
 		AddGameObject<FlashingUI>(Vec3(0.0f), Vec3(128.0f, 128.0f, 1.0f), Vec2(-550.0f, -00.0f), float(4.0f), L"LeftArrow.png", 3.0f);
 
-		//AddGameObject<ImageUI>(Vec3(0.0f), Vec3(512.0f, 256.0f, 1.0f), Vec2(0.0f, 300.0f), float(4.0f), L"StageSelect.png");
-		//AddGameObject<ImageUI>(Vec3(0.0f), Vec3(512.0f, 256.0f, 1.0f), Vec2(-220.0f, -300.0f), float(4.0f), L"ClearScoreUI.png");
-
 		//ƒXƒe[ƒW‚ÌƒCƒ[ƒW‰æ‘œ‚ğæ“¾
 		m_stageImageUI = AddGameObject<ImageUI>(Vec3(0.0f), Vec3(640.0f, 400.0f, 1.0f), Vec2(0.0f, -15.0f), float(4.0f), m_stageImageName[m_stageNum]);
 		m_stageNumUI = AddGameObject<ImageUI>(Vec3(0.0f), Vec3(512.0f, 256.0f, 1.0f), Vec2(0.0f, 250.0f), float(4.0f), m_stageNumImageName[m_stageNum]);
 		AddGameObject<ImageUI>(Vec3(0.0f), Vec3(1350.0f, 900.0f, 1.0f), Vec2(-5.0f, 40.0f), float(3.0f), L"StageBG.png");
 
-		//ƒXƒe[ƒWƒCƒ[ƒW‚ğ•‚­‚Ú‚©‚·UI
+		//‰ğ•ú‚³‚ê‚Ä‚¢‚È‚¢ƒXƒe[ƒW‚ğ•‚­‚Ú‚©‚·UI
 		m_stageLockUI = AddGameObject<ImageUI>(Vec3(0.0f), Vec3(640.0f, 400.0f, 1.0f), Vec2(0.0f, -15.0f), float(4.0f), L"SpecialJumpBG.png");
 		m_stageLockUI->SetDrawActive(false);
 		auto drawPtr = m_stageLockUI->GetComponent<PCTSpriteDraw>();
