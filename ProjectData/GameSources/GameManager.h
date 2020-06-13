@@ -1,6 +1,6 @@
 /*!
 @file GameManager.h
-@brief ゲームを管理するオブジェクト
+@brief ゲームを管理するシングルトン
 */
 
 #pragma once
@@ -29,8 +29,9 @@ namespace basecross {
 	private:
 		GameManager() {
 			m_gameScore = 0;
-			m_gameClearScore = { 6000,7000,9000,10000 };
+			m_gameClearScore = { 6000,8000,13000,25000 };
 
+			///
 			m_baseJumpScore = 100;
 			m_baseActionScore = { 100, 150, 250 };
 			m_itemScore = 100;
