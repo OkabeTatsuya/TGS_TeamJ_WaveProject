@@ -55,17 +55,6 @@ namespace basecross {
 		}
 	}
 
-	//スプライト自体の移動処理
-	//void MoveBG::Movement(shared_ptr<Transform> transPtr) {
-	//	auto pos = transPtr->GetPosition();
-	//	pos.x -= GameManager::GetInstance().GetGameSpeed() * App::GetApp()->GetElapsedTime();
-	//	GetComponent<Transform>()->SetPosition(pos);
-	//	//auto collision = AddComponent<CollisionObb>();
-	//	//collision->SetAfterCollision(AfterCollision::None);
-	//
-	//	//collision->SetDrawActive(true);
-	//}
-
 	void MoveBG::MoveTexture() {
 		Col4 color(1, 1, 1, 1);
 

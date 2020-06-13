@@ -40,8 +40,6 @@ namespace basecross {
 			CreateViewLight();
 
 			CreateUI();
-
-            AddGameObject<Fade>();
 	
 			CreateSaveData();
 
@@ -63,12 +61,10 @@ namespace basecross {
 
 	void SelectStage::OnDestroy() {
 		auto AudioManager = App::GetApp()->GetXAudio2Manager();
-
+		//ï¿½Tï¿½Eï¿½ï¿½ï¿½hï¿½ï¿½~ï¿½ß‚ï¿½
 		AudioManager->Stop(m_SE);
 		AudioManager->Stop(m_voiceSE);
-
 		AudioManager->Stop(m_BGM);
-
 	}
 
 	//ƒRƒ“ƒgƒ[ƒ‰[‚Ì“ü—Í
@@ -221,11 +217,6 @@ namespace basecross {
 		//“ì‹ùUI
 		m_stageIconLockUI = AddGameObject<ImageUI>(Vec3(0.0f), Vec3(256.0f, 256.0f, 1.0f), Vec2(0.0f, -15.0f), float(5.0f), L"Lock.png");
 		m_stageIconLockUI->SetDrawActive(false);
-
-	}
-
-
-	void SelectStage::ChengeStegeNum() {
 
 	}
 

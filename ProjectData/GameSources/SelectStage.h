@@ -56,7 +56,8 @@ namespace basecross {
 				L"StageImage1.png",
 				L"StageImage2.png",
 				L"StageImage3.png",
-				L"StageImage4.png"};
+				L"StageImage4.png"
+			};
 
 			m_stageNumImageName = {
 				L"Stage1.png",
@@ -85,23 +86,19 @@ namespace basecross {
 
 		//UIを作る関数
 		void CreateUI();
-
+		//Aボタンが押された処理
 		void PushA();
-
+		//Bボタンが押された処理
 		void PushB();
-
+		//スティック入力処理
 		void StickL();
 
-		void ChengeStegeNum();
-
 		void CreateSaveData();
-
-		//BGMを再生させる関数
+		//BGMを再生する関数
 		void PlayBGM(wstring soundName, float vol);
-
+		//ボイスを再生する関数
 		void PlayeVoice(wstring soundName, float vol);
-
-		//SEを再生させる関数
+		//SEを再生する関数
 		void PlaySE(wstring soundName, float vol);
 
 	};

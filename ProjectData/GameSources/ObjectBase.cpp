@@ -92,11 +92,12 @@ namespace basecross {
 		};
 
 		auto drawComp = AddComponent<PCTStaticDraw>();
+		//テクスチャがループするように設定
 		drawComp->SetSamplerState(SamplerState::PointWrap);
 		drawComp->CreateOriginalMesh<VertexPositionColorTexture>(m_vertices, indices);
 		drawComp->SetOriginalMeshUse(true);
 
-		///テクスチャの取得、貼り付け
+		//テクスチャの取得、貼り付け
 		auto &app = App::GetApp();
 		auto texDir = app->GetDataDirWString();
 
@@ -132,7 +133,6 @@ namespace basecross {
 				+ Util::FloatToWStr((float)bodyCount[i], 1, Util::FloatModify::Fixed) + L",\t";
 			strObjCount += L"\n";
 		}
-
 
 		wstring str = strMess + strObjCount;
 		//文字列をつける
