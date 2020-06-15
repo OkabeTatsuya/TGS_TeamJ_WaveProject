@@ -29,8 +29,8 @@ namespace basecross {
 		DrawingImage();
 		InitializeTransfrom();
 
-		auto drawPtr = GetComponent<PCTSpriteDraw>();
-		drawPtr->SetDrawActive(false);
+		m_drawPtr = GetComponent<PCTSpriteDraw>();
+		m_drawPtr->SetDrawActive(false);
 		m_scoreUI = GetStage()->AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(100.0f, 100.0f, 1.0f), Vec2(100.0f, 0.0f), float(6.0f), L"GoldenNumbers.png", 4, false, true);
 
 		m_scoreUI->SetDrawActive(false);
@@ -59,22 +59,21 @@ namespace basecross {
 	}
 
 	void BigWaveScoreUI::AnimUI() {
-		auto drawPtr = GetComponent<PCTSpriteDraw>();
 		auto& gm = GameManager::GetInstance();
 
 		if (m_isAnimUI && m_animTimer < m_animEndTime) {
 			m_animTimer += App::GetApp()->GetElapsedTime();
-			auto color = drawPtr->GetDiffuse();
+			auto color = m_drawPtr->GetDiffuse();
 			int setDrawNum = gm.GetSpecialJumpScore();
 
 			m_scoreUI->ScoreDraw(setDrawNum);
 
-			drawPtr->SetDrawActive(false);
+			m_drawPtr->SetDrawActive(true);
 			m_scoreUI->SetDrawActive(true);
 			auto scoreUI = m_scoreUI->GetScoreUIs();
 		}
 		else {
-			drawPtr->SetDrawActive(false);
+			m_drawPtr->SetDrawActive(false);
 			m_scoreUI->SetDrawActive(false);
 			auto scoreUI = m_scoreUI->GetScoreUIs();
 			for each (auto ui in scoreUI)

@@ -10,6 +10,7 @@ namespace basecross {
 	class BigWaveScoreUI : public ImageUI {
 		vector<shared_ptr<SoundItem>> m_SE;
 		shared_ptr<ScoreUIPanel> m_scoreUI;
+		shared_ptr<PCTSpriteDraw> m_drawPtr;
 
 		bool m_isAnimUI;
 		bool m_isPlaySE;
