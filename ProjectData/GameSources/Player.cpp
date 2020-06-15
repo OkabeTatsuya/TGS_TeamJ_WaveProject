@@ -90,7 +90,7 @@ namespace basecross {
         AddComponent<RigidbodyBox>(param);
 
         auto colPtr = AddComponent<CollisionObb>();
-        colPtr->SetMakedSize(Vec3(1.0f, 1.0f, 1.0f));
+        colPtr->SetMakedSize(Vec3(1.4f, 1.0f, 1.0f));
 
         m_scoreUpUI = GetStage()->AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(30.0f, 20.0f, 1.0f), Vec2(0.0f), float(7.0f), L"Number.png", 4, true);
         GameManager::GetInstance().SetScoreUpUIPanel(m_scoreUpUI);
@@ -159,6 +159,7 @@ namespace basecross {
 		m_judgJumpUI->SetingPos(GetComponent<Transform>()->GetPosition());
 		FollowEffect();
 		SpecialCheck();
+		PushAButton();
     }
 
     void Player::OnUpdate2() {
@@ -545,6 +546,7 @@ namespace basecross {
         if (gm.GetIsSpecialTime() && controller.wPressedButtons & XINPUT_GAMEPAD_A && !m_isJump) {
             m_isBigWaveJump = true;
             m_isTouchSea = false;
+			m_isWaveTouch = false;
             m_currentSpecialJumpCount++;
             if (m_currentSpecialJumpCount > m_specialJumpCount) {
                 m_isSpecialJump = false;
@@ -595,6 +597,7 @@ namespace basecross {
         }
         if (controller.wPressedButtons & XINPUT_GAMEPAD_A && !m_isJump) {
             m_isTouchSea = false;
+			m_isWaveTouch = false;
             m_isJumpStartAnimation = true;
             m_isJumpFinishAnimation = false;
             m_isWaitingAnimation = false;
@@ -639,6 +642,7 @@ namespace basecross {
         }
         if (controller.wPressedButtons & XINPUT_GAMEPAD_A && !m_isJump) {
             m_isTouchSea = false;
+			m_isWaveTouch = false;
             m_isJumpStartAnimation = true;
             m_isJumpFinishAnimation = false;
             m_isWaitingAnimation = false;
@@ -833,6 +837,7 @@ namespace basecross {
             m_currentAnimationKeyCount = 0;
             m_isEnableFlightAction = true;
             m_isJump=false;
+			m_isFreeJump = false;
             m_isLanding = true;
             if (m_isFirstJump) {
                 m_isJumpStartAnimation = false;
@@ -856,32 +861,41 @@ namespace basecross {
         }
         if ((other->FindTag(L"SmallWave") || other->FindTag(L"MidWave") || other->FindTag(L"BigWave"))) {
             m_isFirstJump = true;
-            float playerColSize = 1.0f;
+			auto colPtr = GetComponent<CollisionObb>();
+
+            float playerColSize = colPtr->GetMakedSize().x;
             float inSpeed = GameManager::GetInstance().GetGameSpeed();
             float stayTime = playerColSize / inSpeed;
             float outSpeed = inSpeed + m_groundWaveDownSpeedValue * stayTime;
-            float averageSpeed = (inSpeed + outSpeed) / 2;
+            float averageSpeed = (inSpeed + outSpeed) / 2.8f;
             stayTime = playerColSize / averageSpeed;
             m_jumpGradeTime = stayTime * m_jumpGradeTimeJudge;
         }
+
+		if (other->FindTag(L"BigWave")) {
+			m_isWaveTouch = true;
+		}
+		if (other->FindTag(L"MidWave")) {
+			m_isWaveTouch = true;
+		}
+		if (other->FindTag(L"SmallWave")) {
+			m_isWaveTouch = true;
+		}
     }
 
     //ƒRƒŠƒWƒ‡ƒ“‚É“–‚½‚è‘±‚¯‚Ä‚¢‚é‚Æ‚«‚Ìˆ—
     void Player::OnCollisionExcute(shared_ptr<GameObject>& other) {
         if (other->FindTag(L"BigWave")) {
-            m_isWaveTouch = true;
             BigWaveJump();
         }
         if (other->FindTag(L"MidWave")) {
-            m_isWaveTouch = true;
             MidWaveJump();
         }
         if (other->FindTag(L"SmallWave")) {
-            m_isWaveTouch = true;
             SmallWaveJump();
         }
         //—‰º–h~ˆ—
-        if (other->FindTag(L"Sea") && !m_isJump) {
+        if (other->FindTag(L"Sea") && !m_isJump && !m_isFreeJump) {
             GetComponent<RigidbodyBox>()->SetLinearVelocity(Vec3(0, 0, 0));
             GetComponent<RigidbodyBox>()->SetAutoGravity(false);
             if (m_isBigWaveJump) {
@@ -937,6 +951,16 @@ namespace basecross {
             m_isWaveTouch = false;
         }
     }
+
+	void Player::PushAButton() {
+		auto controller = App::GetApp()->GetInputDevice().GetControlerVec()[0];
+
+		if (controller.wPressedButtons & XINPUT_GAMEPAD_A && !m_isFreeJump && !m_isJump && !m_isWaveTouch) {
+			GetComponent<RigidbodyBox>()->SetAutoGravity(true);
+			GetComponent<RigidbodyBox>()->SetLinearVelocity(Vec3(0, m_midJumpMoveY * 0.5f, 0));
+			m_isFreeJump = true;
+		}
+	}
 }
 //end basecross
 

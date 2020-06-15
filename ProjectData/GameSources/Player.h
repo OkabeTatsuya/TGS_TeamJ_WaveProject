@@ -23,6 +23,8 @@ namespace basecross{
         float m_jumpActionTime;
         //ジャンプのフラグ
         bool m_isJump = true;
+		//波にぶつかっていないときのジャンプフラグ
+		bool m_isFreeJump = false;
         //ハイジャンプの上昇量
         float m_highJumpMoveY;
         //ミドルジャンプの上昇量
@@ -271,6 +273,8 @@ namespace basecross{
         void InitKnockBack(float mag);
         //ノックバック処理
         void KnockBack();
+		//Aボタンが押された時の処理
+		void PushAButton();
 
     };
 
