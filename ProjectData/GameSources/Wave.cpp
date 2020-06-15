@@ -55,15 +55,15 @@ namespace basecross {
 		switch (m_waveType)
 		{
 		case WaveType::en_waveS:
-			waveCol = GetStage()->AddGameObject<WaveCollision>(Vec3(0, 0, 0), Vec3(0.1f, 0.1f, 1), Vec3(m_position.x -0.6f, m_position.y -0.5f, -7.0f),L"SmallWave");
+			waveCol = GetStage()->AddGameObject<WaveCollision>(Vec3(0, 0, 0), Vec3(0.1f, 0.3f, 1), Vec3(m_position.x -0.6f, m_position.y -0.5f, -7.0f),L"SmallWave");
 			waveCol->GetComponent<Transform>()->SetParent(GetThis<GameObject>());
 			break;
 		case WaveType::en_waveM:
-			waveCol = GetStage()->AddGameObject<WaveCollision>(Vec3(0, 0, 0), Vec3(0.1f, 0.1f, 1), Vec3(m_position.x - 0.9f, m_position.y - 1.0f, -7.0f),L"MidWave");
+			waveCol = GetStage()->AddGameObject<WaveCollision>(Vec3(0, 0, 0), Vec3(0.1f, 0.3f, 1), Vec3(m_position.x - 0.9f, m_position.y - 1.0f, -7.0f),L"MidWave");
 			waveCol->GetComponent<Transform>()->SetParent(GetThis<GameObject>());
 			break;
 		case WaveType::en_waveL:
-			waveCol = GetStage()->AddGameObject<WaveCollision>(Vec3(0, 0, 0), Vec3(0.1f, 0.1f, 1), Vec3(m_position.x - 1.5f, m_position.y - 1.5f, -7.0f),L"BigWave");
+			waveCol = GetStage()->AddGameObject<WaveCollision>(Vec3(0, 0, 0), Vec3(0.1f, 0.3f, 1), Vec3(m_position.x - 1.5f, m_position.y - 1.2f, -7.0f),L"BigWave");
 			waveCol->GetComponent<Transform>()->SetParent(GetThis<GameObject>());
 			break;
 		default:
