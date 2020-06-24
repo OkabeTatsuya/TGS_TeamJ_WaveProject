@@ -42,6 +42,7 @@ namespace basecross {
 			auto& gamemanager = GameManager::GetInstance();
 
 			for (int j = 0; j < m_defaultObjectNum[i]; j++) {
+				Vec3 firstPos = Vec3(-m_waveState.Pos[i].x, m_waveState.Pos[i].y, m_waveState.Pos[i].z);
 				m_waveObject[i].push_back(GetStage()->AddGameObject<Wave>(m_waveState.Rot, m_waveState.Sca[i], firstPos, m_waveState.Layer, m_waveState.Tex[i], waveType[i]));
 			}
 		}
