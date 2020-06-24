@@ -12,7 +12,6 @@
 #include "GameStage.h"
 #include "ObjectBase.h"
 #include "UIBase.h"
-#include "Character.h"
 #include "ScoreUI.h"
 #include "ScoreUIPanel.h"
 #include "SpecialJumpUI.h"
