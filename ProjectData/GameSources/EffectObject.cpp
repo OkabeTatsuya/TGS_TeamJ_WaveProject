@@ -45,20 +45,4 @@ namespace basecross {
 		 m_efkPlay[effectType]->SetSpeed(0.8f);
 		 GetTypeStage<GameStage>()->SetEfkPlay(m_efkPlay, 0);
 	}
-
-	/*追従しないエフェクト
-		effName エフェクトの名前
-		pos		初期座標
-	*/
-	//追従するエフェクト
-	void EffectObject::PlayEffect(shared_ptr<GameObject> obj) {
-		//if (m_playEffectCount < m_efkPlay.size()) {
-		//	Vec3 objPos = obj->GetComponent<Transform>()->GetPosition();
-		//	m_efkPlay[m_playEffectCount] = ObjectFactory::Create<EfkPlay>(m_efkEffect, objPos);
-		//}
-		//else {
-		//	m_playEffectCount = 0;
-		//}
-	}
-
 }

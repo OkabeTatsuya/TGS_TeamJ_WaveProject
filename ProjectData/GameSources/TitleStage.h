@@ -3,16 +3,6 @@
 
 //コントローラー
 namespace basecross {
-	template<typename T>
-	struct InputHandler {
-		void PushHandle(const shared_ptr<T>& Obj) {
-			auto cutlVec = App::GetApp()->GetInputDevice().GetControlerVec();
-			if (cntlVec[0].bconnected) {
-
-			}
-		}
-	};
-
 	//--------------------------------------------------------------------------------------
 	//	タイトルステージクラス
 	//--------------------------------------------------------------------------------------

@@ -30,7 +30,6 @@ namespace basecross {
 		if (m_isSpecialTime) {
 			m_specialJumpScore = addScore;
 		}
-		//SpecialCheck();
 	}
 
 	void GameManager::AddActionScore(float magnification, float comboMagnification, JumpActionType jumpActionType) {
@@ -65,7 +64,6 @@ namespace basecross {
 	void GameManager::AddItemScore() {
 		m_itemCount++;
 		m_specialCount++;
-		//SpecialCheck();
 	}
 
 	void GameManager::DrawScore() {

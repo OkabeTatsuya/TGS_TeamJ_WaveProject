@@ -50,8 +50,5 @@ namespace basecross {
 
 		//追従しないエフェクト
 		void PlayEffect(EN_EffectName effName, EffectType effectType, Vec3 pos);
-
-		//追従するエフェクト
-		void PlayEffect(shared_ptr<GameObject> obj);
 	};
 }
