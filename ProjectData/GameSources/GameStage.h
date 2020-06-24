@@ -76,6 +76,11 @@ namespace basecross {
 		vector<wstring> m_seStr;
 		vector<wstring> m_voiceSEStr;
 
+		//ステージのテクスチャ
+		vector<wstring> m_noonTexName;
+		vector<wstring> m_eveningTexName;
+		vector<wstring> m_sunsetTexName;
+
 		//アニメーションUI
 		vector<shared_ptr<AnimationUI>> m_startUI;
 		shared_ptr<AnimationUI> m_goalUI;
@@ -85,8 +90,10 @@ namespace basecross {
 		shared_ptr<EfkInterface> m_efkInterface;
 		vector<shared_ptr<EfkEffect>> m_efkEffect;
 
+		//エフェクトを再生するオブジェクト
 		vector<shared_ptr<EfkPlay>> m_efkPlay;
 
+		//プレイヤーオブジェクト
 		shared_ptr<GameObject> m_playerObj;
 		shared_ptr<Transform> m_playerObjTrans;
 
@@ -104,13 +111,13 @@ namespace basecross {
 		//ビッグウェーブで取得したスコアを表示するUI
 		shared_ptr<BigWaveScoreUI> m_bigWaveScoreUI;
 
+		//ウェーブスポナー
 		shared_ptr<WaveSpawner> m_waveSpawner;
 
+		//カットインUIオブジェクト
 		shared_ptr<CutInUI> m_cutInUI;
-
-
-		vector<int> m_gameClearScore;
 		
+		//マップUIのベースになるオブジェクト
 		Vec2 m_baseMapUIPos;
 		vector<Vec2> m_mapUIPos;
 		Vec3 m_textScale;	
@@ -173,9 +180,12 @@ namespace basecross {
 			m_gameClearSpeed = 0.2f;
 			m_spawnFlag = 0;
 
-			m_gameClearScore = { 100,200,300,400 };
-
 			m_seStr = { L"decision16.wav", L"se_GameClear.wav", L"se_GameOver.wav", L"Voice2_13.wav", L"Voice2_15.wav", L"Voice1_11.wav" };
+
+			m_noonTexName = { L"Sky.png" ,L"Ocean.png" ,L"Sea.png" ,L"cloud.png" ,L"Island.png" };
+			m_eveningTexName = { L"SkyAfternoon.png" ,L"OceanAfternoon.png" ,L"SeaAfternoon.png" ,L"CloudAfternoon.png" ,L"Island.png" };
+			m_sunsetTexName = { L"SkySunset.png" ,L"OceanSunset.png" ,L"SeaSunset.png" ,L"CloudSunset.png" ,L"Island.png" };
+
 			m_gameOverPos = -5.0f;
 		}
 
@@ -193,11 +203,8 @@ namespace basecross {
 
 		//ゲッター、セッター
 		shared_ptr<EfkInterface> GetEfkInterface()const { return m_efkInterface; }
-
 		vector<shared_ptr<EfkEffect>> GetEfkEffect()const { return m_efkEffect; }
-
 		vector<shared_ptr<EfkPlay>> GetEfkPlay()const { return m_efkPlay; }
-
 		void SetEfkPlay(vector<shared_ptr<EfkPlay>> set, int efkNum) { m_efkPlay = set; }
 
 		//ゲームUIを作成
@@ -208,12 +215,15 @@ namespace basecross {
 
 		//ゴール時のUIを作成
 		void CreateGoalUI();
+		//コマンド表記のUIを作成
+		void CreateCommandUI();
 
 		//オブジェクトを生成するジェネレーターを作成
 		void CreateGenerator();
 
 		//エフェクトを作成
 		void CreateEfkEffect();
+
 		//スコアUIの描画する数字を入れ替える
 		void UpdateScoreUI();
 
@@ -246,6 +256,12 @@ namespace basecross {
 		//SEを再生する
 		void PlaySE(EN_SoundTypeSE soundType, wstring seName, float vol);
 
+		//BGMを再生する
+		void PlayBGM(wstring bgmName);
+
+		//BGMのフェードイン
+		void FadeInBGM(float maxVol, float time);
+
 		//ビットフラグを上げる
 		void TrueSpawnFlag(unsigned int bit_flag);
 
@@ -254,10 +270,7 @@ namespace basecross {
 
 		//フラグの状態を確認する
 		bool ConfirmSpawnFlag(unsigned int bit_flag);
-
 	};
-
-
 }
 //end basecross
 

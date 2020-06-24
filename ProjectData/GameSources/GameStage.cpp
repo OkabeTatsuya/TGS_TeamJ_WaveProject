@@ -48,7 +48,9 @@ namespace basecross {
 			GameManager::GetInstance().ResetGame();
 			GameManager::GetInstance().SetMaxSpecialCount(m_maxSpecialCount[m_specialJumpCount]);
 
-            AddGameObject<Fade>();
+			for (int i = 0; i < 2; i++) {
+				m_SE.push_back(nullptr);
+			}
 
 			//UI作成
 			CreateAnimUI();
@@ -60,24 +62,14 @@ namespace basecross {
 
 			m_playerObj = AddGameObject<Player>(Vec3(0, 0, 0), Vec3(1.0f, 1.0f, 1), Vec3(-2.0f, -2, -7.0f), 7);
             m_playerObjTrans = m_playerObj->GetComponent<Transform>();
-			m_playerIconTrans = m_playerIconUI->GetComponent<Transform>();
+
 			AddGameObject<SeaCollision>(Vec3(0, 0, 0), Vec3(5, 0.5f, 1), Vec3(-2.5, -4.0, -7.0));
 
 			//スコアUI
 			m_scoreCountUI = AddGameObject<ScoreUIPanel>(Vec3(0.0f), Vec3(50.0f, 50.0f, 1.0f), Vec2(180.0f, 350.f), float(5.0f), L"Number.png", 7, false);
 			AddGameObject<ImageUI>(Vec3(0.0f), Vec3(200.0f, 50.0f, 1.0f), Vec2(30.0f, 350.f), float(5.0f), L"Score.png");
  
-
-			m_fadeInUI = AddGameObject<Fade>(L"ToResulfStage");
-			m_fadeInUI->SetUpdateActive(false);
-
-			auto audioManager = App::GetApp()->GetXAudio2Manager();
-			audioManager->Stop(m_BGM);
-			m_BGM = audioManager->Start(L"game_maoudamashii_5_town05.wav", XAUDIO2_LOOP_INFINITE, 0.1f);
-
-			for (int i = 0; i < 2; i++) {
-				m_SE.push_back(nullptr);
-			}
+			PlayBGM(L"game_maoudamashii_5_town05.wav");
 		}
 		catch (...) {
 			throw;
@@ -86,15 +78,13 @@ namespace basecross {
 
 	void GameStage::OnUpdate() {
 		m_efkInterface->OnUpdate();
+		FadeInBGM(0.5f, 2.0f);
 		FrastTimeCount();
 		GameClear();
 		UpdateScoreUI();
-		auto BGM = App::GetApp()->GetXAudio2Manager();
-		BGM->MyFadeIn(m_BGM, 0.5f, 2.0f);
 		SpecialJumpController();
 		Hundler();
 		MovePlayerIcon();
-		m_playerIconTrans->GetPosition().x;
 	}
 
 	void GameStage::OnDestroy() {
@@ -132,29 +122,6 @@ namespace basecross {
 			Vec2(m_baseMapUIPos.x + -245.0f, m_baseMapUIPos.y + -5.0f),
 		};
 
-		float baseCommandUIPosY = 45;
-		Vec2 baseCommandUIPos = Vec2(450.0f, 350.0f);
-		vector<Vec2> commandUIPos = {
-			Vec2(baseCommandUIPos.x + 0.0f, baseCommandUIPos.y + -baseCommandUIPosY * 0),
-			Vec2(baseCommandUIPos.x + 0.0f, baseCommandUIPos.y + -baseCommandUIPosY * 1),
-			Vec2(baseCommandUIPos.x + 0.0f, baseCommandUIPos.y + -baseCommandUIPosY * 2),
-			Vec2(baseCommandUIPos.x + 0.0f, baseCommandUIPos.y + -baseCommandUIPosY * 3)
-		};
-
-		vector<Vec2> commandIconUIPos = {
-			Vec2(baseCommandUIPos.x + 120.0f, baseCommandUIPos.y + -baseCommandUIPosY * 0),
-			Vec2(baseCommandUIPos.x + 120.0f, baseCommandUIPos.y + -baseCommandUIPosY * 1),
-			Vec2(baseCommandUIPos.x + 120.0f, baseCommandUIPos.y + -baseCommandUIPosY * 2),
-			Vec2(baseCommandUIPos.x + 120.0f, baseCommandUIPos.y + -baseCommandUIPosY * 3)
-		};
-
-		vector<wstring> commandImage = {
-			L"JunpUI.png",
-			L"CommandUI1.png",
-			L"CommandUI2.png",
-			L"CommandUI3.png"
-		};
-
 		Vec3 itemScale = Vec3(40.0f, 40.0f, 1.0f);
 		AddGameObject<ImageUI>(Vec3(0.0f), itemScale, baseItemPos, float(5.0f), L"Coin.png");
 		//アイテム上限UI
@@ -174,41 +141,20 @@ namespace basecross {
 		AddGameObject<ImageUI>(Vec3(0.0f), Vec3(512.0f, 125.0f, 1.0f), m_mapUIPos[0], float(5.0f), L"MapStage.png");
 		AddGameObject<ImageUI>(Vec3(0.0f), Vec3(30.0f, 30.0f, 1.0f), m_mapUIPos[1], float(6.0f), L"MapGoal.png");
 		m_playerIconUI = AddGameObject<ImageUI>(Vec3(0.0f), Vec3(20.0f, 20.0f, 1.0f), m_mapUIPos[2], float(7.0f), L"MapPlayer.png");
+		m_playerIconTrans = m_playerIconUI->GetComponent<Transform>();
+
+		CreateCommandUI();
 
 		//カットインUI
 		m_cutInUI = AddGameObject<CutInUI>(Vec3(0.0f), Vec3(1300.0f, 400.0f, 1.0f), Vec2(0.0f), float(5.0f), L"CutIN1.png");
 
-		Vec2 baseCommandIconScl = Vec2(4.0f, 2.0f);
-		float magnification = 30;
-		float magnification1 = 25;
-
-		vector<Vec3> commandScl = {
-			Vec3(48.0f, 48.0f, 1.0f),
-			Vec3(baseCommandIconScl.x * magnification, baseCommandIconScl.y * magnification, 1.0f),
-			Vec3(baseCommandIconScl.x * magnification, baseCommandIconScl.y * magnification, 1.0f),
-			Vec3(baseCommandIconScl.x * magnification, baseCommandIconScl.y * magnification, 1.0f)
-		};
-
-		vector<Vec3> commandIconScl = {
-			Vec3(48.0f, 48.0f, 1.0f),
-			Vec3(baseCommandIconScl.x * magnification1, baseCommandIconScl.y * magnification1, 1.0f),
-			Vec3(baseCommandIconScl.x * magnification1, baseCommandIconScl.y * magnification1, 1.0f),
-			Vec3(baseCommandIconScl.x * magnification1, baseCommandIconScl.y * magnification1, 1.0f)
-		};
-
-		//コマンドUI
-		for (int i = 0; i < commandUIPos.size(); i++) {
-			AddGameObject<ImageUI>(Vec3(0.0f), commandScl[1], commandUIPos[i], float(6.0f), commandImage[i]);
-		}
-
-		//アイコンUI
-		AddGameObject<ImageUI>(Vec3(0.0f), commandIconScl[0], commandIconUIPos[0], float(5.0f), L"ABttun.png");
-		AddGameObject<ImageUI>(Vec3(0.0f), commandIconScl[1], commandIconUIPos[1], float(6.0f), L"Icon1.png");
-		AddGameObject<ImageUI>(Vec3(0.0f), commandIconScl[2], commandIconUIPos[2], float(6.0f), L"Icon2.png");
-		AddGameObject<ImageUI>(Vec3(0.0f), commandIconScl[3], commandIconUIPos[3], float(6.0f), L"Icon3.png");
-
 		//ビッグウェーブで獲得したスコアを表示
-		m_bigWaveScoreUI = AddGameObject<BigWaveScoreUI>(Vec3(0.0f), Vec3(1300.0f, 400.0f, 1.0f), Vec2(0.0f), float(5.0f), L"CutIn.png");
+		m_bigWaveScoreUI = AddGameObject<BigWaveScoreUI>(Vec3(0.0f), Vec3(256.0f, 128.0f, 1.0f), Vec2(-80.0f,70.0f), float(5.0f), L"Total.png");
+
+		//フェードUI
+		AddGameObject<Fade>();
+		m_fadeInUI = AddGameObject<Fade>(L"ToResulfStage");
+		m_fadeInUI->SetUpdateActive(false);
 	};
 
 	//アニメーションするUIを作成
@@ -277,12 +223,59 @@ namespace basecross {
 		m_failedUI = AddGameObject<AnimationUI>(failedUIState, texter[1], m_maxLoadStageTime);
 	}
 
+	void GameStage::CreateCommandUI() {
+		float baseCommandUIPosY = 45;
+		Vec2 baseCommandUIPos = Vec2(450.0f, 350.0f);
+		vector<Vec2> commandUIPos;
+		vector<Vec2> commandIconUIPos;
+
+		for (int i = 0; i < 4; i++) {
+			commandUIPos.push_back(Vec2(baseCommandUIPos.x + 0.0f, baseCommandUIPos.y + -baseCommandUIPosY * i));
+			commandIconUIPos.push_back(Vec2(baseCommandUIPos.x + 120.0f, baseCommandUIPos.y + -baseCommandUIPosY * i));
+		};
+
+		Vec2 baseCommandIconScl = Vec2(4.0f, 2.0f);
+		float magnification = 30;
+		float magnification1 = 25;
+
+		Vec3 commandScl =
+			Vec3(baseCommandIconScl.x * magnification, baseCommandIconScl.y * magnification, 1.0f);
+
+		vector<Vec3> commandIconScl = {
+			Vec3(48.0f, 48.0f, 1.0f),
+			Vec3(baseCommandIconScl.x * magnification1, baseCommandIconScl.y * magnification1, 1.0f),
+			Vec3(baseCommandIconScl.x * magnification1, baseCommandIconScl.y * magnification1, 1.0f),
+			Vec3(baseCommandIconScl.x * magnification1, baseCommandIconScl.y * magnification1, 1.0f)
+		};
+
+		vector<wstring> commandImage = {
+			L"JunpUI.png",
+			L"CommandUI1.png",
+			L"CommandUI2.png",
+			L"CommandUI3.png"
+		};
+
+		vector<wstring> commandIconImange = {
+			L"ABttun.png",
+			L"Icon1.png",
+			L"Icon2.png",
+			L"Icon3.png"
+		};
+
+		//コマンドUI
+		for (int i = 0; i < commandUIPos.size(); i++) {
+			AddGameObject<ImageUI>(Vec3(0.0f), commandScl, commandUIPos[i], float(6.0f), commandImage[i]);
+		}
+
+		//アイコンUI
+		for (int i = 0; i < commandIconUIPos.size(); i++) {
+			AddGameObject<ImageUI>(Vec3(0.0f), commandIconScl[i], commandIconUIPos[i], float(6.0f), commandIconImange[i]);
+		}
+	}
+
 	//ジェネレーターを作成
 	void GameStage::CreateGenerator() {
 		auto& gm = GameManager::GetInstance();
-		vector<wstring> m_noonTexName = { L"Sky.png" ,L"Ocean.png" ,L"Sea.png" ,L"cloud.png" ,L"Island.png" };
-		vector<wstring> m_eveningTexName = { L"SkyAfternoon.png" ,L"OceanAfternoon.png" ,L"SeaAfternoon.png" ,L"CloudAfternoon.png" ,L"Island.png" };
-		vector<wstring> m_sunsetTexName = { L"SkySunset.png" ,L"OceanSunset.png" ,L"SeaSunset.png" ,L"CloudSunset.png" ,L"Island.png" };
 
 		vector<wstring> setTexName = m_noonTexName;
 		if (gm.GetSelectStageNum() == 2) {
@@ -292,17 +285,18 @@ namespace basecross {
 		if (gm.GetSelectStageNum() == 3) {
 			setTexName = m_sunsetTexName;
 		}
+		vector<BackGroundState> BGState = {
+			BackGroundState{ Vec3(0.0f), Vec3(-10.0f,  0.0f,  0.0f),	Vec2(5.0f, 5.0f), 0, setTexName[0], -10.0f, 0.037f },	//空
+			BackGroundState{ Vec3(0.0f), Vec3(-10.0f,  0.0f, -3.0f),	Vec2(5.0f, 5.0f), 3, setTexName[1], -10.0f, 0.037f },	//背景の海
+			BackGroundState{ Vec3(0.0f), Vec3(-10.0f, -0.12f, -8.0),	Vec2(5.0f, 5.0f), 8, setTexName[2], -10.0f, 0.137f },	//プレイヤーの下にある海
+			BackGroundState{ Vec3(0.0f), Vec3(-10.0f,  0.0f, -1.0),	Vec2(5.0f, 5.0f), 1, setTexName[3], -10.0f, 0.0062f },		//雲
+		};
 
-		BackGroundState SkyState =		{ Vec3(0.0f), Vec3(-10.0f,  0.0f,  0.0f),	Vec2(5.0f, 5.0f), 0, setTexName[0], -10.0f, 0.037f };
-		BackGroundState SeaBGState =	{ Vec3(0.0f), Vec3(-10.0f,  0.0f, -3.0f),	Vec2(5.0f, 5.0f), 3, setTexName[1], -10.0f, 0.037f };
-		BackGroundState SeaState =		{ Vec3(0.0f), Vec3(-10.0f, -0.12f, -8.0),	Vec2(5.0f, 5.0f), 8, setTexName[2], -10.0f, 0.137f };
-		BackGroundState CloudState =	{ Vec3(0.0f), Vec3(-10.0f,  0.0f, -1.0),	Vec2(5.0f, 5.0f), 1, setTexName[3], -10.0f, 0.0062f };
 		BackGroundState IslandState =	{ Vec3(0.0f), Vec3(-10.0f, -0.3f, -2.0),	Vec2(1.5f, 1.5f), 2, setTexName[4], -10.0f, 0.02f };
 
-		AddGameObject<BGGenerator>(SkyState);
-		AddGameObject<BGGenerator>(SeaBGState);
-		AddGameObject<BGGenerator>(SeaState);
-		AddGameObject<BGGenerator>(CloudState);
+		for (int i = 0; i < BGState.size(); i++) {
+			AddGameObject<BGGenerator>(BGState[i]);
+		}
 		AddGameObject<RandomGenerator>(IslandState, 10.0f, 15);
 
 		m_waveSpawner = AddGameObject<WaveSpawner>();
@@ -335,6 +329,8 @@ namespace basecross {
 	void GameStage::Hundler() {
 		//コントローラーの取得
 		auto cntVec = App::GetApp()->GetInputDevice().GetControlerVec();
+		auto KeyState = App::GetApp()->GetInputDevice().GetKeyState();
+
 		if (cntVec[0].bConnected)
 		{
 			m_isReset = cntVec[0].wPressedButtons & XINPUT_GAMEPAD_LEFT_THUMB &&
@@ -391,7 +387,6 @@ namespace basecross {
 		}
 
 		if (!m_isLoadStage && m_loadStageTimeCount > m_maxLoadStageTime) {
-
 			SaveGameData();
 			LoadResultStage();
 			//m_loadStageTimeCount = 0;
@@ -421,7 +416,6 @@ namespace basecross {
 		//ジャンプフラグが立っていたらスピードを下げる
 		auto& gameManager = GameManager::GetInstance();
 		auto specialJumpFlag = gameManager.GetIsSpecialJump();
-
 		auto specialJumpTimeFlag = gameManager.GetIsSpecialTime();
 
 		if (!specialJumpTimeFlag) {
@@ -437,8 +431,6 @@ namespace basecross {
 				m_specialJumpCount++;
 				gameManager.SetMaxSpecialCount(m_maxSpecialCount[m_specialJumpCount]);
 			}
-			//PlaySE(EN_SoundTypeSE::en_SystemSE, m_seStr[EN_SE::en_SpecialTimeSE], 0.9f);
-			//PlaySE(EN_SoundTypeSE::en_VoiceSE, m_seStr[EN_SE::en_SpecialTImeVoice1], 1.0f);
 			m_playSpecialSE = true;
 		}
 
@@ -456,7 +448,6 @@ namespace basecross {
 			if (m_specialJumpTimer > maxCount) {
 				m_specialJumpTimer = 0.0f;
 				gameManager.SetGameSpeed(m_saveGameSpeed);
-				//gameManager.SetIsSpecialTime(false);
 				gameManager.SetIsSpecialJump(false);
 			}
 		}
@@ -551,6 +542,18 @@ namespace basecross {
 	void GameStage::PlaySE(EN_SoundTypeSE soundType, wstring seName, float vol) {
 		auto AudioManager = App::GetApp()->GetXAudio2Manager();
 		m_SE[soundType] = AudioManager->Start(seName, 0, vol);
+	}
+
+	void GameStage::PlayBGM(wstring bgmName) {
+		auto audioManager = App::GetApp()->GetXAudio2Manager();
+		audioManager->Stop(m_BGM);
+		m_BGM = audioManager->Start(bgmName, XAUDIO2_LOOP_INFINITE, 0.1f);
+	}
+
+	//
+	void GameStage::FadeInBGM(float maxVol, float time) {
+		auto audioManager = App::GetApp()->GetXAudio2Manager();
+		audioManager->MyFadeIn(m_BGM, maxVol, time);
 	}
 
 	//ビットフラグを上げる
