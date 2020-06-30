@@ -1,0 +1,37 @@
+国際情報工科自動車大学校　ゲームソフト開発科　３年生
+岡部　龍八（おかべ　たつや）
+
+
+・担当箇所
+Object・UIのベースになるオブジェクト、セレクトステージ、
+波の生成処理、ゴールオブジェクト、
+ビッグウェーブ演出、ステージ解放演出
+
+
+・担当したソース
+「Stage」
+CopywriteStage,SelectStage,GameStage,GameManager
+
+「ObjectBase」
+ObjectBase,UIBase,SpawnerBase
+
+「Generator/Spawner」
+BGGenerator,GoalGenerator,ItemGenerator,RandomGenerator,WaveSpwner
+
+「UI」
+AnimationUI,BigWaveScoreUI,CutInUI,FlashingUI,ImageUI,
+JudgJumpUI,UnlockStageUI
+
+「Object」
+EffectObject,GoalObject,ScoreUpItem
+
+
+・こだわった部分
+「ソースコードの細分化」
+オブジェクトを作成する時、共通している処理を一つにまとめたベースオブジェクトを作成し、
+作業時間の短縮とソースコードの記入量を減らすことを考えて開発しました。
+
+「ビッグウェーブ出現演出」
+ビッグウェーブの特別感が出るように、ボイス・SE、カットインを実装しました。
+
+
