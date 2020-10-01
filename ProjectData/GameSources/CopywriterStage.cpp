@@ -72,9 +72,16 @@ namespace basecross {
 
 	void CopywriterStage::Hundler() {
 		auto CutlVec = App::GetApp()->GetInputDevice().GetControlerVec();
+		auto KeyState = App::GetApp()->GetInputDevice().GetKeyState();
+
 		if (CutlVec[0].bConnected) {
 			//Aボタンを押した時すぐにシーン移動
 			if (CutlVec[0].wPressedButtons & XINPUT_GAMEPAD_A) {
+				PushAButton();
+			}
+		}
+		else {
+			if (KeyState.m_bPressedKeyTbl[VK_SPACE]) {
 				PushAButton();
 			}
 		}
